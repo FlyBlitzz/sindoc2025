@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Historique;
 use App\Entity\Livre;
-use App\Entity\User;
 use App\Entity\LivreAuth;
 use DateTime;
 use Doctrine\DBAL\Connection;
@@ -20,14 +19,14 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/livre', name: 'app_livre_')]
 class LivreController extends AbstractController
 {
 
 
-    
+
     #[Route("/livre/toggle/{id}", name: "toggle_visibility", methods: ["POST"])]
     public function toggleVisibility(Livre $livre, EntityManagerInterface $em): Response
     {
@@ -37,9 +36,9 @@ class LivreController extends AbstractController
         return $this->redirectToRoute('app_livre_app_livre_index');
     }
 
-    
 
-    #[Route("/livre/{id}/auth", name:"app_livre_auth", methods:["GET"])]
+
+    #[Route("/livre/{id}/auth", name: "app_livre_auth", methods: ["GET"])]
     public function authPage(Livre $livre, UserRepository $userRepository, LivreAuthRepository $livreAuthRepository): Response
     {
         $users = $userRepository->findAll();
@@ -55,23 +54,26 @@ class LivreController extends AbstractController
     }
 
     #[Route('/livre/{id}/auth/save', name: 'app_livre_auth_save', methods: ['POST'])]
-    public function saveAuth(Request $request, Livre $livre, UserRepository $userRepository,
-        EntityManagerInterface $entityManager): Response
-    {
+    public function saveAuth(
+        Request $request,
+        Livre $livre,
+        UserRepository $userRepository,
+        EntityManagerInterface $entityManager
+    ): Response {
         $userIds = json_decode($request->request->get('users', '[]'), true);
         // dd($request);
         if (!is_array($userIds)) {
             throw new \InvalidArgumentException('Invalid users data');
         }
-    
+
         foreach ($userIds as $userId) {
             $user = $userRepository->find($userId);
-    
+
             if ($user) {
                 $livreAuth = new LivreAuth();
                 $livreAuth->setLivre($livre);
                 $livreAuth->setUser($user);
-    
+
                 try {
                     $entityManager->persist($livreAuth);
                     $entityManager->flush();
@@ -81,7 +83,7 @@ class LivreController extends AbstractController
                 }
             }
         }
-    
+
         return $this->redirectToRoute('app_livre_app_livre_auth', ['id' => $livre->getIdlivre()]);
     }
 
@@ -120,16 +122,15 @@ class LivreController extends AbstractController
              WHERE la.user = :user
              ORDER BY l.nom'
         )->setParameter('user', $user);
-        
+
         $livres = $query->getResult();
-        if(empty($livres))
-        {
+        if (empty($livres)) {
             return new JsonResponse(null);
         }
         $canEdit = !empty($livres);
         $session->set('canEdit', $canEdit);
         foreach ($livres as $livre) {
-            $data[]= [
+            $data[] = [
                 'id' => $livre->getIdLivre(),
                 'nom' => $livre->getNom(), // Adjust based on your entity field
             ];
@@ -141,24 +142,24 @@ class LivreController extends AbstractController
     public function viewAuthorizedLivres(Connection $connection, int $id): Response
     {
         $userId = $id;
-    
+
         if (!$userId) {
             throw $this->createAccessDeniedException('Vous devez être connecté pour voir cette page.');
         }
-    
+
         // Get the IDs of the livres authorized for the user
         $livreIds = $connection->executeQuery(
             'SELECT livre_id FROM livre_auth WHERE user_id = :user_id',
             ['user_id' => $userId]
         )->fetchFirstColumn();
-    
+
         // Fetch only the authorized and visible livres
         $authorizedLivres = empty($livreIds) ? [] : $connection->executeQuery(
             'SELECT id, nom FROM livre WHERE id IN (:livre_ids) AND visible = true',
             ['livre_ids' => $livreIds],
             ['livre_ids' => Connection::PARAM_INT_ARRAY]
         )->fetchAllAssociative();
-    
+
         return $this->render('profileuser/authorizedlivre.html.twig', [
             'authorizedLivres' => $authorizedLivres,
         ]);
@@ -285,58 +286,58 @@ class LivreController extends AbstractController
      * @return Response
      * Permet de supprimer un livre
      */
-   #[Route('/{id}', name: 'app_livre_delete', methods: ['POST'])]
-   public function delete(Request $request, #[MapEntity(id: 'id')] Livre $livre, EntityManagerInterface $entityManager, Security $security): Response
-   {
-       if (!$livre->getFiche()->isEmpty()) {
+    #[Route('/{id}', name: 'app_livre_delete', methods: ['POST'])]
+    public function delete(Request $request, #[MapEntity(id: 'id')] Livre $livre, EntityManagerInterface $entityManager, Security $security): Response
+    {
+        if (!$livre->getFiche()->isEmpty()) {
 
-           $this->addFlash('error', 'Impossible de supprimer le livre car des fiches sont liées.');
-               $fiches = $livre->getFiche();
+            $this->addFlash('error', 'Impossible de supprimer le livre car des fiches sont liées.');
+            $fiches = $livre->getFiche();
 
-           return $this->render('fiche/liste_fiches.html.twig', [
-                   'fiches' => $fiches,
-               ]);
-       }
-       if ($this->isCsrfTokenValid('delete'.$livre->getIdLivre(), $request->request->get('_token'))) {
-           // Create Historique entry
-           $historique = new Historique();
-           $user = $security->getUser();
-           $historique->setLivreID($livre->getIdLivre());
-           $historique->setUser($user);
-           $historique->setData($livre);
-           $historique->setTypeModif('Suppression');
-           $dateActuelle = new DateTime();
-           $historique->setCreateDate($dateActuelle);
-           $historique->setHeure($dateActuelle);
-           $entityManager->persist($historique);
-           $entityManager->flush();
+            return $this->render('fiche/liste_fiches.html.twig', [
+                'fiches' => $fiches,
+            ]);
+        }
+        if ($this->isCsrfTokenValid('delete' . $livre->getIdLivre(), $request->request->get('_token'))) {
+            // Create Historique entry
+            $historique = new Historique();
+            $user = $security->getUser();
+            $historique->setLivreID($livre->getIdLivre());
+            $historique->setUser($user);
+            $historique->setData($livre);
+            $historique->setTypeModif('Suppression');
+            $dateActuelle = new DateTime();
+            $historique->setCreateDate($dateActuelle);
+            $historique->setHeure($dateActuelle);
+            $entityManager->persist($historique);
+            $entityManager->flush();
 
-           $entityManager->remove($livre);
-           $entityManager->flush();
-           $this->addFlash('success', 'Le livre a été supprimé avec succès.');
-       } else {
-           $this->addFlash('error', 'Erreur lors de la suppression du livre. Veuillez réessayer.');
-       }
+            $entityManager->remove($livre);
+            $entityManager->flush();
+            $this->addFlash('success', 'Le livre a été supprimé avec succès.');
+        } else {
+            $this->addFlash('error', 'Erreur lors de la suppression du livre. Veuillez réessayer.');
+        }
 
-       return $this->redirectToRoute('app_livre_app_livre_index');
-   }
-   #[Route('/{id}', name: 'app_livre_delete', methods: ['POST'])]
-   public function invisible(Request $request, #[MapEntity(id: 'id')] Livre $livre, EntityManagerInterface $entityManager): Response
-   {
+        return $this->redirectToRoute('app_livre_app_livre_index');
+    }
+    #[Route('/{id}', name: 'app_livre_delete', methods: ['POST'])]
+    public function invisible(Request $request, #[MapEntity(id: 'id')] Livre $livre, EntityManagerInterface $entityManager): Response
+    {
         $user = $this->getUser();
-       
+
         $livre->setVisible(false);
         $entityManager->flush();
-   
-        $this->addFlash('success', 'Le livre a été rendu invisible avec succès.');
-   
-       return $this->redirectToRoute('app_livre_app_livre_authorized', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
-   }
-   
 
-   #[Route('/dropdown/get-livre', name: 'app_livre_get_livre_dropdown', methods: ['GET'])]
-   public function getLivresDropdown(LivreRepository $livreRepository)
-   {
+        $this->addFlash('success', 'Le livre a été rendu invisible avec succès.');
+
+        return $this->redirectToRoute('app_livre_app_livre_authorized', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
+    }
+
+
+    #[Route('/dropdown/get-livre', name: 'app_livre_get_livre_dropdown', methods: ['GET'])]
+    public function getLivresDropdown(LivreRepository $livreRepository)
+    {
         $livres = $livreRepository->findAllVisible();
         foreach ($livres as $livre) {
             $data[] = [
@@ -369,20 +370,20 @@ class LivreController extends AbstractController
     // }
 
     #[Route('/session/set-livre', name: 'app_livre_set_livre_session', methods: ['POST'])]
-public function setLivreSession(Request $request, SessionInterface $session): JsonResponse
-{
-    $data = json_decode($request->getContent(), true);
-    // dd($data);
-    
-    if (!isset($data['livreId']) || empty($data['livreId'])) {
-        return new JsonResponse(['success' => false, 'message' => 'Aucun livre sélectionné.'], Response::HTTP_BAD_REQUEST);
+    public function setLivreSession(Request $request, SessionInterface $session): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        // dd($data);
+
+        if (!isset($data['livreId']) || empty($data['livreId'])) {
+            return new JsonResponse(['success' => false, 'message' => 'Aucun livre sélectionné.'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $session->set('livreIdSelectionne', $data['livreId']);
+        $session->set('livreName', $data['livreNom']);
+        // dd($session); 
+        return new JsonResponse(['success' => true, 'message' => 'Livre sélectionné.']);
     }
-   
-    $session->set('livreIdSelectionne', $data['livreId']);
-    $session->set('livreName', $data['livreNom']);
-    // dd($session); 
-    return new JsonResponse(['success' => true, 'message' => 'Livre sélectionné.']);
-}
     #[Route('/livre/{id}/edit', name: 'livre_app_livre_edit', methods: ['GET', 'POST'])]
     public function editAuth(Request $request, #[MapEntity(id: 'id')] Livre $livre, EntityManagerInterface $entityManager): Response
     {
@@ -395,7 +396,7 @@ public function setLivreSession(Request $request, SessionInterface $session): Js
             $user = $this->getUser();
 
             if (in_array('ROLE_ADMIN', $user->getRoles())) {
-            
+
                 return $this->redirectToRoute('livre_app_livre_livre', [], Response::HTTP_SEE_OTHER);
             } else {
                 return $this->redirectToRoute('app_livre_app_livre_authorized', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);

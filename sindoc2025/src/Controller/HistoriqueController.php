@@ -10,7 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class HistoriqueController extends AbstractController
 {
@@ -86,7 +86,7 @@ class HistoriqueController extends AbstractController
     #[Route('/historique/delete/{id}', name: 'historique_app_historique_delete')]
     public function delete(Request $request, #[MapEntity(id: 'id')] Historique $historique, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$historique->getIdHistorique(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $historique->getIdHistorique(), $request->request->get('_token'))) {
             $entityManager->remove($historique);
             $entityManager->flush();
         }
@@ -108,5 +108,4 @@ class HistoriqueController extends AbstractController
         // Rediriger l'utilisateur après la suppression
         return $this->redirectToRoute('historique_app_historique_index');
     }
-
 }

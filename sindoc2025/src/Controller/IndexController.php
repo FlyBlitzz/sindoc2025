@@ -2,14 +2,12 @@
 
 namespace App\Controller;
 
-use Symfony\Component\HttpFoundation\StreamedResponse;
 use App\Entity\Historique;
 use App\Entity\Index;
 use App\Entity\IndexAuth;
 use App\Form\IndexType;
 use App\Repository\IndexRepository;
 use App\Repository\IndexAuthRepository;
-use Doctrine\ORM\Proxy\Proxy;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,7 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\UserRepository;
 use Doctrine\DBAL\Connection;
 use App\Service\PdfService;
@@ -199,7 +197,7 @@ class IndexController extends AbstractController
         );
     }
 
-// Add this to your class
+    // Add this to your class
     private function cleanText(?string $text): string
     {
         $text = $text ?? 'Non spécifié';
@@ -228,9 +226,12 @@ class IndexController extends AbstractController
     }
 
     #[Route('/index/{id}/auth/save', name: 'app_index_auth_save', methods: ['POST'])]
-    public function saveAuth(Request                $request, Index $index, UserRepository $userRepository,
-                             EntityManagerInterface $entityManager): Response
-    {
+    public function saveAuth(
+        Request $request,
+        Index $index,
+        UserRepository $userRepository,
+        EntityManagerInterface $entityManager
+    ): Response {
         $userIds = json_decode($request->request->get('users', '[]'), true);
         if (!is_array($userIds)) {
             throw new \InvalidArgumentException('Invalid users data');
@@ -498,7 +499,4 @@ class IndexController extends AbstractController
             return $this->redirectToRoute('app_index_authorized', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
         }
     }
-
 }
-
-

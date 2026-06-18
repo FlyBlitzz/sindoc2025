@@ -16,8 +16,7 @@ use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Routing\Attribute\Route;
 use App\Service\SearchService;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -30,21 +29,21 @@ class SavRequeteController extends AbstractController
         $this->logicalParser = $logicalParser;
     }
     #[Route('/sav/requete/', name: 'savreq_app_sav_requete_index', methods: ['GET'])]
-public function index(SavRequeteRepository $savRequeteRepository, Request $request): Response
-{
-    $user = $this->getUser();
+    public function index(SavRequeteRepository $savRequeteRepository, Request $request): Response
+    {
+        $user = $this->getUser();
 
-    if ($request->isXmlHttpRequest()) {
-        // Get all SAV requests for the current user
-        $savRequetes = $savRequeteRepository->findBy(['user' => $user]);
+        if ($request->isXmlHttpRequest()) {
+            // Get all SAV requests for the current user
+            $savRequetes = $savRequeteRepository->findBy(['user' => $user]);
 
-        $data = [];
-        foreach ($savRequetes as $savRequete) {
-            $data[] = [
-                'nomRequete' => $savRequete->getNomRequete(),
-                'createDate' => $savRequete->getCreateDate()?->format('Y-m-d') ?? '',
-                'heure' => $savRequete->getHeure()?->format('H:i:s') ?? '',
-                'actions' => '
+            $data = [];
+            foreach ($savRequetes as $savRequete) {
+                $data[] = [
+                    'nomRequete' => $savRequete->getNomRequete(),
+                    'createDate' => $savRequete->getCreateDate()?->format('Y-m-d') ?? '',
+                    'heure' => $savRequete->getHeure()?->format('H:i:s') ?? '',
+                    'actions' => '
                     <div class="d-flex">
                         <a href="' . $this->generateUrl('savreq_app_sav_requete_show', ['id' => $savRequete->getIdSavRequete()]) . '" class="btn btn-outline-primary tooltip-link" data-tooltip="Executer la requête" style="margin-right: 10px;">
                             <i class="bi bi-eye-fill"></i>
@@ -59,18 +58,18 @@ public function index(SavRequeteRepository $savRequeteRepository, Request $reque
                             </button>
                         </form>
                     </div>'
-            ];
+                ];
+            }
+
+            return $this->json(['data' => $data]); // Return all data in JSON format
         }
 
-        return $this->json(['data' => $data]); // Return all data in JSON format
+        // If not an AJAX request, render the template
+        return $this->render('sav_requete/index.html.twig', [
+            'user' => $user,
+        ]);
     }
 
-    // If not an AJAX request, render the template
-    return $this->render('sav_requete/index.html.twig', [
-        'user' => $user,
-    ]);
-}
- 
     #[Route("/sav/requete/{id}/show", name: 'savreq_app_sav_requete_show', methods: ['GET'])]
     public function showRequete(
         #[MapEntity(id: 'id')] SavRequete $savRequete,
@@ -78,17 +77,17 @@ public function index(SavRequeteRepository $savRequeteRepository, Request $reque
         AuthorizationCheckerInterface $authChecker,
         Request $request
     ) {
-       
+
         // Extract query and parameters
         $session = $request->getSession();
         $session->set('previous_url', $request->getUri());
 
         $queryString = $savRequete->getRequete();
         $parameters = json_decode($savRequete->getRequeteParams(), true); // Convert JSON to array
-       
+
         $queryString = str_replace("FROM App\Entity\Fiche f", "FROM App\Entity\Fiche f LEFT JOIN f.ficheMotCles mc", $queryString);
         $query = $entityManager->createQuery($queryString);
-       
+
         // Set Parameters Dynamically
         foreach ($parameters as $key => $value) {
             if ($key != "MotCle")
@@ -129,7 +128,7 @@ public function index(SavRequeteRepository $savRequeteRepository, Request $reque
         }
         $user = $this->getUser();
         $ficheDTOs = array_map(function ($fiche) use ($isAdmin, $user) {
-            $hasAccess = $isAdmin || $fiche->getLivre()->getLivreAuths()->exists(fn($key,$auth) => $auth->getUser() == $user);
+            $hasAccess = $isAdmin || $fiche->getLivre()->getLivreAuths()->exists(fn($key, $auth) => $auth->getUser() == $user);
             return new FicheDTO(
                 $fiche->getIdFiche(),
                 $fiche->getRefer(),
@@ -146,7 +145,7 @@ public function index(SavRequeteRepository $savRequeteRepository, Request $reque
                 implode(',', array_map(function ($motCle) {
                     return $motCle->getReference() . ':' . $motCle->getDenomination();
                 }, $fiche->getMotCles()))
-                
+
             );
         }, $fiches);
         // dd($ficheDTOs);
@@ -294,32 +293,33 @@ public function index(SavRequeteRepository $savRequeteRepository, Request $reque
     }
 
     #[Route('/sav/req/results', name: 'savreq_app_recherche_results')]
-    public function rechercheResult (Request $request,
-    FicheRepository $ficheRepository,
-    AuthorizationCheckerInterface $authChecker,
-    EntityManagerInterface $entityManager,
-    LivreRepository $livreRepository)
-    {
-            $livres = $livreRepository->findAll();
-            $session = $request->getSession();
+    public function rechercheResult(
+        Request $request,
+        FicheRepository $ficheRepository,
+        AuthorizationCheckerInterface $authChecker,
+        EntityManagerInterface $entityManager,
+        LivreRepository $livreRepository
+    ) {
+        $livres = $livreRepository->findAll();
+        $session = $request->getSession();
         $session->set('previous_url', $request->getUri());
-            $requeteMultiCri = $session->get('requeteMultiCri');
-            if (!empty($requeteMultiCri)) {
-                //dd($queries);
-                // dd($requeteMultiCri);
-                $finalQuery = $this->logicalParser->buildMultiCritSearchQuery($requeteMultiCri);
-                // dd($finalQuery);
-                $fiches = $ficheRepository->searchMultiCrit($finalQuery);
-                // dd($fiches);
-                $isAdmin = $authChecker->isGranted('ROLE_ADMIN');
-                $ficheIds = array_map(fn($fiche) => $fiche->getIdFiche(), $fiches);
-                $connection = $entityManager->getConnection();
-                $nbrFiches = 0;
-                $nbrFicheTotal = 0;
-                if(!empty($fiches)){
-                    $livreAssocie = $fiches[0]->getLivre();
-                    $nbrFicheTotal = count($fiches);
-                    $nbrFiches = count($fiches);
+        $requeteMultiCri = $session->get('requeteMultiCri');
+        if (!empty($requeteMultiCri)) {
+            //dd($queries);
+            // dd($requeteMultiCri);
+            $finalQuery = $this->logicalParser->buildMultiCritSearchQuery($requeteMultiCri);
+            // dd($finalQuery);
+            $fiches = $ficheRepository->searchMultiCrit($finalQuery);
+            // dd($fiches);
+            $isAdmin = $authChecker->isGranted('ROLE_ADMIN');
+            $ficheIds = array_map(fn($fiche) => $fiche->getIdFiche(), $fiches);
+            $connection = $entityManager->getConnection();
+            $nbrFiches = 0;
+            $nbrFicheTotal = 0;
+            if (!empty($fiches)) {
+                $livreAssocie = $fiches[0]->getLivre();
+                $nbrFicheTotal = count($fiches);
+                $nbrFiches = count($fiches);
                 $sql = '
                     SELECT 
                         mc.reference AS reference, 
@@ -338,49 +338,48 @@ public function index(SavRequeteRepository $savRequeteRepository, Request $reque
 
                 $statement = $connection->prepare($sql);
                 $motCleOccurrences = $statement->executeQuery()->fetchAllAssociative();
-                }
-                $user = $this->getUser();
-                $isAdmin = $authChecker->isGranted('ROLE_ADMIN');
-                $ficheDTOs = array_map(function ($fiche) use($user, $isAdmin) {
-                    $hasAccess = $isAdmin || $fiche->getLivre()->getLivreAuths()->exists(fn($key,$auth) => $auth->getUser() == $user);
-                    return new FicheDTO(
-                        $fiche->getIdFiche(),
-                        $fiche->getRefer(),
-                        $fiche->getLivre()->getNom(),
-                        $fiche->getDenomination(),
-                        $fiche->getStatut()->getDenomination(),
-                        $fiche->isVisible(),
-                        $hasAccess,
-                        $fiche->getEdition() ?? '', // Assuming there is a method to get edition
-                        $fiche->getTexte() ?? '',   // Assuming there is a method to get texte
-                        $fiche->getTraduction() ?? '', // Assuming there is a method to get traduction
-                        $fiche->getNotes() ?? '',   // Assuming there is a method to get notes
-                        $fiche->getCommentaire() ?? '', // Assuming there is a method to get commentaire
-                        implode(',', array_map(function ($motCle) {
-                            return $motCle->getReference() . ':' . $motCle->getDenomination();
-                        }, $fiche->getMotCles())), // Convert PersistentCollection to string by joining with commas
-                        
-                    );
-                }, $fiches);
-                $session = $request->getSession();
-                // Retrieve search results and livre ID from session
-                $session->set('SavSearchResults', $fiches);
-                // dd($fiches);
-                return $this->render('fiche/liste_fichesRech_SavReq_combin.html.twig', [
-                    'fichesJSON' => json_encode($ficheDTOs),
-                    'fiches' => $fiches,
-                    'isAdmin' => $isAdmin,
-                    'motClesSelect' => $requeteMultiCri,
-                    'livres' => $livres,
-                    'selectedLivre' => 0,
-                    'nbrFiches' => $nbrFiches,
-                    'nbrFicheTotal' => $nbrFicheTotal,
-                    'motCleOccurrences' => $motCleOccurrences ?? []
+            }
+            $user = $this->getUser();
+            $isAdmin = $authChecker->isGranted('ROLE_ADMIN');
+            $ficheDTOs = array_map(function ($fiche) use ($user, $isAdmin) {
+                $hasAccess = $isAdmin || $fiche->getLivre()->getLivreAuths()->exists(fn($key, $auth) => $auth->getUser() == $user);
+                return new FicheDTO(
+                    $fiche->getIdFiche(),
+                    $fiche->getRefer(),
+                    $fiche->getLivre()->getNom(),
+                    $fiche->getDenomination(),
+                    $fiche->getStatut()->getDenomination(),
+                    $fiche->isVisible(),
+                    $hasAccess,
+                    $fiche->getEdition() ?? '', // Assuming there is a method to get edition
+                    $fiche->getTexte() ?? '',   // Assuming there is a method to get texte
+                    $fiche->getTraduction() ?? '', // Assuming there is a method to get traduction
+                    $fiche->getNotes() ?? '',   // Assuming there is a method to get notes
+                    $fiche->getCommentaire() ?? '', // Assuming there is a method to get commentaire
+                    implode(',', array_map(function ($motCle) {
+                        return $motCle->getReference() . ':' . $motCle->getDenomination();
+                    }, $fiche->getMotCles())), // Convert PersistentCollection to string by joining with commas
 
-                ]);
-        }
-        else {
-           
+                );
+            }, $fiches);
+            $session = $request->getSession();
+            // Retrieve search results and livre ID from session
+            $session->set('SavSearchResults', $fiches);
+            // dd($fiches);
+            return $this->render('fiche/liste_fichesRech_SavReq_combin.html.twig', [
+                'fichesJSON' => json_encode($ficheDTOs),
+                'fiches' => $fiches,
+                'isAdmin' => $isAdmin,
+                'motClesSelect' => $requeteMultiCri,
+                'livres' => $livres,
+                'selectedLivre' => 0,
+                'nbrFiches' => $nbrFiches,
+                'nbrFicheTotal' => $nbrFicheTotal,
+                'motCleOccurrences' => $motCleOccurrences ?? []
+
+            ]);
+        } else {
+
             return $this->redirectToRoute('savreq_app_recherche');
         }
     }
@@ -408,9 +407,9 @@ public function index(SavRequeteRepository $savRequeteRepository, Request $reque
             return $this->redirectToRoute('savreq_app_recherche_results', [
                 'requeteMultiCri' => $requeteMultiCri
             ]);
-            
+
         }
-        
+
         // Affichage du formulaire SelectLivreType
         return $this->render('sav_requete/liste.html.twig', [
             'form' => $livreForm->createView(),

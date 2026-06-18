@@ -22,7 +22,7 @@ use App\Repository\UserRepository;
 use App\Service\BreadCrumbService as ServiceBreadCrumbService;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -34,12 +34,9 @@ use Knp\Component\Pager\PaginatorInterface;
 use App\Service\PdfService;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-
 use App\Service\SearchService;
-use App\Service\WordExportService;
 use App\Service\WordService;
 use Symfony\Component\HttpFoundation\StreamedResponse;
-use Symfony\Component\Serializer\SerializerInterface;
 use ZipArchive;
 
 class FicheController extends AbstractController
@@ -50,9 +47,8 @@ class FicheController extends AbstractController
 
     public function __construct(
         ServiceBreadCrumbService $breadcrumbService,
-        SearchService            $logicalParser
-    )
-    {
+        SearchService $logicalParser
+    ) {
         $this->logicalParser = $logicalParser;
         $this->breadcrumbService = $breadcrumbService;
     }
@@ -82,28 +78,30 @@ class FicheController extends AbstractController
     }
 
     #[Route('/fiche/ajout', name: 'add_fiche', methods: ['GET', 'POST'])]
-    public function new(Request $request, LivreRepository $livreRepository, Security $security, 
-    AuthorizationCheckerInterface $authChecker, EntityManagerInterface $entityManager): Response
-    {
+    public function new(
+        Request $request,
+        LivreRepository $livreRepository,
+        Security $security,
+        AuthorizationCheckerInterface $authChecker,
+        EntityManagerInterface $entityManager
+    ): Response {
         // Récupérer la liste des livres depuis le repository
         $livres = $livreRepository->findAllVisible();
-       
+
         $session = $request->getSession();
         $canEdit = $session->get('canEdit', false);
         $listeLivresAutorises = [];
         $user = $this->getUser();
         if ($authChecker->isGranted('ROLE_ADMIN')) {
             $listeLivresAutorises = $livres;
-        }
-        else if($authChecker->isGranted("ROLE_USER") && $canEdit)
-        {
+        } else if ($authChecker->isGranted("ROLE_USER") && $canEdit) {
             $query = $entityManager->createQuery(
                 'SELECT l 
                  FROM App\Entity\Livre l
                  JOIN l.livreAuths la
                  WHERE la.user = :user'
             )->setParameter('user', $user);
-            
+
             $livres = $query->getResult();
             $selectedLivreFromHeader = $session->get('livreIdSelectionne');
             // Extract all book IDs into an array
@@ -144,9 +142,12 @@ class FicheController extends AbstractController
     }
 
     #[Route('/fiche/ajout/deuxieme', name: 'deuxieme_formulaire_route', methods: ['GET', 'POST'])]
-    public function deuxiemeFormulaireAction(Request $request, ManagerRegistry $doctrine, Security $security, AuthorizationCheckerInterface $authChecker,
-    ): Response
-    {
+    public function deuxiemeFormulaireAction(
+        Request $request,
+        ManagerRegistry $doctrine,
+        Security $security,
+        AuthorizationCheckerInterface $authChecker,
+    ): Response {
         // Récupérer la sélection du livre depuis la session
         $livreId = $request->getSession()->get('livreIdSelectionne');
         // Récupérer l'objet Livre à partir de l'ID
@@ -256,9 +257,9 @@ class FicheController extends AbstractController
             $entityManager->flush();
 
             // Rediriger l'utilisateur après le traitement réussi
-            if($authChecker->isGranted('ROLE_USER')){
+            if ($authChecker->isGranted('ROLE_USER')) {
                 return $this->redirectToRoute('user_auth_fiche_list', ['userId' => $user->getId()]);
-            }elseif ($authChecker->isGranted('ROLE_ADMIN')){
+            } elseif ($authChecker->isGranted('ROLE_ADMIN')) {
                 return $this->redirectToRoute('fiche_list', ['livreId' => $livreId]);
             }
         }
@@ -392,8 +393,7 @@ class FicheController extends AbstractController
         // $livreId = $request->cookies->get('selectedLivre');
         $livreId = $request->getSession()->get('livreIdSelectionne');
         // Récupérer l'objet Livre à partir de l'ID
-        if($livreId == null)
-        {
+        if ($livreId == null) {
             // return $this->render('fiche/recherche_fiche.html.twig');
             return $this->redirectToRoute('app_home');
         }
@@ -472,13 +472,12 @@ class FicheController extends AbstractController
 
     #[Route('/fiche/{livreId}/recherche/resultats', name: 'fiche_recherche_resultat')]
     public function resultatRecherche(
-        int                           $livreId,
-        Request                       $request,
-        FicheRepository               $ficheRepository,
+        int $livreId,
+        Request $request,
+        FicheRepository $ficheRepository,
         AuthorizationCheckerInterface $authChecker,
-        EntityManagerInterface        $entityManager
-    ): Response
-    {
+        EntityManagerInterface $entityManager
+    ): Response {
         $session = $request->getSession();
         $session->set('previous_url', $request->getUri());
 
@@ -495,8 +494,10 @@ class FicheController extends AbstractController
 
         $livreId2 = $session->get('livreIdSelectionne');
 
-        if ($livreId2 != null) $livreAssocie = $entityManager->getRepository(Livre::class)->find($livreId2);
-        else $livreAssocie = $entityManager->getRepository(Livre::class)->find($livreId);
+        if ($livreId2 != null)
+            $livreAssocie = $entityManager->getRepository(Livre::class)->find($livreId2);
+        else
+            $livreAssocie = $entityManager->getRepository(Livre::class)->find($livreId);
 
         // Retrieve the book object
         // dd($donnéesRech);
@@ -535,9 +536,9 @@ class FicheController extends AbstractController
         }
 
         $user = $this->getUser();
-        
+
         $ficheDTOs = array_map(function ($fiche) use ($isAdmin, $user) {
-            $hasAccess = $isAdmin || $fiche->getLivre()->getLivreAuths()->exists(fn($key,$auth) => $auth->getUser() == $user);
+            $hasAccess = $isAdmin || $fiche->getLivre()->getLivreAuths()->exists(fn($key, $auth) => $auth->getUser() == $user);
             return new FicheDTO(
                 $fiche->getIdFiche(),
                 $fiche->getRefer(),
@@ -554,7 +555,7 @@ class FicheController extends AbstractController
                 implode(',', array_map(function ($motCle) {
                     return $motCle->getReference() . ':' . $motCle->getDenomination();
                 }, $fiche->getMotCles()))
-                
+
             );
         }, $fiches);
         // Render the response
@@ -576,9 +577,13 @@ class FicheController extends AbstractController
      * @Route("/fiche/export/{id}", name="fiche_export", methods={"POST"})
      */
     #[Route('/fiche/export/{id}', name: 'fiche_export')]
-    public function exportFiche(Request                $request, PdfService $pdfService, WordService $wordExportService,
-                                EntityManagerInterface $entityManager, int $id): Response
-    {
+    public function exportFiche(
+        Request $request,
+        PdfService $pdfService,
+        WordService $wordExportService,
+        EntityManagerInterface $entityManager,
+        int $id
+    ): Response {
         $format = $request->request->get('exportFormat');
         // Fetch the fiche entity from the database
         $fiche = $entityManager->getRepository(Fiche::class)->find($id);
@@ -755,21 +760,21 @@ class FicheController extends AbstractController
     {
         // Retrieve serialized data from the POST request
         $ficheSerialized = $request->request->get('ficheDataWord');
-    
+
         if (!$ficheSerialized) {
             throw $this->createNotFoundException('No fiche data found for export.');
         }
-    
+
         // Deserialize the JSON data into an array or an object
         $fiches = json_decode($ficheSerialized, true);
-    
+
         if (!$fiches) {
             throw $this->createNotFoundException('Invalid fiche data.');
         }
-    
+
         // Retrieve the export type (either 'reference_only' or 'reference_denomination')
         $exportType = $request->request->get('exportType');
-    
+
         // Generate the Word document based on the export type
         $content = '';
         if ($exportType === 'reference_only') {
@@ -779,15 +784,15 @@ class FicheController extends AbstractController
         } else {
             throw new \InvalidArgumentException('Invalid export type.');
         }
-    
+
         // Ensure that content is not empty
         if (empty($content)) {
             throw new \Exception('The generated document is empty.');
         }
-    
+
         // Set the filename for the Word document
         $fileName = 'fiches_export_' . $exportType . '.docx';
-    
+
         // Return the Word document directly for download
         return new Response(
             $content,
@@ -799,16 +804,15 @@ class FicheController extends AbstractController
             ]
         );
     }
-    
+
 
 
     #[Route('/sav/requete/new', name: 'savreq_app_sav_requete_new', methods: ['GET', 'POST'])]
     public function newRequete(
-        Request                $request,
+        Request $request,
         EntityManagerInterface $entityManager,
-        ManagerRegistry        $doctrine
-    ): Response
-    {
+        ManagerRegistry $doctrine
+    ): Response {
 
         // Récupérer la sélection du livre depuis la session
         $livreId = $request->getSession()->get('livreIdSelectionne');
@@ -836,7 +840,7 @@ class FicheController extends AbstractController
             if ($existingRequete) {
                 // Add a flash error message
                 $this->addFlash('error', 'Ce nom de requête existe déjà.');
-                
+
                 return $this->render('sav_requete/new.html.twig', [
                     'form' => $formSavReq->createView(),
                 ]);
@@ -945,29 +949,25 @@ class FicheController extends AbstractController
         $session = $request->getSession();
         $session->set('previous_url', $request->getUri());
         $user = $this->getUser();
-        $livreID = $request->query->get('livre') == null ? $session->get('livreIdSelectionne'): $request->query->get('livre');
+        $livreID = $request->query->get('livre') == null ? $session->get('livreIdSelectionne') : $request->query->get('livre');
         $isAdmin = $authChecker->isGranted('ROLE_ADMIN');
-        
+
         $livres = $livreRepository->findAll();
-        
-        
-        
-        if($isAdmin)
-        {
-            if($livreID != 0)
-            {
+
+
+
+        if ($isAdmin) {
+            if ($livreID != 0) {
                 $fiches = $ficheRepository->findBy(['livre' => $livreID]);
-            }
-            else
-            $fiches = $ficheRepository->findAll();
-        }
-        else {
+            } else
+                $fiches = $ficheRepository->findAll();
+        } else {
             $fiches = $ficheRepository->findBy(['livre' => $livreID]);
         }
         $user = $this->getUser();
         // Map entities to DTOs
-        $ficheDTOs = array_map(function ($fiche) use($isAdmin, $user) {
-            $hasAccess = $isAdmin || $fiche->getLivre()->getLivreAuths()->exists(fn($key,$auth) => $auth->getUser() == $user);
+        $ficheDTOs = array_map(function ($fiche) use ($isAdmin, $user) {
+            $hasAccess = $isAdmin || $fiche->getLivre()->getLivreAuths()->exists(fn($key, $auth) => $auth->getUser() == $user);
             // dd($fiche->getDenomination(), $fiche->getIdFiche());
             return new FicheDTO(
                 $fiche->getIdFiche(),
@@ -983,7 +983,7 @@ class FicheController extends AbstractController
                 '',
                 '',
                 '',
-                
+
             );
         }, $fiches);
         return $this->render('fiche/liste_fiches.html.twig', [
@@ -1007,7 +1007,7 @@ class FicheController extends AbstractController
         $session = $request->getSession();
         $session->set('previous_url', $request->getUri());
         $canEdit = false;
-        
+
         // Fetch the user by ID instead of using getUser()
         $user = $userRepository->find($userId);
         if (!$user) {
@@ -1020,28 +1020,23 @@ class FicheController extends AbstractController
             $isAdmin = true;
         }
         $livres = [];
-      
+
         $livreID = 0;
         // $livreID = $request->query->get('livre') == null ? $session->get('livreIdSelectionne'): $request->query->get('livre');
         // if the user filtred the book
-        
+
         // dd($isAdmin);
         // dd($livreID);
         $hasFiltered = false;
-        if($isAdmin)
-        {
+        if ($isAdmin) {
             $livres = $livreRepository->findBy([], ['nom' => 'ASC']);
-            if($request->query->get('livre') != null)
-            {
+            if ($request->query->get('livre') != null) {
                 // dd("dddd");
                 $hasFiltered = true;
                 $livreID = $request->query->get('livre');
-            }
-            else
-            $livreID = $livres[0]->getIdLivre();
-        }
-        
-        else{
+            } else
+                $livreID = $livres[0]->getIdLivre();
+        } else {
             $query = $entityManager->createQuery(
                 'SELECT l 
                 FROM App\Entity\Livre l
@@ -1049,24 +1044,21 @@ class FicheController extends AbstractController
                 WHERE la.user = :user
                 ORDER BY l.nom'
             )->setParameter('user', $user);
-            
+
             $livres = $query->getResult();
             //check if user has authorized books
-            if(!empty($livres)){
-                if($request->query->get('livre') != null)
-                {
+            if (!empty($livres)) {
+                if ($request->query->get('livre') != null) {
                     $hasFiltered = true;
                     $livreID = $request->query->get('livre');
-                }
-                else
+                } else
                     $livreID = $livres[0]->getIdLivre();
                 $canEdit = true;
-            }  
-            else{
+            } else {
                 $canEdit = false;
-            } 
+            }
         }
-        
+
         if ($isAdmin && !$hasFiltered) {
             $fiches = $ficheRepository->findAll();
         } elseif ($canEdit) {
@@ -1074,13 +1066,13 @@ class FicheController extends AbstractController
         } else {
             $fiches = $ficheRepository->findBy(['livre' => $livreID]);
         }
-        
-        
-    
+
+
+
         // Map entities to DTOs
         $ficheDTOs = array_map(function ($fiche) use ($isAdmin, $user) {
             $hasAccess = $isAdmin || $fiche->getLivre()->getLivreAuths()->exists(fn($key, $auth) => $auth->getUser() == $user);
-    
+
             return new FicheDTO(
                 $fiche->getIdFiche(),
                 $fiche->getRefer(),
@@ -1095,12 +1087,12 @@ class FicheController extends AbstractController
                 '',
                 '',
                 ''
-                
+
             );
         }, $fiches);
         $fichesCount = count($fiches);
         return $this->render('fiche/user_authorized_fiche.html.twig', [
-            'userId' => $user->getId(), 
+            'userId' => $user->getId(),
             'canEdit' => $canEdit,
             'fiches' => json_encode($ficheDTOs),
             'isAdmin' => $isAdmin,
@@ -1151,10 +1143,15 @@ class FicheController extends AbstractController
     }
 
     #[Route('/fiche/supprimer/{id}', name: 'delete_fiche')]
-    public function deleteFiche(#[MapEntity(id: 'id')] Fiche  $fiche = null,
-                                ManagerRegistry               $doctrine, Request $request, EntityManagerInterface $entityManager,
-                                AuthorizationCheckerInterface $authChecker, Security $security, FicheRepository $ficheRepository): RedirectResponse
-    {
+    public function deleteFiche(
+        #[MapEntity(id: 'id')] Fiche $fiche = null,
+        ManagerRegistry $doctrine,
+        Request $request,
+        EntityManagerInterface $entityManager,
+        AuthorizationCheckerInterface $authChecker,
+        Security $security,
+        FicheRepository $ficheRepository
+    ): RedirectResponse {
         // Vérification si la fiche existe
         if ($fiche) {
             // Récupérer l'utilisateur actuellement connecté
@@ -1223,8 +1220,10 @@ class FicheController extends AbstractController
     #[Route('/fiche/total/savReq/{id<\d+>}', name: 'detail_fiche_total_sav_req')]
     public function detailFicheTotalSavReq(
         AuthorizationCheckerInterface $authChecker
-        , Request                     $request, $id): Response
-    {
+        ,
+        Request $request,
+        $id
+    ): Response {
 
         $currentFiche = null;
         $currentIndex = -1;
@@ -1275,11 +1274,14 @@ class FicheController extends AbstractController
     }
 
     #[Route('/fiche/total/rech/{id<\d+>}', name: 'detail_fiche_total_rech')]
-    public function detailFicheTotalRech(ManagerRegistry        $doctrine,
-                                         FicheRepository        $ficheRepository,
-                                         EntityManagerInterface $entityManager
-        , Request                                               $request, $id): Response
-    {
+    public function detailFicheTotalRech(
+        ManagerRegistry $doctrine,
+        FicheRepository $ficheRepository,
+        EntityManagerInterface $entityManager
+        ,
+        Request $request,
+        $id
+    ): Response {
         $session = $request->getSession();
         $session->set('previous_url', $request->getUri());
         $donnéesRech = $session->get('searchCriteria', []);
@@ -1318,11 +1320,14 @@ class FicheController extends AbstractController
     }
 
     #[Route('/fiche/total/{id<\d+>}', name: 'detail_fiche_total')]
-    public function detailFicheTotal(ManagerRegistry        $doctrine,
-                                     FicheRepository        $ficheRepository,
-                                     EntityManagerInterface $entityManager
-        , Request                                           $request, $id): Response
-    {
+    public function detailFicheTotal(
+        ManagerRegistry $doctrine,
+        FicheRepository $ficheRepository,
+        EntityManagerInterface $entityManager
+        ,
+        Request $request,
+        $id
+    ): Response {
         $session = $request->getSession();
         $session->set('previous_url', $request->getUri());
         $donnéesRech = $session->get('searchCriteria', []);
@@ -1404,10 +1409,17 @@ class FicheController extends AbstractController
     }
 
     #[Route('/fiche/total/rech/{id}/edit', name: 'app_fiche_edit_total_rech', methods: ['GET', 'POST'])]
-    public function editTotalRech(SessionInterface   $session,
-                                  PaginatorInterface $paginator, FicheMotCleRepository $ficheMotCleRepository,
-                                  Request            $request, #[MapEntity(id: 'id')] Fiche $fiche, EntityManagerInterface $entityManager, ManagerRegistry $doctrine, $id, Security $security): Response
-    {
+    public function editTotalRech(
+        SessionInterface $session,
+        PaginatorInterface $paginator,
+        FicheMotCleRepository $ficheMotCleRepository,
+        Request $request,
+        #[MapEntity(id: 'id')] Fiche $fiche,
+        EntityManagerInterface $entityManager,
+        ManagerRegistry $doctrine,
+        $id,
+        Security $security
+    ): Response {
         $historique = new Historique();
         $user = $security->getUser();
         if ($user) {
@@ -1494,10 +1506,17 @@ class FicheController extends AbstractController
     }
 
     #[Route('/fiche/total/savReq/{id}/edit', name: 'app_fiche_edit_total_sav_req', methods: ['GET', 'POST'])]
-    public function editTotalSavReq(SessionInterface   $session,
-                                    PaginatorInterface $paginator, FicheMotCleRepository $ficheMotCleRepository,
-                                    Request            $request, #[MapEntity(id: 'id')] Fiche $fiche, EntityManagerInterface $entityManager, ManagerRegistry $doctrine, $id, Security $security): Response
-    {
+    public function editTotalSavReq(
+        SessionInterface $session,
+        PaginatorInterface $paginator,
+        FicheMotCleRepository $ficheMotCleRepository,
+        Request $request,
+        #[MapEntity(id: 'id')] Fiche $fiche,
+        EntityManagerInterface $entityManager,
+        ManagerRegistry $doctrine,
+        $id,
+        Security $security
+    ): Response {
         $historique = new Historique();
         $user = $security->getUser();
         if ($user) {
@@ -1589,7 +1608,7 @@ class FicheController extends AbstractController
             // Associer l'utilisateur à la fiche
             $fiche->setUser($user);
         }
-        
+
         $livreId = $request->getSession()->get('livreIdSelectionne');
         $repository = $doctrine->getRepository(Fiche::class);
         $fiche = $repository->find($id);
@@ -1644,10 +1663,10 @@ class FicheController extends AbstractController
             $entityManager->flush();
             $session->set('savreq_form_data', $request->request->all());
             // Redirect after successful edit
-            return $this->redirectToRoute('savreq_app_recherche_results', [] ,Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('savreq_app_recherche_results', [], Response::HTTP_SEE_OTHER);
 
-        } 
-       
+        }
+
         return $this->render('fiche/edit.html.twig', [
             // 'fiche' => $fiche,
             'form' => $form->createView(),
@@ -1657,10 +1676,16 @@ class FicheController extends AbstractController
     }
     //*Pour le edit lors de l'execution d'une requete enregistree*/
     #[Route('/fiche/requete/{id}/{reqId}/edit', name: 'app_fiche_requete_edit', methods: ['GET', 'POST'])]
-    public function editFicheRechSavReq(SessionInterface $session,  
-    Request $request, #[MapEntity(id: 'id')] Fiche $fiche, 
-    EntityManagerInterface $entityManager, ManagerRegistry $doctrine, $id, $reqId, Security $security): Response
-    {
+    public function editFicheRechSavReq(
+        SessionInterface $session,
+        Request $request,
+        #[MapEntity(id: 'id')] Fiche $fiche,
+        EntityManagerInterface $entityManager,
+        ManagerRegistry $doctrine,
+        $id,
+        $reqId,
+        Security $security
+    ): Response {
         $historique = new Historique();
         $user = $security->getUser();
         if ($user) {
@@ -1723,7 +1748,7 @@ class FicheController extends AbstractController
 
             // Redirect after successful edit
             return $this->redirectToRoute('savreq_app_sav_requete_show', ['id' => $reqId], Response::HTTP_SEE_OTHER);
-        } 
+        }
         return $this->render('fiche/edit.html.twig', [
             // 'fiche' => $fiche,
             'form' => $form->createView(),
@@ -1800,7 +1825,7 @@ class FicheController extends AbstractController
             // Redirect after successful edit
             return $this->redirectToRoute('fiche_recherche_resultat', ['livreId' => $livreId]);
             // return $this->redirectToRoute('fiche_list', [], Response::HTTP_SEE_OTHER);
-        } 
+        }
         return $this->render('fiche/edit.html.twig', [
             // 'fiche' => $fiche,
             'form' => $form->createView(),
@@ -2057,6 +2082,4 @@ class FicheController extends AbstractController
         $entityManager->flush();
         return $this->redirectToRoute('fiche_list', [], Response::HTTP_SEE_OTHER);
     }
-
-
 }

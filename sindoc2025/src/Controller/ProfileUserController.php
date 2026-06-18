@@ -4,20 +4,16 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
-use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 
 #[Route('/users', name: 'app_user_')]
 class ProfileUserController extends AbstractController
 {
-
-
     #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
     public function show(#[MapEntity(id: 'id')] User $user): Response
     {
@@ -43,8 +39,4 @@ class ProfileUserController extends AbstractController
             'form' => $form,
         ]);
     }
-
-
 }
-
-

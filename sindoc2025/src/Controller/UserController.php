@@ -14,29 +14,22 @@ use App\Form\UserTypeEdit;
 use App\Repository\UserRepository;
 use App\Repository\LivreRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Mapping\Id;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Http\Logout\LogoutHandlerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Knp\Component\Pager\PaginatorInterface;
-use Knp\Bundle\PaginatorBundle\KnpPaginatorBundle;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
-
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class UserController extends AbstractController
 {
-
-
     /**
      * @param UserRepository $repository
      * @param PaginatorInterface $paginator
@@ -52,14 +45,14 @@ class UserController extends AbstractController
             $request->query->getInt('page', 1), /*page number*/
             4 /*limit per page*/
         );
-        
+
         return $this->render('users/listUser.html.twig', [
-        'users' => $repository->createQueryBuilder('u')
-        ->leftJoin('u.fiches', 'f') // Assuming 'fiches' is the property in User entity
-        ->addSelect('f') // Fetch fiches with users
-        ->getQuery()
-        ->getResult()
-    ]);
+            'users' => $repository->createQueryBuilder('u')
+                ->leftJoin('u.fiches', 'f') // Assuming 'fiches' is the property in User entity
+                ->addSelect('f') // Fetch fiches with users
+                ->getQuery()
+                ->getResult()
+        ]);
     }
 
     /**
@@ -71,10 +64,11 @@ class UserController extends AbstractController
      */
     #[Route('/user/valider/inscription', name: 'app_admin_app_users_validerInsc', methods: ['GET'])]
     public function validerInscription(
-        UserRepository $repository, 
+        UserRepository $repository,
         PaginatorInterface $paginator,
-     Request $request,Security $security): Response
-    {
+        Request $request,
+        Security $security
+    ): Response {
         if (!$security->getUser()) {
             return $this->redirectToRoute('app_login');
         }
@@ -98,9 +92,12 @@ class UserController extends AbstractController
      * Permet de créer un utilisateur
      */
     #[Route('/user/new', name: 'app_admin_app_users_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, 
-    UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, Security $security): Response
-    {
+    public function new(
+        Request $request,
+        UserPasswordHasherInterface $userPasswordHasher,
+        EntityManagerInterface $entityManager,
+        Security $security
+    ): Response {
         if (!$security->getUser()) {
             return $this->redirectToRoute('app_login');
         }
@@ -135,7 +132,7 @@ class UserController extends AbstractController
      */
     #[Route('/user/{id}', name: 'app_admin_app_users_show', methods: ['GET'])]
     // #[IsGranted('ROLE_USER')]
-    
+
     public function show(#[MapEntity(id: 'id')] int $id, ManagerRegistry $doctrine, Security $security): Response
     {
         if (!$security->getUser()) {
@@ -183,16 +180,19 @@ class UserController extends AbstractController
      * Permet de modifier les informations d'un utilisateur
      */
     #[Route('/user/{id}/edit', name: 'app_admin_app_users_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, #[MapEntity(id: 'id')] User $user,
-     UserPasswordHasherInterface $userPasswordHasher, 
-     EntityManagerInterface $entityManager,Security $security): Response
-    {
+    public function edit(
+        Request $request,
+        #[MapEntity(id: 'id')] User $user,
+        UserPasswordHasherInterface $userPasswordHasher,
+        EntityManagerInterface $entityManager,
+        Security $security
+    ): Response {
         if (!$security->getUser()) {
             return $this->redirectToRoute('app_login');
         }
         $form = $this->createForm(UserTypeEdit::class, $user);
         $form->handleRequest($request);
-        
+
         if ($form->isSubmitted() && $form->isValid()) {
             $user->setRoles($form->get('roles')->getData());
             $entityManager->flush();
@@ -215,21 +215,22 @@ class UserController extends AbstractController
      * Permet de modifier le mot de passe d'un utilisateur
      */
     #[Route('/user/{id}/editUser', name: 'app_admin_app_users_edit_user_password', methods: ['GET', 'POST'])]
-    public function editUserPassword(Request $request, #[MapEntity(id: 'id')] int $id, 
-    UserPasswordHasherInterface $userPasswordHasher, 
-    EntityManagerInterface $entityManager, 
-    TokenStorageInterface $tokenStorage,
-    RequestStack $requestStack,
-    Security $security): Response
-    {
+    public function editUserPassword(
+        Request $request,
+        #[MapEntity(id: 'id')] int $id,
+        UserPasswordHasherInterface $userPasswordHasher,
+        EntityManagerInterface $entityManager,
+        TokenStorageInterface $tokenStorage,
+        RequestStack $requestStack,
+        Security $security
+    ): Response {
         if (!$security->getUser()) {
             return $this->redirectToRoute('app_login');
         }
         // Otherwise, deny access
         // throw $this->createAccessDeniedException("Access denied.");
         $userEntity = $entityManager->getRepository(User::class)->find($id);
-        if($userEntity)
-        {   
+        if ($userEntity) {
             $form = $this->createForm(ResetPassword::class, $userEntity);
             $form->handleRequest($request);
 
@@ -244,7 +245,7 @@ class UserController extends AbstractController
                 $session = $request->getSession();
                 $tokenStorage->setToken(null);
 
-    // Invalidate session
+                // Invalidate session
                 $session = $requestStack->getSession();
                 $session->invalidate();
                 // $session->getFlashBag()->add('success', "Mot de passe réinitialisé, veuillez vous connecter.");
@@ -254,11 +255,10 @@ class UserController extends AbstractController
                 'user' => $userEntity,
                 'form' => $form,
             ]);
-        }
-        else
+        } else
             $this->addFlash('danger', "Une erreur est survenue");
-        
-        
+
+
     }
 
 
@@ -270,9 +270,12 @@ class UserController extends AbstractController
      * Permet de supprimer un utilisateur par un administrateur
      */
     #[Route('/user/{id}', name: 'app_admin_app_users_delete', methods: ['GET', 'POST'])]
-    public function delete(Request $request, #[MapEntity(id: 'id')] User $user, EntityManagerInterface $entityManager,
-    Security $security): Response
-    {
+    public function delete(
+        Request $request,
+        #[MapEntity(id: 'id')] User $user,
+        EntityManagerInterface $entityManager,
+        Security $security
+    ): Response {
         if (!$security->getUser()) {
             return $this->redirectToRoute('app_login');
         }
@@ -293,11 +296,13 @@ class UserController extends AbstractController
      * Permet de supprimer un utilisateur
      */
     #[Route('/user/desactiver/{id}', name: 'desactiver_user')]
-    public function desactiverUser(#[MapEntity(id: 'id')] User $user = null,
-     EntityManagerInterface $entityManager,
-      AuthorizationCheckerInterface $authChecker, 
-      TokenStorageInterface $tokenStorage,Security $security): RedirectResponse
-    {
+    public function desactiverUser(
+        #[MapEntity(id: 'id')] User $user = null,
+        EntityManagerInterface $entityManager,
+        AuthorizationCheckerInterface $authChecker,
+        TokenStorageInterface $tokenStorage,
+        Security $security
+    ): RedirectResponse {
         if (!$security->getUser()) {
             return $this->redirectToRoute('app_login');
         }
@@ -327,12 +332,13 @@ class UserController extends AbstractController
     }
 
     #[Route('/desactiver/{id}', name: 'desactiver_simple_user')]
-    public function desactiverSimpleUser(#[MapEntity(id: 'id')] User $user = null,
-     EntityManagerInterface $entityManager, 
-     AuthorizationCheckerInterface $authChecker, 
-     TokenStorageInterface $tokenStorage,
-     Security $security): RedirectResponse
-    {
+    public function desactiverSimpleUser(
+        #[MapEntity(id: 'id')] User $user = null,
+        EntityManagerInterface $entityManager,
+        AuthorizationCheckerInterface $authChecker,
+        TokenStorageInterface $tokenStorage,
+        Security $security
+    ): RedirectResponse {
         if (!$security->getUser()) {
             return $this->redirectToRoute('app_login');
         }
@@ -362,10 +368,13 @@ class UserController extends AbstractController
     }
 
     #[Route('/user/supprimer/{id}', name: 'delete_user')]
-    public function deleteUser(#[MapEntity(id: 'id')] User $user = null, 
-    EntityManagerInterface $entityManager, AuthorizationCheckerInterface $authChecker, 
-    TokenStorageInterface $tokenStorage, Security $security): RedirectResponse
-    {
+    public function deleteUser(
+        #[MapEntity(id: 'id')] User $user = null,
+        EntityManagerInterface $entityManager,
+        AuthorizationCheckerInterface $authChecker,
+        TokenStorageInterface $tokenStorage,
+        Security $security
+    ): RedirectResponse {
         if (!$security->getUser()) {
             return $this->redirectToRoute('app_login');
         }
@@ -376,15 +385,15 @@ class UserController extends AbstractController
                 // Find and delete related records in index_auth
                 $indexAuthRepo = $entityManager->getRepository(IndexAuth::class);
                 $indexAuthRecords = $indexAuthRepo->findBy(['user' => $user]);
-            
+
                 foreach ($indexAuthRecords as $record) {
                     $entityManager->remove($record);
                 }
                 $entityManager->flush(); // Ensure related records are deleted first
-                
+
                 $livreAuthRepo = $entityManager->getRepository(LivreAuth::class);
                 $livreAuthRecords = $livreAuthRepo->findBy(['user' => $user]);
-            
+
                 foreach ($livreAuthRecords as $record) {
                     $entityManager->remove($record);
                 }
@@ -393,11 +402,11 @@ class UserController extends AbstractController
                 // Now, delete the user
                 $entityManager->remove($user);
                 $entityManager->flush();
-            
+
                 $this->addFlash('success', "L'utilisateur a été supprimé avec succès");
                 return $this->redirectToRoute('admin_index');
             }
-            
+
         } else {
             $this->addFlash('error', "L'utilisateur n'existe pas");
         }
@@ -539,6 +548,4 @@ class UserController extends AbstractController
         return $this->render('base.html.twig');
 
     }
-
-
 }

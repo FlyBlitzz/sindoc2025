@@ -2,13 +2,13 @@
 
 ## 1) Environnement / prérequis
 
-- **Ajout du fichier `.php-version`** pour fixer la version PHP utilisée sur le projet : **8.4.22**  
-  (Symfony 8.1 nécessite PHP ≥ 8.4.1 ; PHP 8.5 posait des conflits de dépendances)
+- Ajout du fichier `.php-version` pour fixer la version PHP utilisée sur le projet : **8.4.22**  
+  (Symfony 8.1 nécessite PHP ≥ 8.4.1 ; PHP 8.5 posait des conflits de dépendances).
 - Vérification/activation des extensions PHP nécessaires au projet sous PHP 8.4.22 : `pgsql`, `pdo_pgsql`, `intl`, `gd`.
 
 ## 2) Dépendances (Composer)
 
-- **Mise à jour des dépendances vers Symfony `v8.1.0`** (tous les `symfony/*` en `8.1.*` dans `composer.json` + régénération de `composer.lock`).
+- Mise à jour des dépendances vers Symfony **v8.1.0** (tous les `symfony/*` en `8.1.*` dans `composer.json` + régénération de `composer.lock`).
 - Mises à jour associées nécessaires pour compatibilité Symfony 8 / Doctrine 3 (principales) :
   - `doctrine/doctrine-bundle` → **3.x**
   - `doctrine/orm` → **3.x**
@@ -20,7 +20,8 @@
 
 ## 3) Corrections de code liées à Doctrine ORM 3 (signatures)
 
-Doctrine ORM 3 typant certaines méthodes, plusieurs repositories surchargeaient `findAll()` sans type de retour. Correction : ajout de `: array`.
+Doctrine ORM 3 typant certaines méthodes, plusieurs repositories surchargeaient `findAll()` sans type de retour.  
+Correction : ajout de `: array`.
 
 - `src/Repository/FicheRepository.php` (~ligne 101)  
   `public function findAll()` → `public function findAll(): array`
@@ -36,8 +37,8 @@ Doctrine ORM 3 typant certaines méthodes, plusieurs repositories surchargeaient
 ## 4) Corrections de mapping Doctrine (associations)
 
 ### 4.1 `Historique` ↔ `User`
-- `src/Entity/Historique.php` : ajout du mapping manquant sur `$user`  
-  Ajout de `#[ORM\ManyToOne(inversedBy: 'historiques')]` + `#[ORM\JoinColumn(nullable: false)]` sur la propriété `private ?User $user = null;`.
+- `src/Entity/Historique.php` : ajout du mapping manquant sur `$user`.  
+  Ajout de `#[ORM\ManyToOne(inversedBy: 'historiques')]` + `#[ORM\JoinColumn(nullable: false)]` sur `private ?User $user = null;`.
 
 ### 4.2 `Historique` ↔ `Fiche`
 - `src/Entity/Historique.php` : ajout/clarification du lien vers `Fiche` et ajout des getters/setters correspondants :
@@ -47,11 +48,11 @@ Doctrine ORM 3 typant certaines méthodes, plusieurs repositories surchargeaient
   - `getFiche()` / `setFiche()`
 
 ### 4.3 `IndexAuth` ↔ `Index`
-- `src/Entity/IndexAuth.php` : correction de la relation inverse  
+- `src/Entity/IndexAuth.php` : correction de la relation inverse.  
   `#[ORM\ManyToOne(targetEntity: Index::class)]` → `#[ORM\ManyToOne(inversedBy: 'index_auth')]` (en conservant `onDelete: "CASCADE"`).
 
 ### 4.4 `LivreAuth` ↔ `Livre`
-- `src/Entity/LivreAuth.php` : correction de la relation inverse  
+- `src/Entity/LivreAuth.php` : correction de la relation inverse.  
   `#[ORM\ManyToOne(targetEntity: Livre::class)]` → `#[ORM\ManyToOne(inversedBy: 'livreAuths')]` (en conservant `onDelete: "CASCADE"`).
 
 ### 4.5 Nettoyage `LivreAuth`
@@ -69,7 +70,8 @@ Doctrine ORM 3 typant certaines méthodes, plusieurs repositories surchargeaient
 
 ## 6) Routes (Symfony 8 : XML → PHP)
 
-Symfony 8 ne charge plus certains fichiers de routes XML des bundles (ou ils ne sont plus présents). Remplacement des imports `.xml` par leurs équivalents `.php`.
+Symfony 8 ne charge plus certains fichiers de routes XML des bundles (ou ils ne sont plus présents).  
+Remplacement des imports `.xml` par leurs équivalents `.php`.
 
 - `config/routes/framework.yaml` :  
   `@FrameworkBundle/Resources/config/routing/errors.xml` → `@FrameworkBundle/Resources/config/routing/errors.php`
@@ -83,7 +85,7 @@ Symfony 8 ne charge plus certains fichiers de routes XML des bundles (ou ils ne 
 - Ajustements manuels pour éviter des erreurs sur une base issue d’un dump (index déjà absents / colonne déjà en IDENTITY) :
   - `ALTER INDEX ...` → `ALTER INDEX IF EXISTS ...`
   - `DROP INDEX ...` → `DROP INDEX IF EXISTS ...`
-  - Adaptation de la conversion `messenger_messages.id` en IDENTITY via un bloc `DO $$ ...` conditionnel
+  - adaptation de la conversion `messenger_messages.id` en IDENTITY via un bloc `DO $$ ...` conditionnel
   - `CREATE INDEX ...` → `CREATE INDEX IF NOT EXISTS ...`
 
 ## 8) Base de données (données incohérentes)
@@ -96,3 +98,10 @@ Symfony 8 ne charge plus certains fichiers de routes XML des bundles (ou ils ne 
 - `bin/console doctrine:schema:validate` :
   - Mapping : **OK**
   - Database : **OK**
+
+## 10) Contrôleurs (routes)
+
+- Dans les contrôleurs concernés (`src/Controller/`), remplacement de :
+  - `use Symfony\Component\Routing\Annotation\Route;`
+  - par `use Symfony\Component\Routing\Attribute\Route;`
+  afin d’être cohérent avec Symfony 8 (routes via attributs `#[Route]`).

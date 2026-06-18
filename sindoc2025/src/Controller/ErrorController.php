@@ -3,7 +3,7 @@
 namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ErrorHandler\Exception\FlattenException;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Twig\Environment;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -14,10 +14,9 @@ class ErrorController extends AbstractController
     {
         $view = "bundles/TwigBundle/Exception/error{$exception->getStatusCode()}.html.twig";
 
-        if(!$env->getLoader()->exists($view)){
-            $view = "bundles/TwigBundle/Exception/error.html.twig";   
+        if (!$env->getLoader()->exists($view)) {
+            $view = "bundles/TwigBundle/Exception/error.html.twig";
         }
         return $this->render($view);
     }
-
 }

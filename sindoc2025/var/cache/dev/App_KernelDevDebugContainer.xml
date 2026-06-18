@@ -416,6 +416,7 @@
     </service>
     <service id="App\Controller\Admin\UsersController" class="App\Controller\Admin\UsersController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
+      <tag name="routing.controller"/>
       <tag name="container.service_subscriber"/>
       <call method="setContainer">
         <argument type="service" id=".service_locator.TJNRSaV.App\Controller\Admin\UsersController"/>
@@ -431,6 +432,7 @@
     </service>
     <service id="App\Controller\DeleteMotController" class="App\Controller\DeleteMotController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
+      <tag name="routing.controller"/>
       <tag name="container.service_subscriber"/>
       <call method="setContainer">
         <argument type="service" id=".service_locator.TJNRSaV.App\Controller\DeleteMotController"/>
@@ -438,6 +440,7 @@
     </service>
     <service id="App\Controller\ErrorController" class="App\Controller\ErrorController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
+      <tag name="routing.controller"/>
       <tag name="container.service_subscriber"/>
       <call method="setContainer">
         <argument type="service" id=".service_locator.TJNRSaV.App\Controller\ErrorController"/>
@@ -445,6 +448,7 @@
     </service>
     <service id="App\Controller\FicheController" class="App\Controller\FicheController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
+      <tag name="routing.controller"/>
       <tag name="container.service_subscriber"/>
       <argument type="service" id="App\Service\BreadCrumbService"/>
       <argument type="service" id="App\Service\SearchService"/>
@@ -454,6 +458,7 @@
     </service>
     <service id="App\Controller\HistoriqueController" class="App\Controller\HistoriqueController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
+      <tag name="routing.controller"/>
       <tag name="container.service_subscriber"/>
       <call method="setContainer">
         <argument type="service" id=".service_locator.TJNRSaV.App\Controller\HistoriqueController"/>
@@ -461,6 +466,7 @@
     </service>
     <service id="App\Controller\HomeController" class="App\Controller\HomeController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
+      <tag name="routing.controller"/>
       <tag name="container.service_subscriber"/>
       <call method="setContainer">
         <argument type="service" id=".service_locator.TJNRSaV.App\Controller\HomeController"/>
@@ -468,6 +474,7 @@
     </service>
     <service id="App\Controller\IndexController" class="App\Controller\IndexController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
+      <tag name="routing.controller"/>
       <tag name="container.service_subscriber"/>
       <call method="setContainer">
         <argument type="service" id=".service_locator.TJNRSaV.App\Controller\IndexController"/>
@@ -475,6 +482,7 @@
     </service>
     <service id="App\Controller\LivreController" class="App\Controller\LivreController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
+      <tag name="routing.controller"/>
       <tag name="container.service_subscriber"/>
       <call method="setContainer">
         <argument type="service" id=".service_locator.TJNRSaV.App\Controller\LivreController"/>
@@ -482,6 +490,7 @@
     </service>
     <service id="App\Controller\MainController" class="App\Controller\MainController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
+      <tag name="routing.controller"/>
       <tag name="container.service_subscriber"/>
       <call method="setContainer">
         <argument type="service" id=".service_locator.TJNRSaV.App\Controller\MainController"/>
@@ -489,6 +498,7 @@
     </service>
     <service id="App\Controller\MotCleController" class="App\Controller\MotCleController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
+      <tag name="routing.controller"/>
       <tag name="container.service_subscriber"/>
       <call method="setContainer">
         <argument type="service" id=".service_locator.TJNRSaV.App\Controller\MotCleController"/>
@@ -496,6 +506,7 @@
     </service>
     <service id="App\Controller\ProfileUserController" class="App\Controller\ProfileUserController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
+      <tag name="routing.controller"/>
       <tag name="container.service_subscriber"/>
       <call method="setContainer">
         <argument type="service" id=".service_locator.TJNRSaV.App\Controller\ProfileUserController"/>
@@ -503,6 +514,7 @@
     </service>
     <service id="App\Controller\RegistrationController" class="App\Controller\RegistrationController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
+      <tag name="routing.controller"/>
       <tag name="container.service_subscriber"/>
       <call method="setContainer">
         <argument type="service" id=".service_locator.TJNRSaV.App\Controller\RegistrationController"/>
@@ -510,6 +522,7 @@
     </service>
     <service id="App\Controller\SavRequeteController" class="App\Controller\SavRequeteController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
+      <tag name="routing.controller"/>
       <tag name="container.service_subscriber"/>
       <argument type="service" id="App\Service\SearchService"/>
       <call method="setContainer">
@@ -518,6 +531,7 @@
     </service>
     <service id="App\Controller\SecurityController" class="App\Controller\SecurityController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
+      <tag name="routing.controller"/>
       <tag name="container.service_subscriber"/>
       <call method="setContainer">
         <argument type="service" id=".service_locator.TJNRSaV.App\Controller\SecurityController"/>
@@ -525,6 +539,7 @@
     </service>
     <service id="App\Controller\StatutController" class="App\Controller\StatutController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
+      <tag name="routing.controller"/>
       <tag name="container.service_subscriber"/>
       <call method="setContainer">
         <argument type="service" id=".service_locator.TJNRSaV.App\Controller\StatutController"/>
@@ -532,6 +547,7 @@
     </service>
     <service id="App\Controller\TestCkeditorController" class="App\Controller\TestCkeditorController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
+      <tag name="routing.controller"/>
       <tag name="container.service_subscriber"/>
       <call method="setContainer">
         <argument type="service" id=".service_locator.TJNRSaV.App\Controller\TestCkeditorController"/>
@@ -539,6 +555,7 @@
     </service>
     <service id="App\Controller\UserController" class="App\Controller\UserController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
+      <tag name="routing.controller"/>
       <tag name="container.service_subscriber"/>
       <call method="setContainer">
         <argument type="service" id=".service_locator.TJNRSaV.App\Controller\UserController"/>
@@ -3875,7 +3892,24 @@
     <service id="routing.loader.attribute.services" class="Symfony\Component\Routing\Loader\AttributeServicesLoader">
       <tag name="routing.loader" priority="-10"/>
       <argument type="collection">
+        <argument>App\Controller\Admin\UsersController</argument>
         <argument>App\Controller\Ckeditor5TestController</argument>
+        <argument>App\Controller\DeleteMotController</argument>
+        <argument>App\Controller\ErrorController</argument>
+        <argument>App\Controller\FicheController</argument>
+        <argument>App\Controller\HistoriqueController</argument>
+        <argument>App\Controller\HomeController</argument>
+        <argument>App\Controller\IndexController</argument>
+        <argument>App\Controller\LivreController</argument>
+        <argument>App\Controller\MainController</argument>
+        <argument>App\Controller\MotCleController</argument>
+        <argument>App\Controller\ProfileUserController</argument>
+        <argument>App\Controller\RegistrationController</argument>
+        <argument>App\Controller\SavRequeteController</argument>
+        <argument>App\Controller\SecurityController</argument>
+        <argument>App\Controller\StatutController</argument>
+        <argument>App\Controller\TestCkeditorController</argument>
+        <argument>App\Controller\UserController</argument>
       </argument>
     </service>
     <service id="routing.loader.attribute.directory" class="Symfony\Component\Routing\Loader\AttributeDirectoryLoader">
@@ -8423,6 +8457,7 @@
     <service id=".abstract.instanceof.App\Service\WordService" class="App\Service\WordService" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\Admin\UsersController" class="App\Controller\Admin\UsersController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\Admin\UsersController" class="App\Controller\Admin\UsersController" autowire="true" abstract="true"/>
+    <service id=".instanceof.App\Controller\Admin\UsersController.0.App\Controller\Admin\UsersController" class="App\Controller\Admin\UsersController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\Admin\UsersController" class="App\Controller\Admin\UsersController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\Ckeditor5TestController" class="App\Controller\Ckeditor5TestController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\Ckeditor5TestController" class="App\Controller\Ckeditor5TestController" autowire="true" abstract="true"/>
@@ -8430,51 +8465,67 @@
     <service id=".abstract.instanceof.App\Controller\Ckeditor5TestController" class="App\Controller\Ckeditor5TestController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\DeleteMotController" class="App\Controller\DeleteMotController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\DeleteMotController" class="App\Controller\DeleteMotController" autowire="true" abstract="true"/>
+    <service id=".instanceof.App\Controller\DeleteMotController.0.App\Controller\DeleteMotController" class="App\Controller\DeleteMotController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\DeleteMotController" class="App\Controller\DeleteMotController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\ErrorController" class="App\Controller\ErrorController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\ErrorController" class="App\Controller\ErrorController" autowire="true" abstract="true"/>
+    <service id=".instanceof.App\Controller\ErrorController.0.App\Controller\ErrorController" class="App\Controller\ErrorController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\ErrorController" class="App\Controller\ErrorController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\FicheController" class="App\Controller\FicheController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\FicheController" class="App\Controller\FicheController" autowire="true" abstract="true"/>
+    <service id=".instanceof.App\Controller\FicheController.0.App\Controller\FicheController" class="App\Controller\FicheController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\FicheController" class="App\Controller\FicheController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\HistoriqueController" class="App\Controller\HistoriqueController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\HistoriqueController" class="App\Controller\HistoriqueController" autowire="true" abstract="true"/>
+    <service id=".instanceof.App\Controller\HistoriqueController.0.App\Controller\HistoriqueController" class="App\Controller\HistoriqueController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\HistoriqueController" class="App\Controller\HistoriqueController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\HomeController" class="App\Controller\HomeController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\HomeController" class="App\Controller\HomeController" autowire="true" abstract="true"/>
+    <service id=".instanceof.App\Controller\HomeController.0.App\Controller\HomeController" class="App\Controller\HomeController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\HomeController" class="App\Controller\HomeController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\IndexController" class="App\Controller\IndexController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\IndexController" class="App\Controller\IndexController" autowire="true" abstract="true"/>
+    <service id=".instanceof.App\Controller\IndexController.0.App\Controller\IndexController" class="App\Controller\IndexController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\IndexController" class="App\Controller\IndexController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\LivreController" class="App\Controller\LivreController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\LivreController" class="App\Controller\LivreController" autowire="true" abstract="true"/>
+    <service id=".instanceof.App\Controller\LivreController.0.App\Controller\LivreController" class="App\Controller\LivreController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\LivreController" class="App\Controller\LivreController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\MainController" class="App\Controller\MainController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\MainController" class="App\Controller\MainController" autowire="true" abstract="true"/>
+    <service id=".instanceof.App\Controller\MainController.0.App\Controller\MainController" class="App\Controller\MainController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\MainController" class="App\Controller\MainController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\MotCleController" class="App\Controller\MotCleController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\MotCleController" class="App\Controller\MotCleController" autowire="true" abstract="true"/>
+    <service id=".instanceof.App\Controller\MotCleController.0.App\Controller\MotCleController" class="App\Controller\MotCleController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\MotCleController" class="App\Controller\MotCleController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\ProfileUserController" class="App\Controller\ProfileUserController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\ProfileUserController" class="App\Controller\ProfileUserController" autowire="true" abstract="true"/>
+    <service id=".instanceof.App\Controller\ProfileUserController.0.App\Controller\ProfileUserController" class="App\Controller\ProfileUserController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\ProfileUserController" class="App\Controller\ProfileUserController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\RegistrationController" class="App\Controller\RegistrationController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\RegistrationController" class="App\Controller\RegistrationController" autowire="true" abstract="true"/>
+    <service id=".instanceof.App\Controller\RegistrationController.0.App\Controller\RegistrationController" class="App\Controller\RegistrationController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\RegistrationController" class="App\Controller\RegistrationController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\SavRequeteController" class="App\Controller\SavRequeteController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\SavRequeteController" class="App\Controller\SavRequeteController" autowire="true" abstract="true"/>
+    <service id=".instanceof.App\Controller\SavRequeteController.0.App\Controller\SavRequeteController" class="App\Controller\SavRequeteController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\SavRequeteController" class="App\Controller\SavRequeteController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\SecurityController" class="App\Controller\SecurityController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\SecurityController" class="App\Controller\SecurityController" autowire="true" abstract="true"/>
+    <service id=".instanceof.App\Controller\SecurityController.0.App\Controller\SecurityController" class="App\Controller\SecurityController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\SecurityController" class="App\Controller\SecurityController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\StatutController" class="App\Controller\StatutController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\StatutController" class="App\Controller\StatutController" autowire="true" abstract="true"/>
+    <service id=".instanceof.App\Controller\StatutController.0.App\Controller\StatutController" class="App\Controller\StatutController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\StatutController" class="App\Controller\StatutController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\TestCkeditorController" class="App\Controller\TestCkeditorController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\TestCkeditorController" class="App\Controller\TestCkeditorController" autowire="true" abstract="true"/>
+    <service id=".instanceof.App\Controller\TestCkeditorController.0.App\Controller\TestCkeditorController" class="App\Controller\TestCkeditorController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\TestCkeditorController" class="App\Controller\TestCkeditorController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\UserController" class="App\Controller\UserController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\UserController" class="App\Controller\UserController" autowire="true" abstract="true"/>
+    <service id=".instanceof.App\Controller\UserController.0.App\Controller\UserController" class="App\Controller\UserController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\UserController" class="App\Controller\UserController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Component\EventDispatcher\EventSubscriberInterface.0.App\EventSubscriber\GlobalVariablesSubscriber" class="App\EventSubscriber\GlobalVariablesSubscriber" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\EventSubscriber\GlobalVariablesSubscriber" class="App\EventSubscriber\GlobalVariablesSubscriber" autowire="true" autoconfigure="true" abstract="true"/>
