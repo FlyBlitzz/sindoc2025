@@ -1,7 +1,4 @@
 {% block body %}
-
-
-	
 		<div class="modal fade" id="livreModal" tabindex="-1" aria-labelledby="livreModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -365,6 +362,15 @@ document.addEventListener("DOMContentLoaded", function () {
         navMenu.classList.toggle("active");
     });
 });
+
+{% if app.session.get('openLivrePopup') %}
+    // Ouvre automatiquement le pop-up de sélection de livre
+    setTimeout(function() {
+        const livreModal = new bootstrap.Modal(document.getElementById('livreModal'));
+        livreModal.show();
+    }, 800); // Délai pour laisser le fetch des livres se terminer
+    {% do app.session.remove('openLivrePopup') %}
+{% endif %}
 </script>
 {% if app.request.attributes.get('_route') not in ['app_login']%}
 <script>
@@ -442,7 +448,6 @@ document.getElementById("livreFormSelect").addEventListener("submit", function (
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert("Livre sélectionné avec succès !");
             window.location.href = "{{ path("app_home") }}";
         } else {
             alert("Erreur: " + data.message);
@@ -458,7 +463,4 @@ document.getElementById("livreFormSelect").addEventListener("submit", function (
 });
   });
 </script>
-
-
-
 {% endif %}

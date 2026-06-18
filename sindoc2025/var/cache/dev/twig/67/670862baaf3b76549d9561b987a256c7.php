@@ -58,21 +58,36 @@ document.addEventListener(\"DOMContentLoaded\", function () {
         navMenu.classList.toggle(\"active\");
     });
 });
-</script>
+
 ";
         // line 369
-        if (!CoreExtension::inFilter(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 369, $this->source); })()), "request", [], "any", false, false, false, 369), "attributes", [], "any", false, false, false, 369), "get", ["_route"], "method", false, false, false, 369), ["app_login"])) {
+        if ((($tmp = CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 369, $this->source); })()), "session", [], "any", false, false, false, 369), "get", ["openLivrePopup"], "method", false, false, false, 369)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
             // line 370
+            yield "    // Ouvre automatiquement le pop-up de sélection de livre
+    setTimeout(function() {
+        const livreModal = new bootstrap.Modal(document.getElementById(\x27livreModal\x27));
+        livreModal.show();
+    }, 800); // Délai pour laisser le fetch des livres se terminer
+    ";
+            // line 375
+            CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 375, $this->source); })()), "session", [], "any", false, false, false, 375), "remove", ["openLivrePopup"], "method", false, false, false, 375);
+        }
+        // line 377
+        yield "</script>
+";
+        // line 378
+        if (!CoreExtension::inFilter(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 378, $this->source); })()), "request", [], "any", false, false, false, 378), "attributes", [], "any", false, false, false, 378), "get", ["_route"], "method", false, false, false, 378), ["app_login"])) {
+            // line 379
             yield "<script>
  const isAdmin = ";
-            // line 371
+            // line 380
             yield (((($tmp = $this->extensions['Symfony\Bridge\Twig\Extension\SecurityExtension']->isGranted("ROLE_ADMIN")) && $tmp instanceof Markup ? (string) $tmp : $tmp)) ? ("true") : ("false"));
             yield ";
  let canEdit = false; 
   document.addEventListener(\"DOMContentLoaded\", function () {
         // Fetch books from backend
         fetch(\"";
-            // line 375
+            // line 384
             yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_livre_app_livre_get_livre_dropdown");
             yield "\")
             .then(response => response.json())
@@ -146,7 +161,7 @@ document.getElementById(\"livreFormSelect\").addEventListener(\"submit\", functi
         if (data.success) {
             alert(\"Livre sélectionné avec succès !\");
             window.location.href = \"";
-            // line 446
+            // line 455
             yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_home");
             yield "\";
         } else {
@@ -561,7 +576,7 @@ document.getElementById(\"livreFormSelect\").addEventListener(\"submit\", functi
      */
     public function getDebugInfo(): array
     {
-        return array (  530 => 355,  418 => 245,  397 => 223,  392 => 79,  387 => 77,  378 => 76,  370 => 74,  361 => 73,  358 => 72,  349 => 70,  341 => 69,  337 => 68,  332 => 67,  322 => 60,  317 => 58,  311 => 57,  306 => 56,  296 => 54,  293 => 53,  283 => 51,  281 => 50,  273 => 49,  265 => 48,  256 => 47,  252 => 45,  249 => 44,  246 => 43,  244 => 42,  238 => 38,  229 => 29,  225 => 28,  207 => 13,  194 => 2,  181 => 1,  150 => 446,  76 => 375,  69 => 371,  66 => 370,  64 => 369,  51 => 358,  49 => 1,);
+        return array (  545 => 355,  433 => 245,  412 => 223,  407 => 79,  402 => 77,  393 => 76,  385 => 74,  376 => 73,  373 => 72,  364 => 70,  356 => 69,  352 => 68,  347 => 67,  337 => 60,  332 => 58,  326 => 57,  321 => 56,  311 => 54,  308 => 53,  298 => 51,  296 => 50,  288 => 49,  280 => 48,  271 => 47,  267 => 45,  264 => 44,  261 => 43,  259 => 42,  253 => 38,  244 => 29,  240 => 28,  222 => 13,  209 => 2,  196 => 1,  165 => 455,  91 => 384,  84 => 380,  81 => 379,  79 => 378,  76 => 377,  73 => 375,  66 => 370,  64 => 369,  51 => 358,  49 => 1,);
     }
 
     public function getSourceContext(): Source
@@ -933,6 +948,15 @@ document.addEventListener(\"DOMContentLoaded\", function () {
         navMenu.classList.toggle(\"active\");
     });
 });
+
+{% if app.session.get(\x27openLivrePopup\x27) %}
+    // Ouvre automatiquement le pop-up de sélection de livre
+    setTimeout(function() {
+        const livreModal = new bootstrap.Modal(document.getElementById(\x27livreModal\x27));
+        livreModal.show();
+    }, 800); // Délai pour laisser le fetch des livres se terminer
+    {% do app.session.remove(\x27openLivrePopup\x27) %}
+{% endif %}
 </script>
 {% if app.request.attributes.get(\x27_route\x27) not in [\x27app_login\x27]%}
 <script>
