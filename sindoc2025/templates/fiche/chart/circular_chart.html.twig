@@ -1,0 +1,55 @@
+
+<div class="col-8 d-flex col-xl-2 col-lg-3 col-md-5 col-sm-6 flex-column">
+            
+                <canvas id="fichesChart"></canvas>
+                <h5 style="margin-right: 0px; clear: both;">
+                    Nombre de fiches: {{ nbrFiches }}/{{ nbrFicheTotal }}
+                </h5>
+           
+        </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const ctx = document.getElementById('fichesChart').getContext('2d');
+            const nbrFiches = {{ nbrFiches|default(0) }};
+            const nbrFicheTotal = {{ nbrFicheTotal|default(0) }};
+            const remainingFiches = nbrFicheTotal - nbrFiches;
+
+            const data = {
+                labels: ['Fiches trouvées', 'Fiches restantes'],
+                datasets: [{
+                    data: [nbrFiches, remainingFiches],
+                    backgroundColor: ['#0088CC', '#f4f4f4'],
+                    hoverBackgroundColor: ['#005f99', '#e2e2e2'],
+                }]
+            };
+
+            const options = {
+                responsive: true,
+                cutout: '75%', // Adjust the size of the doughnut hole
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function (tooltipItem) {
+                                const label = data.labels[tooltipItem.dataIndex];
+                                const value = data.datasets[0].data[tooltipItem.dataIndex];
+                                return `${label}: ${value}`;
+                            }
+                        }
+                    }
+                }
+            };
+
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: data,
+                options: options
+            });
+        });
+    </script>
+</div>
+<style>
+canvas {
+        width: 90% !important;
+        height: auto !important;
+    }
+    </style>

@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}MotCle{% endblock %}
+
+{% block body %}
+<head>
+       <link rel="stylesheet" href="{{ asset('css/ajoutFiche.css') }}">
+
+</head>
+ <div class=" classs">
+    <h1>Détail MotCle</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ mot_cle.idMotCle}}</td>
+            </tr>
+            <tr>
+                <th>Réfèrence</th>
+                <td>{{ mot_cle.reference }}</td>
+            </tr>
+            <tr>
+                <th>Dénomination</th>
+                <td>{{ mot_cle.denomination }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    <a href="{{ path('mot_cle_app_mot_cle_edit', {'id': mot_cle.idMotCle}) }}" class="btn btn-primary">Modifier</a><br />
+        <a href="{{ path('mot_cle_app_mot_cle_index') }}">Retourner à la liste</a><br />
+
+
+
+    </div>
+{% endblock %}

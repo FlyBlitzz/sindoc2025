@@ -1,0 +1,78 @@
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="{{ asset('css/index.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
+    <link rel="stylesheet" href="{{ asset('css/footer.css') }}">
+
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" href="/docs/5.3/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
+    <link rel="icon" href="/docs/5.3/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="/docs/5.3/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
+    <link rel="manifest" href="/docs/5.3/assets/img/favicons/manifest.json">
+    <link rel="mask-icon" href="/docs/5.3/assets/img/favicons/safari-pinned-tab.svg" color="#712cf9">
+    <link rel="icon" href="/docs/5.3/assets/img/favicons/favicon.ico">
+    <meta name="theme-color" content="#712cf9">
+    <link rel="stylesheet" href="{{ asset('css/footer.css') }}">
+
+</head>
+
+    <footer class="cc-footer py-5 d-flex">
+        <div class="container">
+        
+            <div class="row justify-content-center">
+                
+                <div class="col-lg-3 col-md-3 mb-4 col-sm col-12">
+                    <img src="{{ asset('images/Logo_footer.png') }}" alt="Logo" class="img-fluid">
+                </div>
+                <div class="col-lg-3 col-md-3 mb-4 col-sm col-12">
+                    <h6 class="redressed ps-3 fs-3">Liens utiles</h6>
+                    <nav class="nav flex-column">
+                        <a class="nav-link text-white py-1 merriweather fs-6 text-secondary active" aria-current="page"
+                           href="{{ path('mentions_legales')}}">Mentions légales</a>
+                        <a class="nav-link text-white py-1 merriweather fs-6 text-secondary" href="{{ path('app_annuaire')}}">Annuaire</a>
+                    </nav>
+                </div>
+
+                <div class="col-lg-3 col-md-4 mb-4 col-sm col-12">
+                    <h6 class="redressed ps-3 fs-3">Nos informations</h6>
+                    <nav class="nav flex-column">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-home"></i>
+                            <a class="nav-link text-white py-1 merriweather fs-6 text-secondary active" aria-current="page"
+                                href="https://www.google.fr/maps/place/30+Rue+Megevand,+25000+Besan%C3%A7on/@47.2347992,6.0222566,17z/data=!3m1!4b1!4m6!3m5!1s0x478d633ee0bfed2d:0x711b32ecb8a58af!8m2!3d47.2347992!4d6.0248315!16s%2Fg%2F11bw4264sk?entry=ttu">Adresse: 30-32 rue Mégevand, 25000 Besançon</a>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-phone"></i>
+                            <a class="nav-link text-white py-1 merriweather fs-6 text-secondary" href="tel:+3300000000">Téléphone: +33 (0)3
+                                81 66 54 73</a>
+                        </div>
+                    </nav>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <a style="color:white;" href="https://www.facebook.com/InstitutdesSciencesetTechniquesdelAntiquiteISTA?ref=embed_page"><i class="fab fa-facebook-f fa-lg me-3"></i></a>
+                    <a style="color:white;" href="https://twitter.com/ISTA_labo"><i class="fab fa-twitter fa-lg me-3"></i></a>
+                    <a style="color:white;" href="https://www.instagram.com/"><i class="fab fa-instagram fa-lg me-3"></i></a>
+                    <a style="color:white;" href="https://www.youtube.com/channel/UCra_QiMJMQcGrLho4DuQgaw/videos"><i class="fab fa-youtube fa-lg"></i></a>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-12 text-center py-4 text-muted">
+                    &copy; Institut Des Sciences Et Techniques De L'Antiquité
+                    <script>
+                        document.write(new Date().getFullYear());
+                    </script>
+                    Copyright
+                </div>
+            </div>
+
+        </div>
+    </footer>
+
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+

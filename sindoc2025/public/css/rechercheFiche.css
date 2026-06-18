@@ -1,0 +1,27 @@
+ body {
+            background-color: #f8f9fa;
+}
+
+.classs {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    width: 800px;
+    max-width: 100%;
+    margin: 150px auto; /* Adjust the top margin and center horizontally */
+    transition: all 0.3s ease;
+}
+
+.classs:hover {
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
+}
+
+.form-control {
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}

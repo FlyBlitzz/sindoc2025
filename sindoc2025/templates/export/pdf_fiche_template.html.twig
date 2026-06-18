@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Export Fiche</title>
+    <style>
+        body {
+            font-family: Garamond, serif;
+            color: #333; /* Dark text color */
+            margin: 0;
+            padding: 20px;
+        }
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2e3a59; /* Title color */
+            text-align: center;
+        }
+        .content {
+            margin-top: 20px;
+        }
+        .sectionn {
+            display: flex;
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow */
+        }
+        .sectionn h3 {
+            margin: 0;
+            font-size: 18px;
+            color: #2e3a59; /* Dark blue text for headings */
+            font-weight: bold;
+            width: 150px; /* Fixed width for consistency */
+        }
+        .sectionn p {
+            margin: 0;
+            font-size: 16px;
+            color: #555; /* Slightly lighter gray for the content */
+        }
+        .sectionn .fiche-details {
+            margin-left: 20px;
+        }
+        .keywords-list {
+            list-style-type: disc;
+            margin-left: 20px;
+            padding: 0;
+        }
+        .keywords-list li {
+            font-size: 16px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="title">Détails la fiche</div>
+    <div class="content">
+        <div class="sectionn">
+            <h3>Référence:</h3>
+            <p>{{ fiche.refer == null ? 'Non spécifié' : fiche.refer }}</p>
+        </div>
+        <div class="sectionn">
+            <h3>Référence BIS:</h3>
+            <p>{{ fiche.referBis == null ? 'Non spécifié' : fiche.referBis }}</p>
+        </div>
+        <div class="sectionn">
+            <h3>Dénomination:</h3>
+            <p>{{ fiche.denomination == null ? 'Non spécifié' : fiche.denomination }}</p>
+        </div>
+        <div class="sectionn">
+            <h3>Texte:</h3>
+            <p>{{ fiche.texte == null ? 'Non spécifié' : fiche.texte }}</p>
+        </div>
+        <div class="sectionn">
+            <h3>Traduction:</h3>
+            <p>{{ fiche.traduction == null ? 'Non spécifié' : fiche.traduction }}</p>
+        </div>
+        <div class="sectionn">
+            <h3>Edition:</h3>
+            <p>{{ fiche.edition == null ? 'Non spécifié' : fiche.edition }}</p>
+        </div>
+        <div class="sectionn">
+            <h3>Commentaires:</h3>
+            <p>{{ fiche.commentaire == null ? 'Non spécifié' : fiche.commentaire }}</p>
+        </div>
+        <div class="sectionn">
+            <h3>Notes:</h3>
+            <p>{{ fiche.notes == null ? 'Non spécifié' : fiche.notes }}</p>
+        </div>
+        <div class="sectionn">
+            <h3>Statut:</h3>
+            <p>{{ fiche.statut.denomination == null ? 'Non spécifié' : fiche.statut.denomination }}</p>
+        </div>
+        <div class="sectionn">
+            <h3>Mot Clés:</h3>
+            <div class="fiche-details">
+                {% if fiche.motCles %}
+                    <ul class="keywords-list">
+                        {% for keyword in fiche.motCles %}
+                            <li>{{ keyword.reference == null ? 'Non spécifié' : keyword.reference }} : {{ keyword.denomination == null ? 'Non spécifié' : keyword.denomination }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p><strong>Mots-clés :</strong> Non spécifié</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

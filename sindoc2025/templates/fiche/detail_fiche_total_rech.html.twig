@@ -1,0 +1,248 @@
+{# {% extends 'base.html.twig' %}
+
+{% block body %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+   <link rel="stylesheet" href="{{ asset('css/ajoutFiche.css') }}">
+</head>
+<body>
+<body>
+   <div class="card-body classs" style="width: 100%;     margin: 150px auto;">
+<div class="card-body">
+    <h1 class="username">Les détails de la fiche</h1>
+
+    <div>
+        <strong>Numéro de la fiche:</strong> {{ fiche.getIdFiche() }}
+    </div>
+    <div>
+        <strong>Livre:</strong> {{ fiche.livre }}
+    </div>
+    <div>
+        <strong>Edition:</strong> {{ fiche.edition }}
+    </div>
+    <div>
+        <strong>Reference:</strong> {{ fiche.refer }}
+    </div>
+    <div>
+        <strong>Denomination:</strong> {{ fiche.denomination }}
+    </div>
+    <div>
+        <strong>Statut:</strong> {{ fiche.statut }}
+    </div>
+    <div>
+        <strong>Texte:</strong> {{ fiche.texte }}
+    </div>
+    <div>
+        <strong>Traduction:</strong> {{ fiche.traduction }}
+    </div>
+    <div>
+        <strong>Notes:</strong> {{ fiche.notes }}
+    </div>
+    <div>
+        <strong>Commentaire:</strong> {{ fiche.commentaire }}
+    </div>
+
+   <div>
+    <strong>Mots Clés :</strong>
+    {% for motCle in fiche.getMotCles() %}
+        {% for ficheMotCles in fiche.getFicheMotCles() %}
+            {% if motCle == ficheMotCles.getMotCle() %}
+                <span title="{{ motCle.getDenomination() }}">{{ motCle.getReference() }}{% if ficheMotCles.getPrecision() %}:{% endif %}{{ ficheMotCles.getPrecision() }}</span>,
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+</div>
+
+
+
+    <div>
+        {% if previous_fiche is not null %}
+            <a href="{{ path('detail_fiche_total', {id: previous_fiche.getIdFiche()}) }}" style="margin-right: 20px" ><strong><<</strong></a>
+        {% endif %}
+        {% if next_fiche is not null %}
+            <a href="{{ path('detail_fiche_total', {id: next_fiche.getIdFiche()}) }}" ><strong>>></strong></a>
+        {% endif %}
+    </div>
+</div>
+</div>
+
+</body>
+</html>
+{% endblock %}
+
+{% block title %}
+    {{ fiche.refer }} {{ fiche.denomination }}
+{% endblock %} #}
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{ fiche.refer }}
+	{{ fiche.denomination }}
+{% endblock %}
+
+{% block body %}
+	<!DOCTYPE html>
+	<html lang="fr">
+		<head>
+			<meta charset="UTF-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+			<link rel="stylesheet" href="{{ asset('css/ajoutFiche.css') }}">
+			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+			<style>
+				.fiche-detail-container {
+					position:relative;
+					max-width: 800px;
+					margin: 50px auto;
+					padding: 20px;
+					background-color: #f9f9f9;
+					border-radius: 10px;
+					box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+				}
+				.fiche-detail-container h1 {
+					font-size: 2rem;
+					font-weight: bold;
+					color: #333;
+					margin-bottom: 20px;
+				}
+				.fiche-detail-container .detail-item {
+					margin-bottom: 15px;
+					font-size: 1.1rem;
+				}
+				.fiche-detail-container .detail-item strong {
+					color: #555;
+					margin-right: 10px;
+				}
+				.fiche-detail-container .mot-cles {
+					display: flex;
+					flex-wrap: wrap;
+					gap: 5px;
+				}
+				.fiche-detail-container .mot-cles span {
+					background-color: #e9ecef;
+					padding: 5px 10px;
+					border-radius: 5px;
+					font-size: 0.9rem;
+				}
+				.fiche-detail-container .navigation-buttons {
+					display: flex;
+					justify-content: space-between;
+					margin-top: 20px;
+				}
+				.fiche-detail-container .navigation-buttons a {
+					text-decoration: none;
+					font-size: 1.2rem;
+				}
+				.back-to-list-button {
+					padding: 1em;
+					float: left;
+				}
+				.modifier-btn-container {
+					display: flex;
+    				justify-content: end;
+				}
+			</style>
+		</head>
+		{# <script>
+    		const isAdmin = {{ is_granted('ROLE_ADMIN') ? 'true' : 'false' }};
+		</script> #}
+		<body>
+			<div class="back-to-list-button">
+				<a href="{{ path('fiche_recherche_resultat', { livreId: app.session.get('livreIdSelectionne') }) }}" class="btn btn-secondary">
+					Retour à la liste
+				</a>
+			</div>
+			<div class="fiche-detail-container">
+				<div>
+				{% if is_granted('ROLE_ADMIN') or canEdit %}
+					<div class="modifier-btn-container">
+						<a href="{{ path('app_fiche_edit_total_rech', { 'id': fiche.getIdFiche(), 'previousFicheId': previous_fiche ? previous_fiche.getIdFiche() : null, 'nextFicheId': next_fiche ? next_fiche.getIdFiche() : null, 'index': index,'total': total }) }}" class="btn btn-primary">
+							Modifier
+						</a>
+					</div>
+				{% endif %}
+					<h1 class="text-center">Détails de la Fiche</h1>
+				</div>
+
+				<div class="text-center mb-4">
+					<strong>Vous êtes sur la fiche
+						{{ index }}
+						sur
+						{{ total }}</strong>
+				</div>
+				<div class="detail-item">
+					<strong>Numéro de la fiche:</strong>
+					{{ fiche.getIdFiche() }}
+				</div>
+				<div class="detail-item">
+					<strong>Livre:</strong>
+					{{ fiche.livre }}
+				</div>
+				<div class="detail-item">
+					<strong>Édition:</strong>
+					{{ fiche.edition }}
+				</div>
+				<div class="detail-item">
+					<strong>Référence:</strong>
+					{{ fiche.refer }}
+				</div>
+				<div class="detail-item">
+					<strong>Dénomination:</strong>
+					{{ fiche.denomination }}
+				</div>
+				<div class="detail-item">
+					<strong>Statut:</strong>
+					{{ fiche.statut }}
+				</div>
+				<div class="detail-item">
+					<strong>Texte:</strong>
+					{{ fiche.texte }}
+				</div>
+				<div class="detail-item">
+					<strong>Traduction:</strong>
+					{{ fiche.traduction }}
+				</div>
+				<div class="detail-item">
+					<strong>Notes:</strong>
+					{{ fiche.notes }}
+				</div>
+				<div class="detail-item">
+					<strong>Commentaire:</strong>
+					{{ fiche.commentaire|striptags('<p><i><strong><em><br>')|raw }}
+				</div>
+				<div class="detail-item">
+					<strong>Mots Clés:</strong>
+					<div class="mot-cles">
+						{% for motCle  in fiche.MotCles %}
+							<span title="{{ motCle.denomination }}">
+								{{ motCle.reference }}
+							</span>
+							{% if not loop.last %},
+							{% endif %}
+						{% else %}
+							<span>Aucun mot-clé associé.</span>
+						{% endfor %}
+					</div>
+				</div>
+
+				<div class="navigation-buttons">
+					{% if previous_fiche is not null %}
+						<a href="{{ path('detail_fiche_total', {id: previous_fiche.getIdFiche(), index: index - 1, total: total}) }}" class="btn btn-primary">
+							&lt;&lt; Précédent
+						</a>
+					{% endif %}
+					{% if next_fiche is not null %}
+						<a href="{{ path('detail_fiche_total', {id: next_fiche.getIdFiche(), index: index + 1, total: total}) }}" class="btn btn-primary">
+							Suivant &gt;&gt;
+						</a>
+					{% endif %}
+				</div>
+
+			</div>
+		</body>
+	</html>
+{% endblock %}

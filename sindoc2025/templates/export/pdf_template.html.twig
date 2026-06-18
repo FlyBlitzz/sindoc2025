@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .index-info {
+            margin-bottom: 30px;
+        }
+        .motsCles-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .motsCles-table th, .motsCles-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .motsCles-table th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Details for Index: {{ index.nom }}</h1>
+
+    <div class="index-info">
+        <p><strong>ID:</strong> {{ index.idindex }}</p>
+        
+    </div>
+
+    <h2>Keywords (Mots-clés)</h2>
+    <table class="motsCles-table">
+        <thead>
+            <tr>
+                <th>Reference</th>
+                <th>Denomination</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for motCle in motsCles %}
+                <tr>
+                    <td>{{ motCle.reference }}</td>
+                    <td>{{ motCle.Denomination }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>

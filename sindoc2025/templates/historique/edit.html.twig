@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Historique{% endblock %}
+
+{% block body %}
+<head>
+       <link rel="stylesheet" href="{{ asset('css/ajoutFiche.css') }}">
+
+</head>
+ <div class=" classs">
+    {{ include('historique/_delete_form.html.twig') }}
+ </div>
+{% endblock %}

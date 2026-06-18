@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Statut{% endblock %}
+
+{% block body %}
+<head>
+       <link rel="stylesheet" href="{{ asset('css/ajoutFiche.css') }}">
+
+</head>
+ <div class=" classs">
+    <h1>Créer un nouveau Statut</h1>
+
+    {{ include('statut/_form.html.twig') }}</br>
+
+    <a href="{{ path('statut_app_statut_index') }}"> <strong>Retourner à la liste</strong></a>
+    </div>
+{% endblock %}

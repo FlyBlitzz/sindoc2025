@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User{% endblock %}
+
+{% block body %}
+<head>
+       <link rel="stylesheet" href="{{ asset('css/ajoutFiche.css') }}">
+
+</head>
+ <div class=" classs">
+    <h1>Utilisateur: {{ user.username }}</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ user.id }}</td>
+            </tr>
+            <tr>
+                <th>Username</th>
+                <td>{{ user.username }}</td>
+            </tr>
+            <tr>
+                <th>Roles</th>
+                <td>{% if 'ROLE_USER' in user.roles and 'ROLE_ADMIN' in user.roles %}
+                    Utilisateur et Administrateur
+                {% elseif 'ROLE_USER' in user.roles %}
+                    Utilisateur
+                {% elseif 'ROLE_ADMIN' in user.roles %}
+                    Administrateur
+                {% endif %}</td>
+            </tr>
+
+            <tr>
+                <th>Statut compte</th>
+                <td>{{ user.active ? 'Activer': 'Désactiver' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    <a href="{{ path('app_admin_app_users_edit', {'id': user.id}) }}" class="btn btn-primary">Modifier</a></br></br>
+        <a href="{{ path('app_admin_app_users_index') }}">Retourner à la liste</a>
+
+
+</div>
+{% endblock %}

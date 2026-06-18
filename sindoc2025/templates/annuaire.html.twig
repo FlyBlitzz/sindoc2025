@@ -1,0 +1,200 @@
+{% extends "base.html.twig" %}
+
+{% block title %} Annuaire {% endblock %}
+
+{% block body %}
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/listeUsers.css') }}">
+
+    </head>
+
+    <style>
+        h2 {
+            font-weight: bold;
+        }
+    </style>
+
+    <div style="width: 20%; margin: 0 auto 150px;">
+        <main class="col-9 container border border-light bg-white p-2" style="text-align: center;">
+            <h1 style="text-decoration: underline;"> Toute l'équipe de l'ISTA</h1>
+            <br>
+            <p>ISTA a 48 membres enregistrés</p>
+            <p style="font-weight: bold">Prénom NOM</p>
+            <p>Bassir AMIRI<br>
+            Maître de conférences (HDR)<br>
+                <a  href="mailto:bassir.amiri@univ-fcomte.fr">bassir.amiri@univ-fcomte.fr</a></p>
+            <hr>
+            <p>Vincent ANDREANI<br>
+                Doctorant</p>
+            <hr>
+            <p>Guillaume BAVANT<br>
+                Doctorant</p>
+            <hr>
+            <p>Audrey BECKER<br>
+            Professeur des universités<br>
+                <a href="mailto:audrey.becker@univ-fcomte.fr">audrey.becker@univ-fcomte.fr</a></p>
+            <hr>
+            <p>Nicolas BEN MUSTAPHA<br>
+            Doctorant<br>
+            <a href="mailto:nicolas.ben_mustapha@edu.univ-fcomte.fr">nicolas.ben_mustapha@edu.univ-fcomte.fr</a></p>
+            <hr>
+            <p>Rodrigue BIBALOU-BIBALOU<br>
+                Doctorant</p>
+            <hr>
+            <p>Julián BOHÓRQUEZ OLAYA<br>
+                Doctorant</p>
+            <hr>
+            <p>William BONACINA<br>
+                Doctorant</p>
+            <hr>
+            <p>Emeline BOURCERIE<br>
+                Doctorant</p>
+            <hr>
+            <p>Hadrien BRU<br>
+            Maître de conférences (HDR)<br>
+                <a href="mailto:hadrien.bru@univ-fcomte.fr">hadrien.bru@univ-fcomte.fr</a></p>
+            <hr>
+            <p>Claude BRUNET<br>
+            Maître de conférences<br>
+                <a href="mailto:claude.brunet@univ-fcomte.fr">claude.brunet@univ-fcomte.fr</a></p>
+            <hr>
+            <p>Rudy CHAULET<br>
+            Maître de conférences (HDR) émérite<br>
+                <a href="mailto:rudy.chaulet@univ-fcomte.fr">rudy.chaulet@univ-fcomte.fr</a></p>
+            <hr>
+            <p>Clément COUDERT<br>
+                Doctorant</p>
+            <hr>
+            <p>Sylvie DAVID-GUIGNARD<br>
+            Maître de conférences honoraire<br>
+                <a href="mailto:sylvie.david-guignard@univ-fcomte.fr">sylvie.david-guignard@univ-fcomte.fr</a></p>
+            <hr>
+            <p>Loïc DECREUSE<br>
+            BIATSS (contractuel)<br>
+                <a href="mailto:loic.decreuse@univ-fcomte.fr">loic.decreuse@univ-fcomte.fr</a></p>
+            <hr>
+            <p>Marie EBERWEIN<br>
+                Doctorant</p>
+            <hr>
+            <p>Anna ELEANOR SIGNORINI<br>
+                Maître de conférences</p>
+            <hr>
+            <p>Emy FAIVRE<br>
+                Doctorant</p>
+            <hr>
+            <p>Michel FARTZOFF<br>
+            Professeur des universités émérite<br>
+                <a href="mailto:michel.fartzoff@univ-fcomte.fr">michel.fartzoff@univ-fcomte.fr</a></p>
+            <hr>
+            <p>Arianna FECIT<br>
+                Doctorant</p>
+            <hr>
+            <p>Geoffroy FEUGIER<br>
+                Doctorant</p>
+            <hr>
+            <p>Benjamin GOLDLUST<br>
+            Professeur des universités<br>
+                <a href="mailto:benjamin.goldlust@univ-fcomte.fr">benjamin.goldlust@univ-fcomte.fr</a></p>
+            <hr>
+            <p>Antonio GONZALES<br>
+            Professeur des universités<br>
+                <a href="mailto:antonio.gonzales@univ-fcomte.fr">antonio.gonzales@univ-fcomte.fr</a></p>
+            <hr>
+            <p>Thomas GUARD<br>
+            Maître de conférences<br>
+                <a href="mailto:thomas.guard@univ-fcomte.fr">thomas.guard@univ-fcomte.fr</a></p>
+            <hr>
+            <p>Jean-Yves GUILLAUMIN<br>
+            Professeur des universités émérite<br>
+                <a href="mailto:jean-yves.guillaumin@univ-fcomte.fr">jean-yves.guillaumin@univ-fcomte.fr</a></p>
+            <hr>
+            <p>Clotilde HEINRICH<br>
+                Doctorant</p>
+            <hr>
+            <p>Pierre JAMET<br>
+            Professeur des universités<br>
+                <a href="mailto:pierre.jamet@univ-fcomte.fr">pierre.jamet@univ-fcomte.fr</a></p>
+            <hr>
+            <p>Olivier JOUFFROY<br>
+            Maître de conférences<br>
+                <a href="mailto:olivier.jouffroy@univ-fcomte.fr">olivier.jouffroy@univ-fcomte.fr</a></p>
+            <hr>
+            <p>Ana-Marija KRNIC<br>
+                Doctorant</p>
+            <hr>
+            <p>Guy LABARRE<br>
+            Professeur des universités<br>
+                <a href="mailto:guy.labarre@univ-fcomte.fr">guy.labarre@univ-fcomte.fr</a></p>
+            <hr>
+            <p>Laurène LECLERCQ<br>
+            Ingénieur d'études<br>
+                <a href="mailto:laurene.leclercq@univ-fcomte.fr">laurene.leclercq@univ-fcomte.fr</a></p>
+            <hr>
+            <p>Florian LITOT<br>
+            Ingénieur d'études<br>
+                <a href="mailto:florian.litot@univ-fcomte.fr">florian.litot@univ-fcomte.fr</a></p>
+            <hr>
+            <p>Karin MACKOWIAK<br>
+            Maître de conférences (HDR)<br>
+                <a href="mailto:karin.mackowiak@univ-fcomte.fr">karin.mackowiak@univ-fcomte.fr</a></p>
+            <hr>
+            <p>Stéphanie MAHOU<br>
+                Doctorant</p>
+            <hr>
+            <p>Claire MERCIER<br>
+                Doctorant</p>
+            <hr>
+            <p>Sophie MONTEL<br>
+            Maître de conférences<br>
+                <a href="mailto:sophie.montel@univ-fcomte.fr">sophie.montel@univ-fcomte.fr</a></p>
+            <hr>
+            <p>Dulce MORENO HERNANDEZ<br>
+                Doctorant</p>
+            <hr>
+            <p>Chancia NGUI ENAME<br>
+                Doctorant</p>
+            <hr>
+            <p>Antoine PIETROBELLI<br>
+            Professeur des universités<br>
+                <a href="mailto:antoine.pietrobelli@univ-fcomte.fr">antoine.pietrobelli@univ-fcomte.fr</a></p>
+            <hr>
+            <p>Bruno POULLE<br>
+            Professeur des universités<br>
+                <a href="mailto:bruno.poulle@univ-fcomte.fr">bruno.poulle@univ-fcomte.fr</a></p>
+            <hr>
+            <p>Claire POULLE-MUCKENSTURM<br>
+            Maître de conférences<br>
+                <a href="mailto:claire.poulle@univ-fcomte.fr">claire.poulle@univ-fcomte.fr</a></p>
+            <hr>
+            <p>Raul-Darius POVÎRNARU<br>
+                Doctorant</p>
+            <hr>
+            <p>Michel PRETALLI<br>
+            Professeur des universités<br>
+                <a href="mailto:michel.pretalli@univ-fcomte.fr">michel.pretalli@univ-fcomte.fr</a></p>
+            <hr>
+            <p>Stéphane RATTI<br>
+            Professeur des universités émérite<br>
+                <a href="mailto:stephane.ratti@univ-fcomte.fr">stephane.ratti@univ-fcomte.fr</a></p>
+            <hr>
+            <p>Catherine SENSAL<br>
+            Maître de conférences<br>
+                <a href="mailto:catherine.sensal@univ-fcomte.fr">catherine.sensal@univ-fcomte.fr</a></p>
+            <hr>
+            <p>Frédéric SPAGNOLI<br>
+            Maître de conférences<br>
+                <a href="mailto:frederic.spagnoli@univ-fcomte.fr">frederic.spagnoli@univ-fcomte.fr</a></p>
+            <hr>
+            <p>Georges TIROLOGOS<br>
+            Ingénieur d'études<br>
+                <a href="mailto:georges.tirologos@univ-fcomte.fr">georges.tirologos@univ-fcomte.fr</a></p>
+            <hr>
+            <p>Anthi XANTHOPOULO<br>
+                Doctorant</p>
+        </main>
+    </div>
+{% endblock %}
+

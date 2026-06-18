@@ -1,0 +1,368 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Historique index{% endblock %}
+
+{% block body %}
+    <style>
+        .tooltip-link {
+            position: relative;
+            display: inline-block;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+
+        .tooltip-link::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 120%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 5px 10px;
+            font-size: 12px;
+            white-space: nowrap;
+            border-radius: 5px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        /* Show tooltip on hover */
+        .tooltip-link:hover::after {
+            opacity: 1;
+            visibility: visible;
+        }
+        /* Styles pour le modal */
+        .btn {
+            max-width: 200px;
+        }
+
+        #modal, #twoModal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            overflow-y: auto; /* Permet le scroll si le contenu est trop grand */
+            padding: 10px;  /* Barre de défilement verticale */
+
+        }
+
+        #modal-body, #old-modal-body, #new-modal-body {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            width: 90%; /* Réduit la largeur sur mobile */
+            max-width: 600px; /* Évite une taille trop grande sur desktop */
+            max-height: 90vh; /* Empêche la modale de dépasser l'écran */
+            overflow-y: auto; /* Ajoute un scroll interne si nécessaire */
+            text-align: center;
+        }
+
+        #close, #closeTwoModal {
+            float: right;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        #myTable {
+            table-layout: auto;
+            min-width: 1250px; /* Ajuste selon le besoin */
+        }
+    </style>
+    <head>
+        <link rel="stylesheet" href="{{ asset('css/listeFicheRechercher.css') }}">
+        <link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.dataTables.css"/>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+
+    </head>
+    <div class="classs" style="width: 80%; margin: 150px auto; margin-top: 0px;">
+
+        <div class="row">
+            {% include "_partials/_adminnav.html.twig" %}
+
+            <main class="col-12 container border border-light bg-white">
+
+                <h1>Table Historique</h1>
+
+                <div class="d-flex align-items-center gap-3">
+                    <form method="get" action="{{ path('historique_search') }}">
+                        <label for="nom">Nom de l'utilisateur :</label>
+                        <input type="text" name="nom" id="nom" placeholder="Entrez le nom de l'utilisateur"
+                               value="{{ app.request.query.get('nom') }}"/>
+                        <label for="objet"> Objet :</label>
+                        <select id="objet" name="objet">
+                            <option value="all" selected="selected">Tous les objets</option>
+                            <option value="ficheID"
+                                    {% if "ficheID" == app.request.query.get('objet') %}selected{% endif %}>Fiche
+                            </option>
+                            <option value="indexID"
+                                    {% if "indexID" == app.request.query.get('objet') %}selected{% endif %}>Index
+                            </option>
+                            <option value="livreID"
+                                    {% if "livreID" == app.request.query.get('objet') %}selected{% endif %}>Livre
+                            </option>
+                            <option value="mot_cleID"
+                                    {% if "mot_cleID" == app.request.query.get('objet') %}selected{% endif %}>Mot clé
+                            </option>
+                            <option value="statutID"
+                                    {% if "statutID" == app.request.query.get('objet') %}selected{% endif %}>Statut
+                            </option>
+                        </select>
+                        <label for="id">n° </label>
+                        <input type="number" id="id" name="id" min="1" value="{{ app.request.query.get('id') }}">
+                        <button class="btn" style="border: 1px solid black;    padding: 5px;" type="submit">Rechercher
+                        </button>
+                        <a href="{{ path('historique_app_historique_index') }}" class="btn"
+                           style="border: 1px solid black;    padding: 5px;">Réinitialiser</a>
+                    </form>
+
+                    <form method="post" action="{{ path('vider_historique') }}"
+                          onsubmit="return confirm('Êtes-vous sûr de vouloir vider l\'historique ?');">
+                        <button class="btn btn-danger" style="border: 1px solid black;    padding: 5px;">Vider
+                            l'historique
+                        </button>
+                    </form>
+                </div>
+
+
+                <table class="table w-100" id="myTable">
+                    <thead>
+                    <tr style="background-color: rgba(0, 0, 0, 0.4); ">
+                        <th>Type d'action</th>
+                        <th>Utilisateur</th>
+                        <th>Objet</th>
+                        <th>Date</th>
+                        <th>Heure</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for historique in historiques %}
+                        <tr>
+                            <td>{{ historique.typeModif }}</td>
+                            <td>{{ historique.user }}</td>
+                            {% set id =
+                                historique.ficheID is not null ? "Fiche n°" ~ historique.ficheID:
+                                (historique.livreID is not null ? "Livre n°" ~ historique.livreID :
+                                (historique.indexID is not null ? "Index n°" ~ historique.indexID :
+                                (historique.mot_cleID is not null ? "Mot clé n°" ~ historique.mot_cleID :
+                                (historique.statutID is not null ? "Statut n°" ~ historique.statutID : null)))) %}
+                            <td>{{ id }}</td>
+                            <td>{{ historique.getCreateDate()|date('Y-m-d') }}</td>
+                            <td>{{ historique.getHeure()|date('H:i:s') }} </td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    {% if historique.typeModif == "Modification" %}
+                                        <button class="btn-primary btn-sm me-2 tooltip-link open-two-modal" data-tooltip="Afficher la modification"
+                                                style="border: 1px solid black;"
+                                                data-object='{{ {old: historique.getOldData(), new: historique.data} | json_encode }}'>
+                                            <i class="fas fa-eye me-1"></i>
+                                        </button>
+                                    {% else %}
+                                        <button class="btn-primary btn-sm me-2 tooltip-link open-modal" data-tooltip="Afficher la modification"
+                                                data-object='{{ historique.data | json_encode }}'><i
+                                                    class="fas fa-eye me-1"></i>
+                                        </button>
+                                    {% endif %}
+                                    <form method="post"
+                                          action="{{ path('historique_app_historique_delete', {'id': historique.idHistorique}) }}"
+                                          onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?');">
+                                        <input type="hidden" name="_token"
+                                               value="{{ csrf_token('delete' ~ historique.idHistorique) }}">
+                                        <button class="btn btn-outline-danger btn-sm delete-link tooltip-link" data-tooltip="Supprimer la ligne"
+                                                style="border: 1px solid red; text-align: center"><i
+                                                    class="fas fa-trash me-1"></i>
+                                        </button>
+                                    </form>
+                                </div>
+
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="3">Aucun historique trouvé !</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <!-- Modal -->
+                <div id="modal">
+                    <span id="close">&times;</span>
+                    <div id="modal-body"></div>
+                </div>
+                <script>
+                    // Récupérer la référence du modal et de son corps
+                    const modal = document.getElementById("modal");
+                    const modalBody = document.getElementById("modal-body");
+                    const closeModal = document.getElementById("close"); // Référence au bouton de fermeture
+
+                    function escapeHTML(text) {
+                        return text
+                            .replace(/&/g, "&amp;")
+                            .replace(/</g, "&lt;")
+                            .replace(/>/g, "&gt;")
+                            .replace(/"/g, "&quot;")
+                            .replace(/'/g, "&#039;");
+                    }
+
+                    document.querySelectorAll(".open-modal").forEach(button => {
+                        button.addEventListener("click", function () {
+                            // Récupération de l'objet JSON depuis l'attribut data-object
+                            const data = JSON.parse(this.getAttribute("data-object"));
+
+
+                            // Initialisation du contenu
+                            let content = "<h2>Détails de l'objet</h2>";
+
+                            // Parcours des clés de l'objet et génération dynamique du contenu
+                            for (const [key, value] of Object.entries(data)) {
+                                if (value) { // Si la valeur n'est pas null
+                                    content += `<p><strong>${escapeHTML(key)}:</strong> ${escapeHTML(value.toString())}</p>`;
+                                }
+                            }
+
+                            // Injection dans le modal
+                            modalBody.innerHTML = content;
+
+                            // Affichage du modal
+                            modal.style.display = "flex";
+                        });
+                    })
+
+
+                    // Fermer le modal
+                    closeModal.addEventListener("click", () => {
+                        modal.style.display = "none";
+                    });
+
+                    // Clic en dehors du modal pour le fermer
+                    window.addEventListener("click", (e) => {
+                        if (e.target === modal) {
+                            modal.style.display = "none";
+                        }
+                    });
+                </script>
+
+                <div id="twoModal">
+                    <span id="closeTwoModal">&times;</span>
+                    <div id="old-modal-body"></div>
+                    <div id="new-modal-body"></div>
+                </div>
+                <script>
+                    // Récupérer la référence du modal et de son corps
+                    const twoModal = document.getElementById("twoModal");
+                    const oldModalBody = document.getElementById("old-modal-body");
+                    const newModalBody = document.getElementById("new-modal-body");
+                    const closeTwoModal = document.getElementById("closeTwoModal"); // Référence au bouton de fermeture
+
+                    function escapeHTML(text) {
+                        return text
+                            .replace(/&/g, "&amp;")
+                            .replace(/</g, "&lt;")
+                            .replace(/>/g, "&gt;")
+                            .replace(/"/g, "&quot;")
+                            .replace(/'/g, "&#039;");
+                    }
+
+                    document.querySelectorAll(".open-two-modal").forEach(button => {
+                        button.addEventListener("click", function () {
+                            // Récupération de l'objet JSON depuis l'attribut data-object
+                            const data = JSON.parse(this.getAttribute("data-object"));
+
+                            const oldData = data.old;
+                            const newData = data.new;
+
+                            //Initialisation du contenu - Ancienne version
+                            let contentOld = "<h2>Ancienne version</h2>";
+
+                            // Parcours des clés de l'objet et génération dynamique du contenu
+                            for (const [key, value] of Object.entries(oldData)) {
+                                if (value) { // Si la valeur n'est pas null
+                                    contentOld += `<p><strong>${escapeHTML(key)}:</strong> ${escapeHTML(value.toString())}</p>`;
+                                }
+                            }
+
+                            // Injection dans le modal
+                            oldModalBody.innerHTML = contentOld;
+
+
+                            // Initialisation du contenu - Nouvelle version
+                            let contentNew = "<h2>Nouvelle version</h2>";
+
+                            // Parcours des clés de l'objet et génération dynamique du contenu
+                            for (const [key, value] of Object.entries(newData)) {
+                                if (value) { // Si la valeur n'est pas null
+                                    contentNew += `<p><strong>${escapeHTML(key)}:</strong> ${escapeHTML(value.toString())}</p>`;
+                                }
+                            }
+
+                            // Injection dans le modal
+                            newModalBody.innerHTML = contentNew;
+
+                            // Affichage du modal
+                            twoModal.style.display = "flex";
+                        });
+                    })
+
+
+                    // Fermer le modal
+                    closeTwoModal.addEventListener("click", () => {
+                        twoModal.style.display = "none";
+                    });
+
+                    // Clic en dehors du modal pour le fermer
+                    window.addEventListener("click", (e) => {
+                        if (e.target === twoModal) {
+                            twoModal.style.display = "none";
+                        }
+                    });
+                </script>
+            </main>
+        </div>
+    </div>
+    <script>
+        function confirmClearHistorique(url) {
+            if (confirm("Êtes-vous sûr de vouloir vider l'historique ?")) {
+                window.location.href = url;
+            }
+            return false;
+        }
+    </script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#myTable').DataTable({
+                "paging": true,        // Active la pagination
+                "responsive": true,
+                "scrollX": true,
+                "searching": false,     // Active la recherche
+                "ordering": false,      // Active le tri des colonnes
+                "info": true,          // Affiche les informations du tableau
+                "lengthMenu": [10, 25, 50, 100], // Nombre d'éléments par page
+                "language": {
+                    "lengthMenu": "Afficher _MENU_ entrées",
+                    "zeroRecords": "Aucune donnée trouvée",
+                    "info": "Affichage de _START_ à _END_ sur _TOTAL_ entrées",
+                    "infoEmpty": "Aucune entrée disponible",
+                    "infoFiltered": "(filtré sur _MAX_ entrées au total)",
+                    "search": "Rechercher :",
+                    "paginate": {
+                        "first": "Premier",
+                        "last": "Dernier",
+                        "next": "Suivant",
+                        "previous": "Précédent"
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}

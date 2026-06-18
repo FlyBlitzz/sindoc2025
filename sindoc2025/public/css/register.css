@@ -1,0 +1,28 @@
+body {
+            background-color: #f8f9fa;
+        }
+
+.classs {
+    background-color: #ffffff; /* Gris très clair pour le formulaire */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Ombre un peu plus prononcée */
+    
+    max-width: 100%; /* Garantir que la largeur ne dépasse pas la largeur de l'écran */
+    margin: 150px auto; /* Ajuster la marge en haut et centrer horizontalement */
+    /*transition: all 0.3s ease; /* Transition pour une apparence plus fluide */
+}
+
+.classs:hover {
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3); /* Augmentation de l'ombre au survol */
+}
+
+.form-control {
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Transition pour une apparence plus fluide des champs de formulaire */
+}
+
+.form-control:focus {
+    border-color: #007bff; /* Couleur de la bordure lorsqu'un champ est en focus */
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Lueur lorsqu'un champ est en focus */
+}
+

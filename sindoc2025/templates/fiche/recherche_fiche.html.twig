@@ -1,0 +1,138 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<head>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/ajoutFiche.css') }}">
+<style>
+.inline-button {
+    display: inline-block;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+</style>
+</head>
+{% include 'breadcrumb.html.twig' with { breadcrumbs: breadcrumbs } %}
+
+<body>
+    <div class="card-body classs">
+        <h1>Rechercher une fiche</h1>
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'classe': 'inline-button'}}) }}
+        {{ form_end(form) }}
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+<script>
+$(document).ready(function() {
+    // Variable pour stocker les parenthèses et les mots-clés sélectionnés
+    var elementsSelectionnes = [];
+
+    // Détecter le changement dans le champ motClesSelect
+    $('.motClesSelect').change(function() {
+        // Récupérer les mots-clés sélectionnés
+        var motsClesSelectionnes = $('.motClesSelect option:selected');
+
+        // Ajouter les nouveaux mots-clés sélectionnés à la liste sans doublons
+        motsClesSelectionnes.each(function() {
+            var reference = $(this).data('reference');
+            if (!elementsSelectionnes.includes(reference)) {
+                elementsSelectionnes.push(reference);
+            }
+        });
+
+        // Mettre à jour la valeur du champ motClesRechercher
+        updateMotClesRechercher();
+    });
+
+    // Détecter le clic sur le bouton pour la parenthèse droite
+    $('.ajouter-parenthese-droite-btn').click(function(event) {
+        event.preventDefault(); // Empêcher le comportement par défaut du bouton
+
+        // Ajouter une parenthèse droite à la liste des éléments sélectionnés
+        elementsSelectionnes.push(')');
+
+        // Mettre à jour la valeur du champ motClesRechercher
+        updateMotClesRechercher();
+    });
+
+    // Détecter le clic sur le bouton pour la parenthèse gauche
+    $('.ajouter-parenthese-gauche-btn').click(function(event) {
+        event.preventDefault(); // Empêcher le comportement par défaut du bouton
+
+        // Ajouter une parenthèse gauche à la liste des éléments sélectionnés
+        elementsSelectionnes.push('(');
+
+        // Mettre à jour la valeur du champ motClesRechercher
+        updateMotClesRechercher();
+    });
+
+    // Détecter le clic sur le bouton pour le ET
+    $('.buttonET').click(function(event) {
+        event.preventDefault(); // Empêcher le comportement par défaut du bouton
+
+        // Ajouter 'ET' à la liste des éléments sélectionnés
+        elementsSelectionnes.push('ET');
+
+        // Mettre à jour la valeur du champ motClesRechercher
+        updateMotClesRechercher();
+    });
+    // Détecter le clic sur le bouton pour le NOT
+    $('.buttonNOT').click(function(event) {
+        event.preventDefault(); // Empêcher le comportement par défaut du bouton
+
+        // Ajouter 'NOT' à la liste des éléments sélectionnés
+        elementsSelectionnes.push('NOT');
+
+        // Mettre à jour la valeur du champ motClesRechercher
+        updateMotClesRechercher();
+    });
+
+    // Détecter le clic sur le bouton pour le OU
+    $('.buttonOU').click(function(event) {
+        event.preventDefault(); // Empêcher le comportement par défaut du bouton
+
+        // Ajouter 'OU' à la liste des éléments sélectionnés
+        elementsSelectionnes.push('OU');
+
+        // Mettre à jour la valeur du champ motClesRechercher
+        updateMotClesRechercher();
+    });
+     // Détecter le clic sur le bouton de suppression
+        $('.supprimerContenu').click(function(event) {
+            event.preventDefault(); // Empêcher le comportement par défaut du bouton
+
+            // Vider la liste des éléments sélectionnés
+            elementsSelectionnes = [];
+            $('.motClesSelect').val([]).trigger('change'); // Vider le champ EntityType
+
+            // Mettre à jour la valeur du champ motClesRechercher
+            updateMotClesRechercher();
+        });
+   // Détecter le clic sur le bouton de suppression
+        $('.supprimerContenu').click(function(event) {
+            event.preventDefault(); // Empêcher le comportement par défaut du bouton
+            $('.motClesSelect').val([]).trigger('change'); // Vider la liste des éléments sélectionnés
+               // Vider la liste des éléments sélectionnés
+                       elementsSelectionnes = [];
+            // Mettre à jour la valeur du champ motClesRechercher
+            updateMotClesRechercher();
+        });
+    // Fonction pour mettre à jour la valeur du champ motClesRechercher
+    function updateMotClesRechercher() {
+        
+        // Mettre à jour la valeur du champ motClesRechercher en joignant tous les éléments sélectionnés
+        $('#recherche_fiche_motClesRechercher').val(elementsSelectionnes.join(' '));
+    }
+});
+
+</script>
+
+<script>
+$(document).ready(function() {
+    $('.select2').select2();
+});
+</script>
+{% endblock %}
+

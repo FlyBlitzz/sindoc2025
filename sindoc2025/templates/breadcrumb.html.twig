@@ -1,0 +1,59 @@
+<style>
+.breadcrumb {
+    background: none;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    display: flex;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    content: '>';
+    margin: 0 5px;
+    color: #6c757d;
+}
+
+.breadcrumb-item a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+.breadcrumb-item a:hover {
+    text-decoration: underline;
+}
+
+	nav[aria-label="breadcrumb"] {
+		display: inline;
+		font-size: 14px;
+		color: #007bff;
+		padding:1em;
+	}
+
+	nav[aria-label="breadcrumb"] a {
+		text-decoration: none;
+		color: #007bff;
+	}
+
+	nav[aria-label="breadcrumb"] a:hover {
+		text-decoration: underline;
+	}
+
+	nav[aria-label="breadcrumb"] span {
+		color: #6c757d;
+		font-size:1.1em;
+	}
+</style>
+<nav aria-label="breadcrumb">
+	{% for breadcrumb in breadcrumbs %}
+		{% if breadcrumb.route %}
+			<a href="{{ path(breadcrumb.route, breadcrumb.routeParams) }}">{{ breadcrumb.label }}</a>
+		{% else %}
+			<span>{{ breadcrumb.label }}</span>
+		{% endif %}
+
+		{% if not loop.last %}
+			>
+			<!-- Séparateur entre les liens -->
+		{% endif %}
+	{% endfor %}
+</nav>

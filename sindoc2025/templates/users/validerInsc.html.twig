@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des utilisateurs{% endblock %}
+
+{% block body %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/showUser.css') }}">
+    <!-- Lien vers Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ asset('css/listeUsers.css') }}">
+
+
+
+</head>
+   <div class="classs" style="width: 84%;     margin: 150px auto; margin-top: 0px;">
+
+        <div class="row">
+          {% include "_partials/_adminnav.html.twig"%}
+
+          <main class="col-9 container border border-light bg-white p-2">
+    <h1>Demandes d'inscriptions</h1>
+
+    <table class="table " >
+        <thead>
+            <tr>
+                                <th scope="col"></th>
+
+                <th scope="col">Nom</th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+
+                <th scope="col">Valider l'inscription</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td></td>
+
+                <td>{{ user.username }}</td>
+                <td></td>
+                <td></td>
+
+                <td>
+
+                <form method="POST" action="{{ path('admin_user_validate', {'id': user.id}) }}" id="form_valide_{{ user.id }}">
+                    <input type="hidden" name="_method" value="PUT">
+                    <label class="switch">
+                        <input type="checkbox" name="valide" {% if user.isValide() %} checked {% endif %} onchange="document.getElementById('form_valide_{{ user.id }}').submit()">
+                        <span class="slider round"></span>
+                    </label>
+                </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">Aucune demande d'inscription en attente</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+</div>
+
+
+
+
+
+{% endblock %}
+
+
+
+
+

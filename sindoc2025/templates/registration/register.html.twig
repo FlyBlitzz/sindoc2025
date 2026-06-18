@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/register.css') }}">
+    <!-- Ajout de la bibliothèque d'icônes Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <style>
+.eye-icon {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    margin-left: 450px;
+     margin-bottom: -50px;
+}
+</style>
+</head>
+
+<body>
+    <div class="classs" style="width: 540px;">
+        <h1 class="mb-4">Inscription</h1>
+
+        {{ form_errors(registrationForm) }}
+
+        {{ form_start(registrationForm) }}
+            {{ form_row(registrationForm.username, {
+                 label: 'Identifiant'
+             }) }}
+
+             <img src="{{ asset('images/eyesOpen.png') }}" alt="eye-open" id="eyeOpen" class="eye-icon">
+         <img src="{{ asset('images/eyesClose.png') }}" alt="eye-closed" id="eyeClosed" class="eye-icon" style="display: none;">
+            {{ form_row(registrationForm.plainPassword, {
+                label: 'Mot de passe',
+            }) }}
+
+            {{ form_row(registrationForm.agreeTerms) }}
+            <div class="d-flex justify-content-end" style="margin-right: 0px">
+                <button type="submit" class="btn btn-primary mx-2">S'inscrire</button>
+            </div>
+        {{ form_end(registrationForm) }}
+    </div>
+
+
+
+    <script>
+const pwInput1 = document.getElementById('registration_form_plainPassword_first');
+const pwInput2 = document.getElementById('registration_form_plainPassword_second');
+const eyeOpen = document.getElementById('eyeOpen');
+const eyeClosed = document.getElementById('eyeClosed');
+
+eyeOpen.addEventListener('click', () => {
+    pwInput1.type = 'text';
+    pwInput2.type = 'text';
+    eyeOpen.style.display = 'none';
+    eyeClosed.style.display = 'inline-block';
+});
+
+eyeClosed.addEventListener('click', () => {
+    pwInput1.type = 'password';
+    pwInput2.type = 'password';
+    eyeOpen.style.display = 'inline-block';
+    eyeClosed.style.display = 'none';
+});
+</script>
+
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New SavRequete{% endblock %}
+
+{% block body %}
+<head>
+       <link rel="stylesheet" href="{{ asset('css/ajoutFiche.css') }}">
+
+</head>
+ <div class=" classs">
+    <h1>Enregistrer la requête</h1>
+
+    {{ include('sav_requete/_form.html.twig') }}</br>
+
+    <a href="{{ path('savreq_app_sav_requete_index') }}"><strong>Retourner à la liste</strong></a>
+ </div>
+{% endblock %}

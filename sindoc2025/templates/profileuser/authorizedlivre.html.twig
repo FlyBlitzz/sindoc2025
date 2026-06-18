@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User{% endblock %}
+
+{% block body %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/showUser.css') }}">
+     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+</head>
+<body>
+
+ <div class="container mb-5 pb-5">
+ <h1 class="text-center mb-4">Mes Livres Autorisés</h1>
+<table class="table" id="Table2">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nom</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for livre in authorizedLivres %}
+           <tr>
+    <td class="pt-3">{{ livre.id }}</td>
+    <td>
+        <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+            <span class="mx-lg-5">{{ livre.nom }}</span>
+            <div style="display: flex; gap: 10px;">
+                <a href="{{ path('app_livre_livre_app_livre_edit', {id: livre.id}) }}" class="btn btn-primary btn-md">Modifier</a>
+                <form action="{{ path('app_livre_app_livre_delete', {id: livre.id}) }}" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-danger btn-md">Supprimer</button>
+                </form>
+            </div>
+        </div>
+    </td>
+</tr>
+
+        {% else %}
+            <tr>
+                <td colspan="2" class="text-center">Aucun livre autorisé.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+</body>
+
+<script>
+$(document).ready(function() {
+        $('#Table2').DataTable({
+            language: {
+                url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/French.json'
+            }
+        });
+    });
+</script>
+
+{% endblock %}

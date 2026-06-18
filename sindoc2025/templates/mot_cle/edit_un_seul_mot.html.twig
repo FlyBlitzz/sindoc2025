@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier MotCle{% endblock %}
+
+{% block body %}
+<head>
+       <link rel="stylesheet" href="{{ asset('css/ajoutFiche.css') }}">
+
+</head>
+ <div class=" classs">
+    <h1>Modifier MotCle</h1>
+
+    {{ include('mot_cle/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+
+    </div>
+{% endblock %}

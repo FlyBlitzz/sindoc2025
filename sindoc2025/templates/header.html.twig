@@ -1,0 +1,464 @@
+{% block body %}
+
+
+	
+		<div class="modal fade" id="livreModal" tabindex="-1" aria-labelledby="livreModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="livreModalLabel">Sélectionner un Livre</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<form id="livreFormSelect" action="{{ path('app_livre_app_livre_set_livre_session') }}" method="POST">
+							<label for="livre">Veuillez choisir un livre</label>
+							<select id="livreSelect" name="livre" class="form-select">
+								<option value="">Chargement...</option>
+							</select>
+							<button type="submit" class="btn btn-primary mt-3" id="submitButton">
+								<span id="buttonText">Valider</span>
+								<span id="loadingSpinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+							</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+        <nav class="navbar">
+         <a href="{{ path('app_home') }}" class="nav-logo">
+            <img src="{{ asset('images/Logo-ista.png') }}" style="width:40%; margin-left: 60px; " alt="ISTA Logo" class="logo-image ">
+        </a>
+    <div class="nav-container">
+       
+        
+        <div class="hamburger" id="hamburger" style="font-size:3em;">
+            {# <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div> #}
+            <i class="fa-solid fa-bars"></i>
+        </div>
+
+        <ul class="nav-menu" id="nav-menu">
+            {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER') %}
+                {% if app.user %}
+                    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER') or canEdit %}
+                        <li id="canEditUser"><a href="#" data-bs-toggle="modal" data-bs-target="#livreModal">Livre</a></li>
+                    {% endif %}
+                    <li><a href="{{ path('fiche_recherche') }}" class="{% if app.request.attributes.get('_route') in ['fiche_recherche', 'deuxieme_fiche_recherche', 'fiche_recherche_resultat'] %}active{% endif %}">Rechercher une fiche</a></li>
+                    <li><a href="{{ path('savreq_app_sav_requete_index') }}" class="{% if app.request.attributes.get('_route') == 'savreq_app_sav_requete_index' %}active{% endif %}">Requêtes enregistrées</a></li>
+                    <li><a href="{{ path('savreq_app_recherche') }}" class="{% if app.request.attributes.get('_route') == 'savreq_app_recherche' %}active{% endif %}">Recherche multicritères</a></li>
+                    {% if is_granted('ROLE_ADMIN') or canEdit %}
+                        <li id="canEditUser"><a href="{{ path('add_fiche') }}" class="{% if app.request.attributes.get('_route') in ['add_fiche', 'deuxieme_formulaire_route'] %}active{% endif %}">Ajouter une Fiche</a></li>
+                    {% endif %}
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <li><a href="{{ path('admin_index') }}" class="{% if app.request.attributes.get('_route') == 'admin_index' %}active{% endif %}">ADMINISTRATION</a></li>
+                    {% endif %}
+                    <li><a href="{{ path('app_admin_app_users_show', {id: app.user.getId()}) }}" 
+                    class="{% if app.request.attributes.get('_route') == 'app_admin_app_users_show' %}active{% endif %}">
+                        <i class="fas fa-user"></i> {{ app.user.getUsername() }}</a></li>
+                    <li>
+    <a href="{{ path('app_logout') }}" >
+        <i class="fas fa-sign-out-alt"></i> Me déconnecter
+    </a>
+</li>
+
+
+                {% else %}
+                    <li><a href="{{ path('app_login') }}">Connexion</a></li>
+                    <li><a href="{{ path('app_register') }}">Inscription</a></li>
+                    <li><a href="{{ path('fiche_recherche') }}" class="{% if app.request.attributes.get('_route') in ['fiche_recherche', 'deuxieme_fiche_recherche'] %}active{% endif %}">Rechercher une fiche</a></li>
+                    <li><a href="{{ path('savreq_app_sav_requete_index') }}" class="{% if app.request.attributes.get('_route') == 'savreq_app_sav_requete_index' %}active{% endif %}">Recherche multicritères</a></li>
+                {% endif %}
+            {% else %}
+                <li><a href="{{ path('app_login') }}" class="{% if app.request.attributes.get('_route') in ['app_login'] %}active{% endif %}">Connexion</a></li>
+                <li><a href="{{ path('app_register') }}" class="{% if app.request.attributes.get('_route') in ['app_register'] %}active{% endif %}">Inscription</a></li>
+                {# <li><a href="#" data-bs-toggle="modal" data-bs-target="#livreModal">Livre</a></li> #}
+                <li><a href="{{ path('fiche_recherche') }}" class="{% if app.request.attributes.get('_route') in ['fiche_recherche', 'deuxieme_fiche_recherche'] %}active{% endif %}">Rechercher une fiche</a></li>
+                <li><a href="{{ path('visiteur_multi_requetes') }}">Recherche multicritères</a></li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+		{# <nav class="cc-navbar navbar navbar-expand-lg position-fixed navbar-dark w-100" style="flex-direction:column;">
+			<div class="container-fluid">
+				<a class="navbar-brand text-uppercase fw-bolder mx-4 py-3" href="{{ path('app_home') }}">ISTA</a>
+
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER') %}
+        {% if app.user %}
+            {% if is_granted('ROLE_ADMIN') %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('admin_index')}}">ADMINISTRATION</a>
+                </li>
+            {% endif %}
+
+            <li class="nav-item">
+                <div class="input-group">
+                    <span class="input-group-text bg-transparent border-0">
+                        <i class="fas fa-user"></i>
+                    </span>
+                    <a class="nav-link" href="{{ path('app_admin_app_users_show', {id: app.user.getId()})}}">
+                        {{ app.user.getUsername() }}
+                    </a>
+                </div>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('app_logout') }}">Me déconnecter</a>
+            </li>
+
+            <li class="nav-item pe-1">
+                <a class="btn btn-order w-100 text-center" href="#" data-bs-toggle="modal" data-bs-target="#livreModal">
+                    Livre
+                </a>
+            </li>
+
+            <li class="nav-item pe-1">
+                <a class="btn btn-order w-100 text-center" href="{{ path('fiche_recherche') }}">
+                    Rechercher une fiche
+                </a>
+            </li>
+
+            <li class="nav-item pe-1">
+                <a class="btn btn-order w-100 text-center" href="{{ path('savreq_app_sav_requete_index') }}">
+                    Requêtes enregistrées
+                </a>
+            </li>
+
+            <li class="nav-item pe-1">
+                <a class="btn btn-order w-100 text-center" href="{{ path('savreq_app_recherche') }}">
+                    Recherche multicritères
+                </a>
+            </li>
+		{% if is_granted('ROLE_ADMIN') %}
+            <li class="nav-item">
+                <a class="btn btn-order w-100 text-center" href="{{ path('add_fiche') }}">
+                    Ajouter une Fiche
+                </a>
+            </li>
+			{% endif %}
+        {% else %}
+            <li class="nav-item pe-4">
+                <a class="nav-link active" aria-current="page" href="{{ path('app_home') }}">Accueil</a>
+            </li>
+            <li class="nav-item pe-4">
+                <a class="nav-link" href="{{ path('app_login')}}">Connexion</a>
+            </li>
+            <li class="nav-item pe-4">
+                <a class="nav-link" href="{{ path('app_register') }}">Inscription</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="btn btn-order w-100 text-center" href="{{ path('fiche_recherche') }}">
+                    Rechercher une fiche
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="btn btn-order w-100 text-center" href="{{ path('savreq_app_sav_requete_index') }}">
+                    Recherche multicritères
+                </a>
+            </li>
+        {% endif %}
+    {% else %}
+        <li class="nav-item pe-4">
+            <a class="nav-link active" aria-current="page" href="{{ path('app_home') }}">Accueil</a>
+        </li>
+        <li class="nav-item pe-4">
+            <a class="nav-link" href="{{ path('app_login')}}">Connexion</a>
+        </li>
+        <li class="nav-item pe-4">
+            <a class="nav-link" href="{{ path('app_register') }}">Inscription</a>
+        </li>
+
+        <li class="nav-item">
+            <button class="btn btn-order w-100 text-center" data-bs-toggle="modal" data-bs-target="#livreModal">
+                Livre
+            </button>
+        </li>
+
+        <li class="nav-item pe-1">
+            <a class="btn btn-order w-100 text-center" href="{{ path('fiche_recherche') }}">
+                Rechercher une fiche
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="btn btn-order w-100 text-center" href="{{ path('visiteur_multi_requetes') }}">
+                Recherche multicritères
+            </a>
+        </li>
+    {% endif %}
+</ul>
+
+				</div>
+			</div>
+	</body>
+	{% if app.user %}
+	<div class="row">
+
+	<p class="ps-4 mt-3" style="float:left;">
+		{% if app.session.get('livreName') %}
+			<span class="navbar-text">
+				<span class="bg-white text-dark p-2 rounded">
+					Livre actuel:
+					{{ app.session.get('livreName') }}
+				</span>
+			</span>
+		{% else %}
+			<span class="navbar-text">
+				<span class="bg-white text-dark p-2 rounded">
+					Aucun livre sélectionné
+				</span>
+			</span>
+		{% endif %}
+	</p>
+	</div>
+	{% endif %}
+</nav> #}
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+.navbar {
+    background-color: #333;
+    color: white;
+    padding: 15px 20px;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+{# #canEditUser{
+    display:none;
+} #}
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-logo {
+    text-decoration: none;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.nav-menu {
+    list-style: none;
+    display: flex;
+}
+
+.nav-menu li {
+    margin-left: 20px;
+}
+
+.nav-menu a {
+    text-decoration: none;
+    color: white;
+    font-size: 1rem;
+    padding: 10px;
+    transition: 0.3s;
+}
+.nav-menu li a.active {
+    background-color: #3667f8 !important;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+}
+.nav-menu a:hover {
+    background-color: #555;
+    border-radius: 5px;
+    color:white;
+}
+
+/* Hamburger menu styles */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.bar {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    margin: 5px 0;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 1594px) {
+    .hamburger {
+        display: flex;
+    }
+
+    .nav-menu {
+        display: none;
+        flex-direction: column;
+        background-color: #333;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        padding: 10px 0;
+    }
+
+    .nav-menu.active {
+        display: flex;
+    }
+
+    .nav-menu li {
+        margin: 10px 0;
+    }
+}
+@media screen and (max-width: 768px) {
+    .hamburger {
+        display: flex;
+    }
+
+    .nav-menu {
+        display: none;
+        flex-direction: column;
+        background-color: #333;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        padding: 10px 0;
+    }
+
+    .nav-menu.active {
+        display: flex;
+    }
+
+    .nav-menu li {
+        margin: 10px 0;
+    }
+}
+
+
+</style>
+
+<script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+
+{% endblock %}
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const hamburger = document.getElementById("hamburger");
+    const navMenu = document.getElementById("nav-menu");
+
+    hamburger.addEventListener("click", function () {
+        navMenu.classList.toggle("active");
+    });
+});
+</script>
+{% if app.request.attributes.get('_route') not in ['app_login']%}
+<script>
+ const isAdmin = {{ is_granted('ROLE_ADMIN') ? 'true' : 'false' }};
+ let canEdit = false; 
+  document.addEventListener("DOMContentLoaded", function () {
+        // Fetch books from backend
+        fetch("{{ path('app_livre_app_livre_get_livre_dropdown') }}")
+            .then(response => response.json())
+            .then(data => {
+                let select = document.getElementById("livreSelect");
+                select.innerHTML = '<option value="">Sélectionner un livre</option>';
+                // alert(data);
+                if (data.length > 0) {
+                    //canEdit = true; // User has authorized books
+                    data.forEach(livre => {
+                    let option = document.createElement("option");
+                    option.value = livre.id;
+                    option.textContent = livre.nom; // Ensure 'nom' is the correct field
+                    select.appendChild(option);
+                });
+                }
+                
+            })
+            .catch(error => console.error("Erreur de chargement des livres:", error));
+  
+
+ 
+
+function toggleButtonVisibility() {
+    let buttons = document.querySelectorAll("#canEditUser"); // Select all elements with the class
+    console.log(buttons)
+    buttons.forEach(button => {
+        if (isAdmin) {
+            button.style.display = "block";
+        } else{
+            button.style.display = canEdit ? "block" : "none";
+        }
+    });
+}
+
+    
+
+
+
+
+// Handle form submission
+document.getElementById("livreFormSelect").addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    let livreSelect = document.getElementById("livreSelect");
+    let livreId = livreSelect.value;
+    let livreNom = livreSelect.selectedOptions[0]?.textContent; // Added optional chaining for safety
+
+    if (!livreId) {
+        alert("Veuillez sélectionner un livre !");
+        return;
+    }
+
+    let submitButton = document.getElementById("submitButton");
+    let buttonText = document.getElementById("buttonText");
+    let loadingSpinner = document.getElementById("loadingSpinner");
+
+    submitButton.disabled = true;
+    buttonText.textContent = "Validation en cours...";
+    loadingSpinner.classList.remove("d-none");
+
+    fetch(this.action, {
+        method: this.method,
+        body: JSON.stringify({ "livreId": livreId, "livreNom": livreNom }),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert("Livre sélectionné avec succès !");
+            window.location.href = "{{ path("app_home") }}";
+        } else {
+            alert("Erreur: " + data.message);
+        }
+    })
+    .catch(error => console.error("Erreur:", error))
+    .finally(() => {
+        // Re-enable the button and hide the loading spinner
+        submitButton.disabled = false;
+        buttonText.textContent = "Valider";
+        loadingSpinner.classList.add("d-none");
+    });
+});
+  });
+</script>
+
+
+
+{% endif %}

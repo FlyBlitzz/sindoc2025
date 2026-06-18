@@ -1,0 +1,14 @@
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
+
+# config/routes.yaml
+get_base_html:
+    path: /get_base_html
+    controller: App\Controller\UserController::getBaseHTML
+
+admin_get_base_html:
+    path: /admin_get_base_html
+    controller: App\Controller\MainController::getBaseHTMLAdmin

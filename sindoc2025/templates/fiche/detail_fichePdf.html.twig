@@ -1,0 +1,59 @@
+{% block body %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/showUser.css') }}">
+</head>
+<body>
+<div class="card-body">
+    <h1 class="username">Les détails de la fiche</h1>
+
+    <div>
+        <strong>Numero de la fiche:</strong> {{ fiche.getIdFiche() }}
+    </div>
+    <div>
+        <strong>Livre:</strong> {{ fiche.livre }}
+    </div>
+    <div>
+        <strong>Edition:</strong> {{ fiche.edition }}
+    </div>
+    <div>
+        <strong>Reference:</strong> {{ fiche.refer }}
+    </div>
+    <div>
+        <strong>Denomination:</strong> {{ fiche.denomination }}
+    </div>
+    <div>
+        <strong>Statut:</strong> {{ fiche.statut }}
+    </div>
+    <div>
+        <strong>Texte:</strong> {{ fiche.texte }}
+    </div>
+    <div>
+        <strong>Traduction:</strong> {{ fiche.traduction }}
+    </div>
+    <div>
+        <strong>Notes:</strong> {{ fiche.notes }}
+    </div>
+    <div>
+        <strong>Commentaire:</strong> {{ fiche.commentaire }}
+    </div>
+
+   <div>
+    <strong>Mots Clés :</strong>
+    {% for motCle in fiche.getMotCles() %}
+        {% for ficheMotCles in fiche.getFicheMotCles() %}
+            {% if motCle == ficheMotCles.getMotCle() %}
+                <span title="{{ motCle.getDenomination() }}">{{ motCle.getReference() }}{% if ficheMotCles.getPrecision() %}:{% endif %}{{ ficheMotCles.getPrecision() }}</span>,
+            {% endif %}   
+        {% endfor %}
+    {% endfor %}
+</div>
+
+</div>
+</body>
+</html>
+{% endblock %}

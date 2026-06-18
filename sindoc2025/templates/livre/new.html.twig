@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Livre{% endblock %}
+
+{% block body %}
+<head>
+       <link rel="stylesheet" href="{{ asset('css/ajoutFiche.css') }}">
+
+</head>
+ <div class=" classs">
+    <h1>Créer un nouveau Livre</h1>
+
+    {{ include('livre/_form.html.twig') }}</br>
+    <a href="{{ path('app_livre_app_livre_index') }}"><strong>Retourner à la liste</strong></a>
+
+</div>
+{% endblock %}

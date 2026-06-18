@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block head %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/ajoutFiche.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .inline-button {
+            display: inline-block;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+{% endblock %}
+{% block body %}
+    <body>
+        <div class="card-body classs w-50">
+            <h1>Faire une recherche multi critères</h1>
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}, 'id': 'myForm'}) }}
+            {# {{ form_row(form.requeteRechercher) }} #}
+            {# {{ form_errors(form.requeteRechercher) }} #}
+            {{ form_end(form) }}
+        </div>
+
+        <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+        <script>
+            $(document).ready(function() {
+                
+                // Fonction pour mettre à jour la valeur du champ requeteRechercher
+                function mettreAJourMotCles(nouveauMot) {
+                    // Récupérer la valeur actuelle du champ
+                    var ancienMot = $('#{{ form.vars.id }}_requeteRechercher').val();
+                    // Mettre à jour la valeur avec le nouveau mot et les séparateurs
+                    var separateur = (ancienMot !== '') ? ' ' : '';
+                    var nouveauMotCles = ancienMot + separateur + nouveauMot;
+                    // Mettre à jour la valeur du champ
+                    $('#{{ form.vars.id }}_requeteRechercher').val(nouveauMotCles);
+                  
+                }
+
+                // Lorsque le bouton "ET" est cliqué
+                $('.buttonET').click(function() {
+                    mettreAJourMotCles('ET');
+                });
+
+                // Lorsque le bouton "OU" est cliqué
+                $('.buttonOU').click(function() {
+                    mettreAJourMotCles('OU');
+                });
+                $('.buttonNOT').click(function() {
+                    mettreAJourMotCles('NOT');
+                });
+              // Lorsque la requête est sélectionnée
+                $('.select2').change(function() {
+                    var nomRequete = $('.select2 option:selected').text();
+                    mettreAJourMotCles(nomRequete);
+                });
+             // Lorsque le bouton "Supprimer" est cliqué
+                $('.supprimer-btn').click(function() {
+                    $('.select2').val('');
+                    // Effacer le contenu du champ requeteRechercher
+                    $('#{{ form.vars.id }}_requeteRechercher').val('');
+                });
+            });
+        </script>
+    </body>
+{% endblock %}

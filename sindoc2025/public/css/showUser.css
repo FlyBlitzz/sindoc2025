@@ -1,0 +1,61 @@
+     /* Styles personnalisés pour les boutons */
+              .btn-delete {
+                  background-color: #ff6b6b; /* Rouge plus clair */
+                  border-color: #ff6b6b; /* Couleur de la bordure */
+              }
+              .btn-delete:hover {
+                  background-color: #f44444; /* Rouge plus foncé au survol */
+                  border-color: #f44444; /* Couleur de la bordure plus foncée au survol */
+              }
+              .btn-deactivate {
+                  background-color: #6c757d; /* Gris */
+                  border-color: #6c757d; /* Couleur de la bordure */
+              }
+              .btn-deactivate:hover {
+                  background-color: #5a6268; /* Gris plus foncé au survol */
+                  border-color: #5a6268; /* Couleur de la bordure plus foncée au survol */
+              }
+        .btn-container .btn {
+            margin-right: 10px;
+        }
+
+.btn-order {
+	color: var(--bs-teal);
+	border-color: var(--bs-teal);
+	transition: 0.5s;
+}
+
+.btn-order:hover,
+.btn-order:focus,
+.btn-order:active {
+	color: #fff;
+	background-color: var(--bs-teal);
+}
+
+
+.classs {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    width: 700px;
+    max-width: 100%;
+    transition: all 0.3s ease;
+}
+
+
+.classs:hover {
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3); /* Augmentation de l'ombre au survol */
+}
+
+.form-control {
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Transition pour une apparence plus fluide des champs de formulaire */
+}
+
+.form-control:focus {
+    border-color: #007bff; /* Couleur de la bordure lorsqu'un champ est en focus */
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Lueur lorsqu'un champ est en focus */
+}
+.username{
+margin-top: 150px;
+}

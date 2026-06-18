@@ -1,0 +1,28 @@
+body {
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .cc-footer {
+        flex: 1;
+        position: relative;
+        background-color: #333333;
+        color: white;
+    }
+
+    .cc-footer::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        /* background-color: #ccc; */
+    }
+@media(max-width:900px)
+{
+    
+}

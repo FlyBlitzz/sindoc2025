@@ -1,0 +1,93 @@
+{% extends "base.html.twig" %}
+
+{% block title %} Mentions légales {% endblock %}
+
+{% block body %}
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/listeUsers.css') }}">
+
+    </head>
+
+    <style>
+        h2 {
+            font-weight: bold;
+        }
+    </style>
+
+    <div style="width: 40%; margin: 0 auto 150px;">
+        <main class="col-9 container border border-light bg-white p-2" style="text-align: center;">
+            <h1 style="text-decoration: underline;"> Mentions légales </h1>
+            <br>
+            <h2>Le site web est édité par :</h2>
+            <p> ISTA UR 4011
+                <br>
+                <br>
+                30-32 rue Mégevand
+                <br>
+                25000 Besançon
+                <br>
+                03.81.66.54.73</p>
+            <br>
+            <h2>Directeur de la publication :</h2>
+            <p>Mme Woronoff, Présidente de l'Université de Franche-Comté</p>
+            <br>
+            <h2>Directeur de la redaction :</h2>
+            <p>Antonio Gonzales, directeur de l'ISTA</p>
+            <br>
+            <h2>Hébergement du site :</h2>
+            <p> Université de Franche-Comté
+                <br>
+                Centre de ressources informatiques (CRI)
+                <br>
+                16 route de Gray
+                <br>
+                25030 Besançon cedex
+                <br>
+                03 81 66 66 66</p>
+            <br>
+            <h2>Crédits :</h2>
+            <p>- Développement : Antonin Rothé, Faiza Merah, Abdelmadjid Zenine
+                <br>
+                - Sous la supervision de : Florian Litot</p>
+            <br>
+            <h2>Droits d'auteur :</h2>
+            <p>
+                L'ensemble de ce site relève de la législation française et internationale sur le droit d'auteur et la
+                propriété intellectuelle. Tous les droits de reproduction et de diffusion sont réservés, y compris pour
+                les représentations iconographiques et photographiques.
+                <br>
+                La reproduction de tout ou partie de ce site sur un support quel qu'il soit, est formellement interdite
+                sauf autorisation expresse du directeur de la publication.
+                <br>
+                <br>
+                La création de liens hypertextes vers ce site est autorisée sous réserve de :
+            </p>
+            <ul>
+                <li>
+                    Ne pas utiliser la technique du lien profond effectué vers des fichiers téléchargeables ou
+                    exécutables ;
+                </li>
+                <li>
+                    Ne pas utiliser ce site dans un cadre dénaturant son identité visuelle et excluant son
+                    identification ;
+                </li>
+                <li>
+                    Ne pas effectuer de lien vers une image ou photographie en l'incluant dans une page hors de ce site
+                    ;
+                </li>
+                <li>
+                    Ne pas utiliser les informations de ce site à des fins commerciales ou publicitaires.
+                </li>
+            </ul>
+            <h2>Navigation :</h2>
+            <p>Ce site a été conçu pour les navigateurs Internet Explorer (à partir de la version 9), Safari, Mozilla
+                Firefox et Google Chrome. Pour une navigation optimisée, nous conseillons l'emploi de Firefox ou de
+                Google Chrome.
+            </p>
+        </main>
+    </div>
+{% endblock %}
+

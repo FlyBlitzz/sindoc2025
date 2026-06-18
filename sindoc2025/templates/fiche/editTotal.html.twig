@@ -1,0 +1,118 @@
+{% extends 'base.html.twig' %}
+
+{% block head %}
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+   <link rel="stylesheet" href="{{ asset('css/ajoutFiche.css') }}">
+   <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+{% endblock %}
+
+{% block body %}
+<body>
+   <div class="card-body classs">
+       <h1>Modifier la fiche</h1>
+
+       {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+       {{ form_row(form.refer) }}
+       {{ form_row(form.edition) }}
+       {{ form_row(form.denomination) }}
+       {{ form_row(form.statut) }}
+       {{ form_row(form.texte) }}
+       {{ form_row(form.traduction) }}
+       {{ form_row(form.notes) }}
+       {{ form_row(form.commentaire) }}
+       {{ form_row(form.user) }}
+       {{ form_row(form.visible) }}
+
+      {# {% if form.ficheMotCles is not empty %}
+          {% for ficheMotCle in form.ficheMotCles %}
+                  {{ form_row(ficheMotCle.motCle, {'attr': {'class': 'motCles'}}) }}
+                  {{ form_row(ficheMotCle.precision, {'attr': {'class': 'precision'}}) }}
+<a href="{{ path('fiche_mot_cle_delete', {'motCle': ficheMotCle.motCle.vars.data, 'fiche': fiche.getIdFiche()}) }}" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce mot-clé ?')">Supprimer</a>
+
+          {% endfor %}
+            {% endif %}
+        <div id="motClesContainer">
+         <div class="motClesGroup">
+             {{ form_row(form.ficheMotCles.vars.prototype.motCle, {'attr': {'class': 'motCles'}}) }}
+             {{ form_row(form.ficheMotCles.vars.prototype.precision, {'attr': {'class': 'precision'}}) }}
+
+     </div>
+       </div> #}
+        <div class="ficheMotCles" 
+        data-index="{{ form.ficheMotCles|length > 0 ? form.ficheMotCles|last.vars.name + 1 : 0 }}"
+        data-prototype="{{ form_widget(form.ficheMotCles.vars.prototype)|e('html_attr') }}">
+          {% for ficheMotCle in form.ficheMotCles %}
+        <div class="motClesGroup" >
+            {{ form_widget(ficheMotCle) }}
+            
+            <button type="button" class="btn btn-danger remove-mot-cle" style="margin-bottom:1em;float:right;"><i class="fas fa-minus"></i></button>
+        </div>
+    {% endfor %}
+    </div>
+
+          {{ form_row(form.plus, {'attr': {'class': 'plus btn-primary' }}) }}
+          {{ form_row(form.Enregistrer) }}
+       {{ form_end(form) }}
+         <a href="{{ path('app_fiche_duplicate', {'id': fiche.getIdFiche()}) }}" class="btn btn-primary">Dupliquer la fiche</a>
+         {# <a href="{{ path('fiche_list') }}" class="btn btn-primary">retourner à la liste</a> #}
+         <p></p>
+       <div>
+       {% if previous_fiche is not null %}
+              <a href="{{ path('app_fiche_edit_total', {id: previous_fiche.getIdFiche(), liste: 'resultats'}) }}" class="btn btn-outline-secondary" style="margin-right: 20px"> <strong> <<</strong></a>
+       {% endif %}
+       {% if next_fiche is not null %}
+              <a href="{{ path('app_fiche_edit_total', {id: next_fiche.getIdFiche(), liste: 'resultats'}) }}" class="btn btn-outline-secondary" > <strong> >></strong> </a>
+       {% endif %}
+       </div>
+   </div>
+   <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+      <script>
+  $(document).ready(function() {
+    $('.select2').select2();
+
+    $('.plus').click(function(e) {
+        e.preventDefault();
+        var $motClesContainer = $('#motClesContainer');
+        var $motClesGroupClone = $motClesContainer.children('.motClesGroup:first').clone(true);
+        $motClesGroupClone.find('.motCles').val('');
+        $motClesGroupClone.find('.precision').val('');
+        $motClesGroupClone.appendTo($motClesContainer);
+        $('.select2').select2();
+    });
+  $(document).on('click', '.minus', function(e) {
+      e.preventDefault();
+
+      var $motCleGroup = $(this).closest('.motClesGroup');
+      var ficheMotCleId = $(this).data('id'); // Récupération de l'ID de l'entité à supprimer
+
+      $.ajax({
+          url: '/fiche-mot-cle/delete/' + ficheMotCleId, // Utilisation de l'ID dans l'URL
+          type: 'DELETE',
+          success: function(result) {
+              $motCleGroup.remove();
+          }
+      });
+  });
+
+
+
+
+    $('form').submit(function() {
+        var precisionValues = [];
+        $('.precision').each(function() {
+            precisionValues.push($(this).val());
+        });
+        var precisionValuesJSON = JSON.stringify(precisionValues);
+        $('<input>').attr({
+            type: 'hidden',
+            name: 'precisionValues',
+            value: precisionValuesJSON
+        }).appendTo('form');
+    });
+});
+            </script>
+
+{% endblock %}

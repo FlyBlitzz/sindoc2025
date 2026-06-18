@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New User{% endblock %}
+
+{% block body %}
+<head>
+       <link rel="stylesheet" href="{{ asset('css/ajoutFiche.css') }}">
+
+</head>
+ <div class=" classs">
+    <h1>Créer un nouveau utilisateur</h1>
+
+    {{ include('users/_form.html.twig') }}</br>
+
+    <a href="{{ path('app_admin_app_users_index') }}"><strong>Retourner à la liste</strong></a>
+   </div>
+{% endblock %}

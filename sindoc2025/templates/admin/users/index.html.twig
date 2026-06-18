@@ -1,0 +1,124 @@
+{% extends "base.html.twig" %}
+
+{% block title %} Administration {% endblock %}
+
+{% block body %}
+<style>
+.classs{
+margin-top: 200px;
+}
+.classs1{
+margin-bottom: 1000px;
+}
+
+</style>
+    <h1 class="classs" >Administration des utilisateurs </h1>
+    <div class="classs1" style="margin-top: 0px;">
+    <div class="container mt-4">
+    {% if not users.items is same as([])%}
+        <h1>Liste des utilisateurs </h1>
+        {# total items count #}
+        <div class="count mt-4">
+          <h4>
+          <small> Il y'a {{ users.getTotalItemCount}} utilistauers au total</small>
+          </h4>
+        </div>
+        <table class="table table-hover mt-4">
+          <thead>
+            <tr>
+              <th scope="col"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Numéro</font></font></th>
+              <th scope="col"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Nom</font></font></th>
+              <th scope="col"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Suppression</font></font></th>
+              <th scope="col"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Détails Fiche</font></font></th>
+
+            </tr>
+          </thead>
+          <tbody>
+          {% for user in users %}
+            <tr class="table-primary">
+                 <th scope="row"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{user.getId}}</font></font></th>
+                 <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{user.getUsername}}</font></font></td>
+                 <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"><form method="post" action="{{ path('app_users_delete', {'id': user.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+                     <button class="btn">Delete
+                 </form></button></font></font>
+                 </td>
+
+<td>
+    <button onclick="afficherDetails()">Voir détails</button>
+    <ul id="listeDetails" style="display: none;">
+        {% for fiche in user.getFiche %}
+            <li>
+
+                <strong>Numéro:</strong> {{ fiche.getIdFiche }}<br>
+                <strong>Statut:</strong> {{ fiche.getStatut.getDenomination}}<br>
+                <strong>Livre:</strong> {{ fiche.getLivre.getNom}}<br>
+                <strong>Utilisateur:</strong> {{ fiche.getUser.getUsername}}<br>
+                <strong>Référence:</strong> {{ fiche.getRefer }}<br>
+                <strong>Référence_Bis:</strong> {{ fiche.getReferBis}}<br>
+                <strong>Dénomination:</strong> {{ fiche.getDenomination }}<br>
+                <strong>Text:</strong> {{ fiche.getTexte}}<br>
+                <strong>Traduction:</strong> {{ fiche.getTraduction }}<br>
+                <strong>Notes:</strong> {{ fiche.getNotes }}<br>
+                <strong>Edition:</strong> {{ fiche.getEdition}}<br>
+                <strong>Commentaire:</strong> {{ fiche.getCommentaire }}<br>
+                <strong>Numéro:</strong> {{ fiche.getNumFiche}}<br>
+                <strong>Visible:</strong> {{ fiche.isVisible}}<br>
+            </li>
+        {% endfor %}
+    </ul>
+</td>
+
+
+          <!-- JavaScript -->
+  <script>
+      function afficherDetails() {
+          var listeDetails = document.getElementById("listeDetails");
+          if (listeDetails.style.display === "none") {
+              var details = "";
+              var fiches = document.querySelectorAll("#listeDetails li");
+
+             fiches.forEach(function(fiche) {
+                 details += "<div class='fiche' style='border: 4px solid darkblue; height: 360px; width: 210px;'>" +
+                     fiche.innerHTML +
+                     "<button style='margin: 10px; vertical-align: inherit;' class='btn btn-light'>Supprimer</button>" +
+                     "<button style='margin: 10px;' >Modifier</button>" +
+
+                     "</div>";
+             });
+
+
+              ouvrirNouvelleFenetre(details);
+          } else {
+              listeDetails.style.display = "none";
+          }
+      }
+
+      function ouvrirNouvelleFenetre(details) {
+          var nouvelleFenetre = window.open("", "_blank");
+          nouvelleFenetre.document.write("<div style='display: flex; justify-content: space-evenly; '>" + details + "</div>");
+      }
+  </script>
+
+
+
+            </tr>
+          {% endfor%}
+
+
+
+          </tbody>
+        </table>
+{# display navigation #}
+<div class="navigation d-flex justify-content-center mt-4">
+    {{ knp_pagination_render(users) }}
+</div>
+{% else %}
+<h4> Il n'y pas d'utilisateurs</h4>S
+{% endif %}
+
+ </div>
+ </div>
+
+{% endblock %}
+

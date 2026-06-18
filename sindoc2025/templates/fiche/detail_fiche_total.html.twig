@@ -1,0 +1,165 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{ fiche.refer }}
+	{{ fiche.denomination }}
+{% endblock %}
+
+{% block body %}
+	<!DOCTYPE html>
+	<html lang="fr">
+		<head>
+			<meta charset="UTF-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+			<link rel="stylesheet" href="{{ asset('css/ajoutFiche.css') }}">
+			<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+			<style>
+				.fiche-detail-container {
+					position:relative;
+					max-width: 800px;
+					margin: 50px auto;
+					padding: 20px;
+					background-color: #f9f9f9;
+					border-radius: 10px;
+					box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+				}
+				.fiche-detail-container h1 {
+					font-size: 2rem;
+					font-weight: bold;
+					color: #333;
+					margin-bottom: 20px;
+				}
+				.fiche-detail-container .detail-item {
+					margin-bottom: 15px;
+					font-size: 1.1rem;
+				}
+				.fiche-detail-container .detail-item strong {
+					color: #555;
+					margin-right: 10px;
+				}
+				.fiche-detail-container .mot-cles {
+					display: flex;
+					flex-wrap: wrap;
+					gap: 5px;
+				}
+				.fiche-detail-container .mot-cles span {
+					background-color: #e9ecef;
+					padding: 5px 10px;
+					border-radius: 5px;
+					font-size: 0.9rem;
+				}
+				.fiche-detail-container .navigation-buttons {
+					display: flex;
+					justify-content: space-between;
+					margin-top: 20px;
+				}
+				.fiche-detail-container .navigation-buttons a {
+					text-decoration: none;
+					font-size: 1.2rem;
+				}
+				.back-to-list-button {
+					padding: 1em;
+					float: left;
+				}
+				.modifier-btn-container {
+					display: flex;
+    				justify-content: end;
+				}
+			</style>
+		</head>
+		<body>
+			<div class="back-to-list-button">
+				<a href="{{ path('fiche_list', { livre: app.session.get('livreIdSelectionne') }) }}" class="btn btn-secondary">
+					Retour à la liste
+				</a>
+			</div>
+			<div class="fiche-detail-container">
+				<div>
+					{% if is_granted('ROLE_ADMIN') %}
+						<div class="modifier-btn-container">
+							<a href="{{ path('app_fiche_edit_total', { 'id': fiche.getIdFiche(), 'previousFicheId': previous_fiche ? previous_fiche.getIdFiche() : null, 'nextFicheId': next_fiche ? next_fiche.getIdFiche() : null, 'index': index, 'total': total }) }}" class="btn btn-primary">
+								<i class="bi bi-pencil-fill"></i>
+							</a>
+						</div>
+					{% endif %}
+					<h1 class="text-center">Détails de la Fiche</h1>
+				</div>
+				<div class="text-center mb-4">
+					<strong>Vous êtes sur la fiche
+						{{ index }}
+						sur
+						{{ total }}</strong>
+				</div>
+				<div class="detail-item">
+					<strong>Numéro de la fiche:</strong>
+					{{ fiche.getIdFiche() }}
+				</div>
+				<div class="detail-item">
+					<strong>Livre:</strong>
+					{{ fiche.livre }}
+				</div>
+				<div class="detail-item">
+					<strong>Édition:</strong>
+					{{ fiche.edition }}
+				</div>
+				<div class="detail-item">
+					<strong>Référence:</strong>
+					{{ fiche.refer }}
+				</div>
+				<div class="detail-item">
+					<strong>Dénomination:</strong>
+					{{ fiche.denomination }}
+				</div>
+				<div class="detail-item">
+					<strong>Statut:</strong>
+					{{ fiche.statut }}
+				</div>
+				<div class="detail-item">
+					<strong>Texte:</strong>
+					{{ fiche.texte }}
+				</div>
+				<div class="detail-item">
+					<strong>Traduction:</strong>
+					{{ fiche.traduction }}
+				</div>
+				<div class="detail-item">
+					<strong>Notes:</strong>
+					{{ fiche.notes }}
+				</div>
+				<div class="detail-item">
+					<strong>Commentaire:</strong>
+					{{ fiche.commentaire }}
+				</div>
+				<div class="detail-item">
+					<strong>Mots Clés:</strong>
+					<div class="mot-cles">
+						{% for motCle  in fiche.MotCles %}
+							<span title="{{ motCle.denomination }}">
+								{{ motCle.reference }}
+							</span>
+							{% if not loop.last %},
+							{% endif %}
+						{% else %}
+							<span>Aucun mot-clé associé.</span>
+						{% endfor %}
+					</div>
+				</div>
+
+				<div class="navigation-buttons">
+					{% if previous_fiche is not null %}
+						<a href="{{ path('detail_fiche_total', {id: previous_fiche.getIdFiche(), index: index - 1, total: total}) }}" class="btn btn-primary">
+							&lt;&lt; Précédent
+						</a>
+					{% endif %}
+					{% if next_fiche is not null %}
+						<a href="{{ path('detail_fiche_total', {id: next_fiche.getIdFiche(), index: index + 1, total: total}) }}" class="btn btn-primary">
+							Suivant &gt;&gt;
+						</a>
+					{% endif %}
+				</div>
+
+			</div>
+		</body>
+	</html>
+{% endblock %}

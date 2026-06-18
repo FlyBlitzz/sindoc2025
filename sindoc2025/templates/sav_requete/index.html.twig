@@ -1,0 +1,187 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SavRequete index{% endblock %}
+
+{% block body %}
+<head>
+       {# <link rel="stylesheet" href="{{ asset('css/ajoutFiche.css') }}"> #}
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <style>
+        .tooltip-link {
+            position: relative;
+            display: inline-block;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Tooltip text */
+        .tooltip-link::after {
+            content: attr(data-tooltip); /* Use the attribute value */
+            position: absolute;
+            bottom: 50%; /* Position above the link */
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 5px 10px;
+            font-size: 12px;
+            white-space: nowrap;
+            border-radius: 5px;
+            opacity: 0;
+            visibility: hidden;
+            z-index:9999;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        /* Show tooltip on hover */
+        .tooltip-link:hover::after {
+            opacity: 1;
+            visibility: visible;
+        }
+        /* Ensure table allows overflow */
+#savRequeteTable {
+    position: relative;
+    overflow: visible !important;
+}
+thead{
+    z-index:-1;
+}
+        </style>
+</head>
+       <div class="card-body classs w-75">
+    <div class="table-responsive">
+    <h1>Liste des requêtes</h1>
+    <table id="savRequeteTable" class="table table-hover table-borderless" >
+    <thead>
+        <tr>
+            <th>Nom de la requête</th>
+            <th>Date de création</th>
+            <th>Heure de création</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+</table>
+</div>
+</div>
+<script>
+$(document).ready(function () {
+    $('#savRequeteTable').DataTable({
+        responsive: true,
+       language: {
+        "sProcessing": "Traitement en cours...",
+        "sSearch": "Rechercher :",
+        "sLengthMenu": "Afficher _MENU_ éléments",
+        "sInfo": "Affichage de _START_ à _END_ sur _TOTAL_ éléments",
+        "sInfoEmpty": "Affichage de 0 à 0 sur 0 élément",
+        "sInfoFiltered": "(filtré de _MAX_ éléments au total)",
+        "sLoadingRecords": "Chargement en cours...",
+        "sZeroRecords": "Aucun élément correspondant trouvé",
+        "sEmptyTable": "Aucune donnée disponible dans le tableau",
+        "oPaginate": {
+            "sFirst": "Premier",
+            "sPrevious": "Précédent",
+            "sNext": "Suivant",
+            "sLast": "Dernier"
+        },
+        "oAria": {
+            "sSortAscending": ": activer pour trier la colonne par ordre croissant",
+            "sSortDescending": ": activer pour trier la colonne par ordre décroissant"
+        }
+    },
+         scrollX: true, // Enables horizontal scrolling
+    autoWidth: false, // Prevents automatic width adjustment
+        ajax: "{{ path('savreq_app_sav_requete_index') }}", // Fetch data from Symfony controller
+        columns: [
+            { data: 'nomRequete', title: 'Nom Requête' },
+            { data: 'createDate', title: 'Date de Création' },
+            { data: 'heure', title: 'Heure' },
+            { data: 'actions', title: 'Actions', orderable: false, searchable: false }
+        ]
+    });
+});
+
+</script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var flashMessage = document.querySelector('.alert');
+        // console.log(flashMessage)
+        if (flashMessage) {
+
+            setTimeout(function() {
+                flashMessage.style.display = 'none';
+            }, 2000); 
+        }
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Sélection de la liste déroulante
+        var select = document.getElementById('pet-select');
+        var select1 = document.getElementById('add-item-button');
+
+        // Écouter les changements de sélection
+        select.addEventListener('change', function() {
+            var selectedOption = this.options[this.selectedIndex];
+            var selectedItemValue = selectedOption.value;
+            var selectedItemText = selectedOption.textContent.trim();
+            alert(selectedOption)
+            // Vérifier si l'option sélectionnée n'est pas l'option par défaut
+            if (selectedItemValue !== '') {
+                // Créer un nouvel élément pour afficher l'élément sélectionné
+                var newItem = document.createElement('div');
+                newItem.textContent = selectedItemText;
+                newItem.classList.add('selected-item');
+
+                // Ajouter l'élément au conteneur des éléments sélectionnés
+                document.getElementById('selected-items').appendChild(newItem);
+            }
+        });
+           // Sélection du bouton 'ET'
+              var button = document.getElementById('add-item-button');
+
+              // Écouter les clics sur le bouton
+              button.addEventListener('click', function() {
+                  // Récupérer la valeur et le texte du bouton
+                  var selectedItemValue = this.value;
+                  var selectedItemText = this.textContent.trim();
+
+                  // Créer un nouvel élément pour afficher l'élément sélectionné
+                  var newItem = document.createElement('div');
+                  newItem.textContent = selectedItemText;
+                  newItem.classList.add('selected-item');
+
+                  // Ajouter l'élément au conteneur des éléments sélectionnés
+                  document.getElementById('selected-items').appendChild(newItem);
+              });
+
+            // Sélection du bouton 'ou'
+             var button = document.getElementById('add-item-buttonOU');
+
+             // Écouter les clics sur le bouton
+             button.addEventListener('click', function() {
+                 // Récupérer la valeur et le texte du bouton
+                 var selectedItemValue = this.value;
+                 var selectedItemText = this.textContent.trim();
+
+                 // Créer un nouvel élément pour afficher l'élément sélectionné
+                 var newItem = document.createElement('div');
+                 newItem.textContent = selectedItemText;
+                 newItem.classList.add('selected-item');
+
+                 // Ajouter l'élément au conteneur des éléments sélectionnés
+                 document.getElementById('selected-items').appendChild(newItem);
+             });
+                 // Sélection du bouton "SUPPRIMER"
+                     var deleteButton = document.getElementById('add-item-buttonSupp');
+
+                     // Écouter les clics sur le bouton "SUPPRIMER"
+                     deleteButton.addEventListener('click', function() {
+                         // Supprimer tous les éléments enfants du conteneur des éléments sélectionnés
+                         var selectedItemsContainer = document.getElementById('selected-items');
+                         selectedItemsContainer.innerHTML = '';
+                     });
+    });
+</script>
+
+{% endblock%}

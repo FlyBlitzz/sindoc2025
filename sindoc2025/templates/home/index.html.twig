@@ -1,0 +1,193 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ista.univ-fcomte.fr/{% endblock %}
+
+{% block body %}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="{{ asset('css/index.css') }}">
+    <link rel="stylesheet" href="{{ asset('fichier.php') }}">
+
+</head>
+
+<body>
+
+
+<section class="banner d-flex justify-content-center align-items-center pt-5">
+    <div class="container my-5 py-5">
+        <div class="row">
+            <div class="col-md-6 banner-desc lh-lg">
+
+               <h1 class="text-capitalize py-3  redressed">
+                  Un outil pour analyser les textes Antiques
+              </h1>
+              <a href="https://ista.univ-fcomte.fr/index.php/bdd/esclaves-dependants" class="btn btn-order  btn-lg me-5 rounded-0 merriweather">Pour plus d'informations</a>
+
+              </div>
+            <div class="col-md-6 banner-desc lh-lg">
+                <h1 class="text-capitalize py-3 redressed">
+                    Institut des Sciences et  <br />
+                    Techniques de l'Antiquité <br /> Besançon
+
+                <p>
+                <a href="{{ path('fiche_recherche') }}" class="btn btn-outline-info btn-lg rounded-0 merriweather">Rechercher une fiche</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="available merriweather py-5">
+			<div class="container">
+				<div class="row">
+					<div class="card mb-3 border-0 rounded-0">
+						<div class="row">
+							<div class="col-md-6">
+								<img src="{{ asset('images/img1.png') }}" class="img-fluid" alt="..." />
+							</div>
+							<div class="col-md-6">
+								<div class="card-body px-0">
+									<h3 class="card-title">Une époque</h3>
+									<p class="card-text">
+										Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptatibus nihil error, expedita quasi
+										deserunt, maxime ducimus, nostrum quos nisi tenetur temporibus harum debitis odio magni aliquid
+										voluptas cum doloremque ab?
+									</p>
+									<p class="card-text"><a href="#" class="btn text-muted">Découvrir le met</a></p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="card my-5 border-0 rounded-0">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="card-body px-0">
+									<h3 class="card-title">Des découvertes</h3>
+									<p class="card-text">
+										Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vel aliquid maiores asperiores sint
+										doloribus eligendi odio nostrum quod, aperiam placeat eaque dolor libero provident beatae neque
+										obcaecati quidem tempore debitis.
+									</p>
+									<p class="card-text"><a href="#" class="btn text-muted">Découvrir le met</a></p>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+									<div class="carousel-inner">
+										<div class="carousel-item active">
+											<img src="{{ asset('images/Carousel/img2.png') }}" class="d-block w-100" alt="..." />
+										</div>
+										<div class="carousel-item">
+											<img src="{{ asset('images/Carousel/img3.png') }}" class="d-block w-100" alt="..." />
+										</div>
+										<div class="carousel-item">
+											<img src="{{ asset('images/Carousel/img2.png') }}" class="d-block w-100" alt="..." />
+										</div>
+									</div>
+									<button
+										class="carousel-control-prev"
+										type="button"
+										data-bs-target="#carouselExampleControls"
+										data-bs-slide="prev">
+
+										<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+										<span class="visually-hidden">Previous</span>
+									</button>
+									<button
+										class="carousel-control-next"
+										type="button"
+										data-bs-target="#carouselExampleControls"
+										data-bs-slide="next"
+									>
+										<span class="carousel-control-next-icon" aria-hidden="true"></span>
+										<span class="visually-hidden">Next</span>
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="card mb-3 border-0 rounded-0">
+						<div class="row">
+							<div class="col-md-6">
+								<img src="{{ asset('images/img4.png') }}" class="img-fluid" alt="..." />
+							</div>
+							<div class="col-md-6">
+								<div class="card-body px-0">
+									<h3 class="card-title">Une histoire</h3>
+									<p class="card-text">
+										Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vel aliquid maiores asperiores sint
+										doloribus eligendi odio nostrum quod, aperiam placeat eaque dolor libero provident beatae neque
+										obcaecati quidem tempore debitis.
+									</p>
+									<p class="card-text"><a href="#" class="btn text-muted">Découvrir le met</a></p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+<section class="order-form py-5">
+			<div class="container">
+				<h2 class="merriweather text-center text-light mb-4">Contactez-nous</h2>
+ 				<form>
+					<div class="row">
+						<div class="col-md-6 col-sm">
+							<div class="input-group mb-3">
+								<span class="input-group-text"><i class="fas fa-user"></i></span>
+								<input type="text" class="form-control" placeholder="Votre nom complet" />
+							</div>
+	                            <div class="input-group mb-3">
+	                            <span class="input-group-text"><i class="fas fa-home"></i></span>
+								<input type="text" class="form-control" placeholder="Adresse zone Ex:. Ekounou, Avenu 52" />
+							</div>
+						</div>
+						<div class="col-md-6 col-sm">
+							<div class="input-group mb-3">
+								<input type="email" class="form-control" placeholder="Votre adresse email" />
+								<span class="input-group-text"><i class="fas fa-at"></i></span>
+							</div>
+							<div class="input-group mb-3">
+								<input type="number" class="form-control" placeholder="Numéro de téléphone" />
+								<span class="input-group-text"><i class="fas fa-phone"></i></span>
+							</div>
+
+						</div>
+					</div>
+					<div class="row">
+
+						<div class="input-group">
+							<span class="input-group-text">Ecrire votre demande</span>
+							<textarea class="form-control" aria-label="With textarea"></textarea>
+							<button type="submit" class="input-group-text">Envoyer</button>
+
+						</div>
+					</div>
+
+				</form>
+			</div>
+		</section>
+
+
+		<script src="assets/js/bootstrap.bundle.min.js"></script>
+	</body>
+</html>
+
+
+{% endblock %}
+
+
+
+
+

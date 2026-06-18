@@ -1,0 +1,229 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}User{% endblock %}
+
+{% block body %}
+
+<style>
+    .button-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* 2 colonnes */
+        gap: 10px; /* Espacement entre les boutons */
+        max-width: 400px; /* Largeur maximale du conteneur */
+        margin: 0 auto; /* Centrer le conteneur horizontalement */
+    }
+
+    .my-button {
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+        transition: background-color 0.3s ease;
+        text-decoration: none;
+        color: black;
+    }
+
+    .my-button:hover {
+        background-color: #ddd; /* Changement de couleur au survol */
+    }
+</style>
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/showUser.css') }}">
+</head>
+
+<section style="margin-bottom: 150px;" >
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-header" style="background-color: rgba(0, 0, 0, 0.55); color: white;">
+                        <h3 class="mb-0">Votre profil</h3>
+                    </div>
+                    <div class="card-body">
+                        <hr>
+                        <h6>Informations personnelles</h6>
+                        <hr>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <h6>Nom utilisateur:</h6>
+                                <h5>{{ user.username }}</h5>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>Rôle:</h6>
+                                <p>
+                                    {% if 'ROLE_USER' in user.roles and 'ROLE_ADMIN' in user.roles %}
+                                        Utilisateur / Administrateur
+                                    {% elseif 'ROLE_USER' in user.roles %}
+                                        Utilisateur
+                                    {% elseif 'ROLE_ADMIN' in user.roles %}
+                                        Administrateur
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                        <hr>
+                        <h6>Gestion du compte</h6>
+                        <hr>
+                        <div class="container">
+                           <div class="btn-container">
+                           {# 
+                               <li><a href="#" onclick="return confirmDeleteUser('{{ path('delete_user', {'id': user.id}) }}');" class="btn btn-delete">Supprimer le compte</a> </li> #} 
+                               <div class="container">
+                               <div class="row mx-auto w-75">
+                               {% if is_granted('ROLE_ADMIN')%}
+                                <a href="#" class="btn btn-delete col btn-danger" onclick="return confirmDesactiverUser('{{ path('desactiver_user', {'id': user.id}) }}');">
+                                    Désactiver le compte
+                                </a>
+                                {% endif %}
+                                {% if not is_granted('ROLE_ADMIN')%}
+                                <a href="#" class="btn btn-delete col btn-danger" onclick="return confirmDesactiverUser('{{ path('desactiver_simple_user', {'id': user.id}) }}');">
+                                    Désactiver le compte
+                                </a>
+                                {% endif %}
+                               <a href="{{ path('app_admin_app_users_edit_user_password', {id: user.getId()}) }}" type="button" class="btn btn-deactivate col btn-info">Réinitialiser le mot de passe?</a>
+                            </div>
+                            </div>
+                           </div>
+                        </div>
+                        <hr>
+                        <h6>Activités</h6>
+                        <hr>
+                        <div class="btn-container">
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                            <a href="{{ path('user_auth_fiche_list', { 'userId': userId }) }}" class="my-button">Consulter mes fiches</a>
+                        </div>
+                            <ul style="display: none;" class="user-details">
+                                <table class="table table-hover" style="width: 900px; margin: 0 auto;">
+                                    <tr style=" background-color: #a9a9a9; ">
+                                        <td class="table-active">Numéro fiche</td>
+                                        <td class="table-active">Afficher fiche</td>
+                                        <td class="table-active">Supprimer fiche</td>
+                                        <td class="table-active">Modifier fiche</td>
+                                    </tr>
+
+                                    {% for fiche in user.getFiche %}
+                                        <tr>
+                                            <td > <strong>Fiche numéro:</strong> {{ fiche.getIdFiche }}<br></td>
+                                            <td > <a href="{{ path('detail_fiche', {id: fiche.getIdFiche()}) }}" type="button" class="btn btn-secondary  " style=" margin-right: 10px; background-color: #a9a9a9;">Voir</a></td>
+                                            <td > <a href="{{ path('delete_fiche', {id: fiche.getIdFiche()}) }}" type="button"  class="btn btn-secondary  " style="margin-right: 10px;">Supprimer</a></td>
+                                            <td > <a href="{{ path('app_fiche_edit', {id: fiche.getIdFiche()}) }}" type="button"  class="btn btn-secondary  " style=" margin-right: 10px; background-color: #a9a9a9;">Modifier</a></td>
+                                        </tr>
+                                    {% endfor %}
+                                </table>
+                            </ul>
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <a href="{{ path('savreq_app_sav_requete_index') }}" class="my-button"   onclick="toggleDetails(this)">Consulter mes requêtes</a>
+                            </div>
+                            {% if not is_granted('ROLE_ADMIN')%}
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <a href="{{ path('app_index_authorized', {'id': user.id}) }}" class="my-button" onclick="toggleDetails(this)">Voir mes index</a>
+                            </div>
+
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <a href="{{ path('app_livre_app_livre_authorized', {'id': user.id}) }}" class="my-button" onclick="toggleDetails(this)">
+                                    Voir mes livres
+                                </a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    function confirmDeleteUser(url) {
+        if (confirm("Êtes-vous sûr de vouloir supprimer votre compte ?")) {
+            window.location.href = url;
+        }
+        return false;
+    }
+</script>
+<script>
+    function confirmDesactiverUser(url) {
+        if (confirm("Êtes-vous sûr de vouloir desactiver votre compte ?")) {
+            window.location.href = url;
+        }
+        return false;
+    }
+</script>
+<script>
+    function confirmDeleteFiche(url) {
+        if (confirm("Êtes-vous sûr de vouloir supprimer cette fiche ?")) {
+            window.location.href = url;
+        }
+        return false;
+    }
+</script>
+
+<script>
+    function upload() {
+        var input = document.getElementById('avatar');
+        var preview = document.getElementById('preview');
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+
+<script>
+    function toggleDetails(button) {
+        const userDetails = button.parentElement.nextElementSibling;
+        userDetails.style.display = userDetails.style.display === 'none' ? 'block' : 'none';
+
+        if (userDetails.style.display === 'block') {
+            const detailsWindow = window.open('', '_self');
+
+            detailsWindow.document.write('<html><head><title>Détails</title>');
+            detailsWindow.document.write('<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">');
+            detailsWindow.document.write('<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">');
+            detailsWindow.document.write('<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">');
+            detailsWindow.document.write('<link rel="stylesheet" href="{{ asset('css/listeUsers.css') }}">');
+            detailsWindow.document.write('</head><body>');
+            detailsWindow.document.write('<h1 style="text-align: center;margin-bottom: 30px;margin-top: 30px;">Liste des fiches</h1>');
+            detailsWindow.document.write(userDetails.innerHTML);
+            detailsWindow.document.write('</body></html>');
+
+            userDetails.style.display = 'none';
+
+            detailsWindow.addEventListener('popstate', function(event) {
+                if (event.state === null) {
+                    detailsWindow.close();
+                }
+            });
+
+            // Mettre un état initial dans l'historique
+            detailsWindow.history.replaceState({ page: 1 }, 'Détails', '');
+
+            // Gérer les liens internes pour les ajouter à l'historique
+            const internalLinks = detailsWindow.document.querySelectorAll('a');
+            internalLinks.forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    detailsWindow.history.pushState({ page: 2 }, 'Détails', link.href);
+                    detailsWindow.location.reload();
+                });
+            });
+        }
+    }
+</script>
+
+{% endblock %}

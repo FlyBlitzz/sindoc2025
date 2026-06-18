@@ -1,0 +1,17 @@
+
+
+
+
+.classs:hover {
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3); /* Augmentation de l'ombre au survol */
+}
+
+.form-control {
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Transition pour une apparence plus fluide des champs de formulaire */
+}
+
+.form-control:focus {
+    border-color: #007bff; /* Couleur de la bordure lorsqu'un champ est en focus */
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Lueur lorsqu'un champ est en focus */
+}
+

@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block body %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/register.css') }}">
+
+<style>
+.eye-icon {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    margin-left: 410px;
+}
+
+</style>
+
+</head>
+
+<body>
+    <div class="classs w-25">
+        <form method="post" name=login>
+            {% if error %}
+                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+
+            {% if app.user %}
+                <div class="mb-3">
+                    You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+                </div>
+            {% endif %}
+
+            <h1 class="h3 mb-4 font-weight-normal">Connexion</h1>
+
+            <strong><label for="inputUsername">Identifiant:</label></strong>
+            <div class="input-group mb-4">
+                <span class="input-group-text" style="min-width: 40px;"><i class="fas fa-user"></i></span>
+                <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control" autocomplete="username" required autofocus>
+            </div>
+
+         <strong><label for="inputPassword">Mot de passe:</label></strong>
+         <img src="{{ asset('images/eyesOpen.png') }}" alt="eye-open" id="eyeOpen" class="eye-icon mx-lg-3">
+         <img src="{{ asset('images/eyesClose.png') }}" alt="eye-closed" id="eyeClosed" class="eye-icon" style="display: none;">
+         <div class="input-group mb-4">
+             <span class="input-group-text" style="min-width: 40px;"><i class="fa-solid fa-lock"></i></span>
+             <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+
+         </div>
+
+
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+      <div class="d-flex justify-content-end" style="margin-right: 0px">
+          <button class="btn btn-primary mb-2 h-100" type="submit">SE CONNECTER</button>
+      </div>
+
+
+        </form>
+    </div>
+
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+
+
+<script>
+const pwInput = document.getElementById('inputPassword');
+const eyeOpen = document.getElementById('eyeOpen');
+const eyeClosed = document.getElementById('eyeClosed');
+
+eyeOpen.addEventListener('click', () => {
+    pwInput.type = 'text';
+    eyeOpen.style.display = 'none';
+    eyeClosed.style.display = 'inline-block';
+});
+
+eyeClosed.addEventListener('click', () => {
+    pwInput.type = 'password';
+    eyeOpen.style.display = 'inline-block';
+    eyeClosed.style.display = 'none';
+});
+</script>
+
+</body>
+</html>
+{% endblock %}

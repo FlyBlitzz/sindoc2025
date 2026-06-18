@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test CKEditor - Tes classes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* TES styles existants */
+        .ckeditor-field {
+            width: 100%;
+            min-height: 150px;
+        }
+        .form-control {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body class="container mt-5">
+    <h1>Test CKEditor avec TES classes</h1>
+    <p class="text-muted">Utilise les classes <code>.ckeditor-field</code> et <code>.form-control</code></p>
+    
+    {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+    
+    <div class="mb-3">
+        {{ form_label(form.titre, null, {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.titre, {'attr': {'class': 'form-control'}}) }}
+    </div>
+    
+    <div class="mb-3">
+        {{ form_label(form.commentaire, null, {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.commentaire, {'attr': {'class': 'ckeditor-field form-control'}}) }}
+        <div class="form-text">Utilisez les boutons <strong>Gras</strong> et <em>Italique</em> ci-dessus.</div>
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Tester l'envoi</button>
+    
+    {{ form_end(form) }}
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- CKEditor 5 -->
+    <!--<script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>-->
+            <script src="{{ asset('ckeditor5/ckeditor.js') }}"></script>
+            <script src="{{ asset('ckeditor5/translations/fr.js') }}"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔍 Recherche des champs avec classe .ckeditor-field...');
+            
+            // Trouve tous les éléments avec TA classe .ckeditor-field
+            const ckeditorFields = document.querySelectorAll('.ckeditor-field');
+            console.log('✅ Champs trouvés:', ckeditorFields.length);
+            
+            ckeditorFields.forEach((field, index) => {
+                console.log(`🚀 Initialisation du champ ${index + 1}:`, field.id || field.className);
+                
+                ClassicEditor
+                    .create(field, {
+                        // Configuration pour seulement gras et italique
+                        toolbar: {
+                            items: ['bold', 'italic']
+                        },
+                        language: 'fr',
+                        height: '200px',
+                        placeholder: 'Écrivez votre commentaire ici...'
+                    })
+                    .then(editor => {
+                        console.log(`✅ CKEditor ${index + 1} initialisé avec succès`);
+                        
+                        // Vérifie que la toolbar est bien là
+                        const toolbar = editor.ui.view.toolbar;
+                        console.log('🛠️ Boutons disponibles:', 
+                            toolbar.items.map(item => item.label || item.buttonView?.label).filter(Boolean)
+                        );
+                        
+                        // Affiche la toolbar en console
+                        console.log('🎨 Toolbar HTML:', 
+                            editor.ui.view.toolbar.element.innerHTML.substring(0, 200) + '...'
+                        );
+                    })
+                    .catch(error => {
+                        console.error(`❌ Erreur sur le champ ${index + 1}:`, error);
+                        console.error('Stack:', error.stack);
+                    });
+            });
+            
+            // Si aucun champ trouvé, essaye par ID
+            if (ckeditorFields.length === 0) {
+                console.log('⚠️ Aucun champ .ckeditor-field trouvé, essaye par ID...');
+                const byId = document.getElementById('commentaire-field');
+                if (byId) {
+                    console.log('✅ Champ trouvé par ID:', byId.id);
+                    ClassicEditor.create(byId, {
+                        toolbar: ['bold', 'italic'],
+                        language: 'fr'
+                    });
+                }
+            }
+        });
+    </script>
+    
+    <!-- Debug visuel -->
+    <div class="mt-4 p-3 bg-light border rounded">
+        <h5>Debug :</h5>
+        <p>Classes utilisées : <code>.ckeditor-field</code> et <code>.form-control</code></p>
+        <p>ID du champ commentaire : <code id="debug-id">commentaire-field</code></p>
+        <p>Nombre de champs .ckeditor-field : <span id="debug-count">0</span></p>
+        <button onclick="checkFields()" class="btn btn-sm btn-info">Vérifier les champs</button>
+    </div>
+    
+    <script>
+        function checkFields() {
+            const fields = document.querySelectorAll('.ckeditor-field');
+            document.getElementById('debug-count').textContent = fields.length;
+            console.log('Champs .ckeditor-field:', fields);
+            
+            fields.forEach((field, i) => {
+                console.log(`Champ ${i}:`, {
+                    id: field.id,
+                    className: field.className,
+                    tagName: field.tagName,
+                    value: field.value.substring(0, 50)
+                });
+            });
+        }
+        
+        // Vérifie au chargement
+        setTimeout(checkFields, 1000);
+    </script>
+</body>
+</html>

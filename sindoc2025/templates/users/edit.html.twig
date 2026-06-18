@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit User{% endblock %}
+
+{% block body %}
+<head>
+       <link rel="stylesheet" href="{{ asset('css/ajoutFiche.css') }}">
+
+</head>
+ <div class=" classs">
+    <h1>Mettre à jour</h1>
+
+    {{ include('users/_form.html.twig', {'button_label': 'Update'}) }}
+
+ </div>
+{% endblock %}

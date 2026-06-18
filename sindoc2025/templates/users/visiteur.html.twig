@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New User{% endblock %}
+
+{% block body %}
+<head>
+       <link rel="stylesheet" href="{{ asset('css/ajoutFiche.css') }}">
+
+</head>
+ <div class=" classs" style="width: 100%">
+<h5>Cher utilisateur, vous ne pouvez pas effectuer de recherche multi-critères. Veuillez vous inscrire, s'il vous plaît !</h5>
+
+    <a href="{{ path('app_register') }}"><strong>M'inscrire</strong></a>
+   </div>
+{% endblock %}

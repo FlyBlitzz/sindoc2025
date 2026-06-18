@@ -1,0 +1,1174 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des fiches
+{% endblock %}
+{% block Pagetitle %}
+    Liste des fiches
+{% endblock %}
+{% block body %}
+    <head>
+        <link rel="stylesheet" href="{{ asset('css/listeFicheRechercher.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/header.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/dataTables.css') }}">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="{{ asset('js/jquery.easy-pie-chart.js') }}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.8.0/jszip.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+        <!-- jQuery 3.6.0 (Required for Select2) -->
+
+
+        <style>
+            .tooltip-link {
+                position: relative;
+                display: inline-block;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+            option {
+                max-width: 200px !important;
+            }
+
+            /* Tooltip text */
+            .tooltip-link::after {
+                content: attr(data-tooltip); /* Use the attribute value */
+                position: absolute;
+                bottom: 120%; /* Position above the link */
+                left: 50%;
+                transform: translateX(-50%);
+                background-color: rgba(0, 0, 0, 0.8);
+                color: white;
+                padding: 5px 10px;
+                font-size: 12px;
+                white-space: nowrap;
+                border-radius: 5px;
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.3s, visibility 0.3s;
+            }
+
+            /* Show tooltip on hover */
+            .tooltip-link:hover::after {
+                opacity: 1;
+                visibility: visible;
+            }
+        </style>
+
+    </head>
+    {% include 'breadcrumb.html.twig' with { breadcrumbs: breadcrumbs } %}
+    {% include 'fiche/fiche_modal.html.twig' %}
+    <div class="card-body classs">
+        <h3 style="text-align: center; margin-bottom: 30px; ">
+            Résultat de recherche pour :
+            {{ motClesSelect }}</h3>
+
+        {% if fiches is not empty %}
+            <div class="table-responsive">
+                <table class="table table-hover table-borderless" id="fichesTable">
+                    <thead>
+                    <tr style="background-color: rgba(0, 0, 0, 0.4); ">
+                        <th>#</th>
+                        <th scope="col">Id</th>
+                        <th scope="col">Référence</th>
+                        <th scope="col">Livre</th>
+                        <th scope="col">Dénomination</th>
+                        <th scope="col">Statut</th>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <th scope="col">Visible</th>
+                        {% endif %}
+                        <th scope="col" style="display:flex;">Action</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {# <td scope="col"></td> #}
+                    </tbody>
+                </table>
+            </div>
+
+        {% else %}
+            <p>Aucune fiche trouvée pour les critères de recherche.</p>
+        {% endif %}
+
+        {% if livre.getIndex().getMotCles() is not empty %}
+        <div class="container-fluid">
+            <div class="chart-container d-flex justify-content-between flex-md-row flex-sm-column align-items-md-start align-items-sm-center">
+                <div class="col-12 col-md-5 col-sm-12">
+                    <select name="pets" id="pet-select" class="form-select">
+                        <option value="">------- Apparition des mots clés -------</option>
+                        {% for motCle in motCleOccurrences %}
+                            <option value="{{ motCle.denomination }}">
+                                {{ motCle.reference }} : {{ motCle.denomination }} ({{ motCle.count }})
+                            </option>
+                        {% endfor %}
+                    </select>
+                    <script>
+                        // Assuming `fiches` is a JavaScript object or array containing your fiche data
+                        $(document).ready(function () {
+
+                            const fichesPdf = {{ fichesJSON|raw }};
+
+                            // Serialize the JavaScript object into a JSON string
+                            const ficheDataSerializedPdf = JSON.stringify(fichesPdf);
+
+                            // Set the value of the hidden input field with the serialized data
+                            document.getElementById("ficheDataPdf").value = ficheDataSerializedPdf;
+                            document.getElementById("ficheDataWord").value = ficheDataSerializedPdf;
+                        })
+                    </script>
+                </div>
+
+                {% endif %}
+
+
+                {% set nbrFicheTotal = 0 %}
+                {% for fiche in livre.getFiche() %}
+                    {% set nbrFicheTotal = nbrFicheTotal + 1 %}
+                {% endfor %}
+                {% set nbrFiche = 0 %}
+                {% for fiche in fiches %}
+                    {% if fiche in livre.getFiche() %}
+                        {% set nbrFiche = nbrFiche + 1 %}
+                    {% endif %}
+                {% endfor %}
+
+
+                {% if nbrFicheTotal != 0 %}
+
+                {% if nbrFicheTotal != 0 %}
+                    {% include 'fiche/chart/circular_chart.html.twig' with {
+                        nbrFiches: nbrFiches,
+                        nbrFicheTotal: nbrFicheTotal
+                    } %}
+                {% endif %}
+            </div>
+            {# <div class="d-flex flex-wrap flex-column flex-md-row gap-2">
+                    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER') %}
+                        <a href="{{ path('savreq_app_sav_requete_new') }}" class="card-link btn btn-order">Enregistrer
+                            la requete</a>
+                    {% endif %}
+                   
+                    <button id="exportPDFButton" class="btn btn-order mx-2">Exporter les graphes PDF</button>
+                    <button id="exportZIPButton" class="btn btn-order mx-2">Exporter les graphes ZIP</button>
+                    <a href="#" onclick="exportToExcel()" class="btn btn-order">Exporter vers Excel</a>
+                </div> #}
+            {# {% include 'fiche/fiche_export_pdf_modal.html.twig' %}
+                {% include 'fiche/fiche_export_word_modal.html.twig' %} #}
+
+        </div>
+
+        <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet"/>
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+        <script>
+
+            $('#pet-select').select2({
+                width: '100%' // Makes it responsive
+            });
+
+            {# const isAdmin = {{ is_granted('ROLE_ADMIN') ? 'true' : 'false' }}; #}
+        </script>
+        <script>
+            $(document).ready(function () {
+                const fiches = {{ fichesJSON|raw }};
+                console.log(fiches);
+                $('#fichesTable').DataTable({
+                    data: fiches,
+                    responsive: true,
+                    "columnDefs": [
+                        {"orderable": false, "targets": [5]} // Remplace X par l'index de ta colonne (commence à 0)
+                    ],
+                    language: {
+                        paginate: {
+                            next: "Suivant",
+                            previous: "Précédent"
+                        },
+                        info: 'Page _PAGE_ de _PAGES_',
+                        lengthMenu: 'Afficher _MENU_ fiches'
+                    },
+                    columns: [
+                        {
+                            data: null,
+                            render: function (data, type, row, meta) {
+                                return `<td data-cell="Numéro">${
+                                    meta.row + 1
+                                }</td>`;
+                            }
+                        },
+                        {
+                            data: 'Id',
+                            visible: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'refer',
+                            render: function (data) {
+                                return `<td data-cell="Référence">${data}</td>`;
+                            }
+                        },
+                        {
+                            data: 'livre',
+                            render: function (data) {
+                                return `<td data-cell="Livre">${data}</td>`;
+                            }
+                        }, {
+                            data: 'denomination',
+                            render: function (data) {
+                                return `<td data-cell="Dénomination">${data}</td>`;
+                            }
+                        }, {
+                            data: 'statut',
+                            render: function (data) {
+                                return `<td data-cell="Statut">${data}</td>`;
+                            }
+                        },{% if is_granted('ROLE_ADMIN') %}
+                        {
+                            data: 'visible',
+                            render: function (data) {
+                                return `<td data-cell="Visible">${data}</td>`;
+                            }
+                        },{% endif %}
+
+                        {
+                            data: null,
+                            render: function (data, type, row, meta) {
+                                const rowIndex = meta.row + 1;
+                                const totalRows = fiches.length;
+
+                                const baseUrlAfficher = "{{ path('detail_fiche_total_rech', {'id': 0}) }}".replace('/0', '');
+                                const baseUrlEdit = "{{ path('app_fiche_rech_edit', {'id': 0}) }}".replace("/0", `/${data.Id}`);
+                                const baseUrlDupliquer = "{{ path('fiche_dupliquer', {'ficheID': 0}) }}".replace('/0', '');
+                                const baseUrlDelete = "{{ path('delete_fiche', {'id': 0}) }}".replace('/0', '');
+
+                                let actions = `
+<td data-cell="Actions">
+    <a href="${baseUrlAfficher}/${
+                                    data.Id
+                                }?index=${rowIndex}&total=${totalRows}"
+       class="btn btn-outline-primary btn-sm me-2 tooltip-link" data-tooltip="Afficher la fiche">
+        <i class="fas fa-eye me-1"></i>
+    </a>
+    <a href="#" 
+       class="btn btn-outline-secondary btn-sm tooltip-link" 
+       data-tooltip="Exporter la fiche" 
+       data-toggle="modal" 
+       data-target="#exportModal" 
+       data-ficheid="${
+                                    data.Id
+                                }">
+        <i class="fas fa-download me-1"></i>
+    </a>`;
+
+                                if (isAdmin || data.canEdit) {
+
+                                    actions += `
+    <a href="${baseUrlEdit}" class="btn btn-outline-primary btn-sm me-2 tooltip-link" data-tooltip="Modifier la fiche">
+        <i class="fas fa-edit me-1"></i>
+    </a>
+        <a href="${baseUrlDupliquer}/${data.Id}" class="btn btn-outline-primary btn-sm me-2 tooltip-link" data-tooltip="Dupliquer la fiche"><i class="fas fa-regular fa-clone"></i></a>
+
+    <a href="#" onclick="return confirmDeleteFiche('${baseUrlDelete}/${
+                                        data.Id
+                                    }');"
+       class="btn btn-outline-danger btn-sm delete-link tooltip-link" data-tooltip="Supprimer la fiche">
+        <i class="fas fa-trash me-1"></i>
+    </a>`;
+                                }
+
+                                actions += `</td>`;
+                                return actions;
+                            }
+                        }
+                    ],
+                    "initComplete": function () {
+                        $('#fichesTable').fadeIn(); // Afficher la table après chargement
+                    },
+                    createdRow: function (row, data, dataIndex) {
+                        $(row).find('td').each(function (index) {
+                            const columnName = $('#fichesTable thead th').eq(index).text().trim();
+                            $(this).attr('data-cell', columnName);
+                        });
+                    }
+                });
+            });
+        </script>
+
+
+        {% include 'fiche/fiche_export_pdf_modal.html.twig' %}
+        {% include 'fiche/fiche_export_word_modal.html.twig' %}
+        <div class="col-12 d-flex flex-column flex-sm-column flex-lg-row flex-xl-row gap-2" style="display:flex; margin-bottom: 50px">
+            {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER') %}
+                <a href="{{ path('savreq_app_sav_requete_new') }}" class="card-link btn btn-order">Enregistrer
+                    la requete</a>
+            {% endif %}
+
+            <button id="exportPDFButton" class="btn btn-order mx-2">Exporter les graphes PDF</button>
+            <button id="exportZIPButton" class="btn btn-order mx-2"
+            >Exporter les graphes ZIP
+            </button>
+            {# <a href="#" onclick="exportToExcel()" class="btn btn-order">Exporter vers Excel</a> #}
+            <input type="hidden" id="ficheDataPdf" name="ficheDataPdf" value="">
+            {# <button type="submit" class="card-link btn btn-order">Export to PDF</button> #}
+            <button type="button" class="card-link btn btn-order" data-bs-toggle="modal"
+                    data-bs-target="#exportModalPdf">
+                Exporter vers PDF
+            </button>
+            <input type="hidden" id="ficheDataWord" name="ficheDataWord" value="">
+            <button type="button" class="card-link btn btn-order" data-bs-toggle="modal"
+                    data-bs-target="#exportModalword">Exporter vers Word
+            </button>
+            <a href="#" onclick="exportToExcel()" class="btn btn-order">Exporter vers Excel</a>
+        </div>
+        {# {# <a href="#" id="generateWordBtn"  >Exporter les fiches en Word</a> #}
+
+        {% else %}
+        <p>Aucune fiche disponible pour ce livre !</p>
+        {% endif %}
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/html-docx-js/dist/html-docx.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+        <canvas id="keywordChart1" width="400" height="200" style="display: none;"></canvas>
+        <canvas id="keywordChart2" width="400" height="200" style="display: none;"></canvas>
+        <canvas id="keywordChart3" width="400" height="200" style="display: none;"></canvas>
+        <canvas id="keywordChart4" width="400" height="200" style="display: none;"></canvas>
+        <canvas id="keywordChart5" width="400" height="200" style="display: none;"></canvas>
+        <canvas id="keywordChart6" width="400" height="200" style="display: none;"></canvas>
+
+        <!-- Include jsPDF and JSZip libraries -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
+        <script>
+            function generateGraph1() {
+                const keywordOccurrences = {};
+                const livre = "{{ fiches|length > 0 ? fiches[0].livre : '' }}";{% for fiche in fiches %}
+                {% for mot in fiche.getMotCles() %}
+                if (keywordOccurrences.hasOwnProperty('{{ mot.reference }}')) {
+                    keywordOccurrences['{{ mot.reference }}'] += 1;
+                } else {
+                    keywordOccurrences['{{ mot.reference }}'] = 1;
+                }
+                {% endfor %}
+                {% endfor %}
+
+                const keywordsData = Object.keys(keywordOccurrences).map(keyword => ({
+                    label: keyword,
+                    value: keywordOccurrences[keyword]
+                })).sort((a, b) => a.label.localeCompare(b.label));
+
+                const labels = keywordsData.map(data => data.label);
+                const values = keywordsData.map(data => data.value);
+
+                const ctx1 = document.getElementById('keywordChart1').getContext('2d');
+                const chart1 = new Chart(ctx1, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: 'Occurrences des mots-clés',
+                                data: values,
+                                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                                borderColor: 'rgba(54, 162, 235, 1)',
+                                borderWidth: 1
+                            }
+                        ]
+                    },
+                    options: {
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: `${livre}: Occurrences des mots-clés`,
+                                font: {
+                                    size: 28
+                                }
+                            },
+
+                            datalabels: {
+                                anchor: 'center',
+                                align: 'center',
+                                color: 'black',
+                                font: {
+                                    size: 16,
+                                    weight: 'bold'
+                                },
+                                formatter: (value) => value > 0 ? value : ''
+                            }
+                        },
+                        scales: {
+                            x: {
+                                ticks: {
+                                    font: {
+                                        size: 22
+                                    }
+                                }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    font: {
+                                        size: 22
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    plugins: [ChartDataLabels]
+                });
+            }
+
+            function generateGraph2() {
+                const keywordStatusOccurrences = {};
+                const livre = "{{ fiches|length > 0 ? fiches[0].livre : '' }}";
+                const fichesData = [{% for fiche in fiches %}
+                    {
+                        statut: "{{ fiche.getStatut() }}",
+                        mots: [{% for mot in fiche.motCles %}"{{ mot.reference }}"{% if not loop.last %},{% endif %}
+                            {% endfor %}]
+                    }
+                    {% if not loop.last %},{% endif %}
+                    {% endfor %}];
+
+                const keywordColors = {};
+                const getRandomColor = () => {
+                    const r = Math.floor(Math.random() * 256);
+                    const g = Math.floor(Math.random() * 256);
+                    const b = Math.floor(Math.random() * 256);
+                    return `rgba(${r}, ${g}, ${b}, 0.5)`;
+                };
+
+// Group data by statut and count keywords
+                fichesData.forEach(fiche => {
+                    const statut = fiche.statut;
+
+                    if (!keywordStatusOccurrences[statut]) {
+                        keywordStatusOccurrences[statut] = {};
+                    }
+
+                    fiche.mots.forEach(mot => {
+                        if (!keywordColors[mot]) {
+                            keywordColors[mot] = getRandomColor();
+                        }
+
+                        if (!keywordStatusOccurrences[statut][mot]) {
+                            keywordStatusOccurrences[statut][mot] = 0;
+                        }
+                        keywordStatusOccurrences[statut][mot] += 1;
+                    });
+                });
+
+// Prepare datasets for each keyword
+                const allKeywords = Object.keys(keywordColors);
+                const labels = Object.keys(keywordStatusOccurrences).sort(); // Sort statuts alphabetically
+                const datasets = allKeywords.map(keyword => {
+                    const data = labels.map(statut => keywordStatusOccurrences[statut][keyword] || 0); // Default to 0 if no data
+                    return {
+                        label: `${keyword}`,
+                        data: data,
+                        backgroundColor: keywordColors[keyword],
+                        borderColor: keywordColors[keyword].replace('0.5', '1'),
+                        borderWidth: 1
+                    };
+                });
+
+// Create the chart
+                const ctx2 = document.getElementById('keywordChart2').getContext('2d');
+                const keywordChart2 = new Chart(ctx2, {
+                    type: 'bar',
+                    data: {
+                        labels: labels, // Statuts on the x-axis (sorted)
+                        datasets: datasets // Grouped by keywords
+                    },
+                    options: {
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: `${livre}: Statut des mots-clés`,
+                                font: {
+                                    size: 28
+                                }
+                            },
+// Configure the datalabels plugin
+                            datalabels: {
+                                anchor: 'center',
+                                align: 'center',
+                                color: 'black',
+                                font: {
+                                    size: 16,
+                                    weight: 'bold'
+                                },
+                                formatter: (value) => value > 0 ? value : ''
+                            }
+                        },
+                        scales: {
+                            x: {
+                                ticks: {
+                                    font: {
+                                        size: 22
+                                    }
+                                }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    font: {
+                                        size: 22
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    plugins: [ChartDataLabels]
+                });
+            }
+
+            function generateGraph3() {
+                const keywordStatusOccurrences = {};
+                const livre = "{{ fiches|length > 0 ? fiches[0].livre : '' }}";
+                const fichesData = [{% for fiche in fiches %}
+                    {
+                        statut: "{{ fiche.getStatut() }}",
+                        mots: [{% for mot in fiche.motCles %}"{{ mot.reference }}"{% if not loop.last %},{% endif %}
+                            {% endfor %}]
+                    }
+                    {% if not loop.last %},{% endif %}
+                    {% endfor %}];
+
+                const statutColors = {};
+                const getRandomColor = () => {
+                    const r = Math.floor(Math.random() * 256);
+                    const g = Math.floor(Math.random() * 256);
+                    const b = Math.floor(Math.random() * 256);
+                    return `rgba(${r}, ${g}, ${b}, 0.5)`;
+                };
+
+// Organize occurrences by keyword and statut
+                fichesData.forEach(fiche => {
+                    const statut = fiche.statut;
+
+                    if (!statutColors[statut]) {
+                        statutColors[statut] = getRandomColor();
+                    }
+
+                    fiche.mots.forEach(mot => {
+                        if (!keywordStatusOccurrences[mot]) {
+                            keywordStatusOccurrences[mot] = {};
+                        }
+
+                        if (!keywordStatusOccurrences[mot][statut]) {
+                            keywordStatusOccurrences[mot][statut] = 0;
+                        }
+                        keywordStatusOccurrences[mot][statut] += 1;
+                    });
+                });
+
+// Sort keywords alphabetically for X-axis
+                const labels = Object.keys(keywordStatusOccurrences).sort(); // ✅ Sorted X-axis (keywords)
+                const allStatuts = Object.keys(statutColors);
+
+// Prepare datasets for each statut
+                const datasets = allStatuts.map(statut => {
+                    const data = labels.map(keyword => keywordStatusOccurrences[keyword][statut] || 0); // Default to 0 if no data
+                    return {
+                        label: `Statut: ${statut}`,
+                        data: data,
+                        backgroundColor: statutColors[statut],
+                        borderColor: statutColors[statut].replace('0.5', '1'),
+                        borderWidth: 1
+                    };
+                });
+
+// Create the chart
+                const ctx3 = document.getElementById('keywordChart3').getContext('2d');
+                const keywordChart3 = new Chart(ctx3, {
+                    type: 'bar',
+                    data: {
+                        labels: labels, // Keywords on the x-axis (Sorted)
+                        datasets: datasets // Grouped by statut
+                    },
+                    options: {
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: `${livre}: Distribution des statuts par mots-clés`,
+                                font: {
+                                    size: 28
+                                }
+                            },
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false
+                            },
+                            datalabels: {
+                                anchor: 'center',
+                                align: 'center',
+                                color: 'black',
+                                font: {
+                                    size: 16,
+                                    weight: 'bold'
+                                },
+                                formatter: (value) => value > 0 ? value : ''
+                            }
+                        },
+                        responsive: true,
+                        scales: {
+                            x: {
+                                stacked: true,
+                                ticks: {
+                                    font: {
+                                        size: 22
+                                    }
+                                }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                stacked: true,
+                                ticks: {
+                                    font: {
+                                        size: 22
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    plugins: [ChartDataLabels]
+                });
+            }
+
+            function generateGraph4() {
+                const keywordStatusOccurrences = {};
+                const livre = "{{ fiches|length > 0 ? fiches[0].livre : '' }}";
+                const fichesData = [{% for fiche in fiches %}
+                    {
+                        statut: "{{ fiche.getStatut() }}",
+                        mots: [{% for mot in fiche.motCles %}"{{ mot.reference }}"{% if not loop.last %},{% endif %}
+                            {% endfor %}]
+                    }
+                    {% if not loop.last %},{% endif %}
+                    {% endfor %}];
+
+                const statutColors = {};
+                const getRandomColor = () => {
+                    const r = Math.floor(Math.random() * 256);
+                    const g = Math.floor(Math.random() * 256);
+                    const b = Math.floor(Math.random() * 256);
+                    return `rgba(${r}, ${g}, ${b}, 0.7)`;
+                };
+
+                fichesData.forEach(fiche => {
+                    const statut = fiche.statut;
+
+                    if (!statutColors[statut]) {
+                        statutColors[statut] = getRandomColor();
+                    }
+
+                    fiche.mots.forEach(mot => {
+                        if (!keywordStatusOccurrences[mot]) {
+                            keywordStatusOccurrences[mot] = {};
+                        }
+
+                        if (!keywordStatusOccurrences[mot][statut]) {
+                            keywordStatusOccurrences[mot][statut] = 0;
+                        }
+                        keywordStatusOccurrences[mot][statut] += 1;
+                    });
+                });
+
+// Sort keywords alphabetically for X-axis
+                const labels = Object.keys(keywordStatusOccurrences).sort();
+                const allStatuts = Object.keys(statutColors);
+
+// Prepare datasets for each statut
+                const datasets = allStatuts.map(statut => {
+                    const data = labels.map(keyword => keywordStatusOccurrences[keyword][statut] || 0);
+                    return {
+                        label: `Statut: ${statut}`,
+                        data: data,
+                        backgroundColor: statutColors[statut],
+                        borderColor: statutColors[statut].replace('0.7', '1'),
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    };
+                });
+
+
+                const ctx4 = document.getElementById('keywordChart4').getContext('2d');
+                const keywordChart4 = new Chart(ctx4, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: datasets
+                    },
+                    options: {
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: `${livre}: Évolution des statuts par mots-clés`,
+                                font: {
+                                    size: 28
+                                }
+                            },
+                            datalabels: {
+                                anchor: 'center',
+                                align: 'top',
+                                color: 'black',
+                                font: {
+                                    size: 16,
+                                    weight: 'bold'
+                                },
+                                formatter: (value) => value > 0 ? value : ''
+                            }
+                        },
+                        responsive: true,
+                        scales: {
+                            x: {
+                                ticks: {
+                                    font: {
+                                        size: 22
+                                    }
+                                }
+                            },
+                            y: {
+                                stacked: true,
+                                beginAtZero: true,
+                                ticks: {
+                                    font: {
+                                        size: 22
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    plugins: [ChartDataLabels]
+                });
+            }
+
+            function generateGraph5() {
+                const keywordStatusOccurrences = {};
+                const livre = "{{ fiches|length > 0 ? fiches[0].livre : '' }}";
+                const fichesData = [{% for fiche in fiches %}
+                    {
+                        statut: "{{ fiche.getStatut() }}",
+                        mots: [{% for mot in fiche.motCles %}"{{ mot.reference }}"{% if not loop.last %},{% endif %}
+                            {% endfor %}]
+                    }
+                    {% if not loop.last %},{% endif %}
+                    {% endfor %}];
+
+                const statutColors = {};
+                const getRandomColor = () => {
+                    const r = Math.floor(Math.random() * 256);
+                    const g = Math.floor(Math.random() * 256);
+                    const b = Math.floor(Math.random() * 256);
+                    return `rgba(${r}, ${g}, ${b}, 0.4)`; // Semi-transparent color for fill
+                };
+
+                fichesData.forEach(fiche => {
+                    const statut = fiche.statut;
+
+                    if (!statutColors[statut]) {
+                        statutColors[statut] = getRandomColor();
+                    }
+
+                    fiche.mots.forEach(mot => {
+                        if (!keywordStatusOccurrences[mot]) {
+                            keywordStatusOccurrences[mot] = {};
+                        }
+
+                        if (!keywordStatusOccurrences[mot][statut]) {
+                            keywordStatusOccurrences[mot][statut] = 0;
+                        }
+                        keywordStatusOccurrences[mot][statut] += 1;
+                    });
+                });
+
+// Sort keywords alphabetically for X-axis (same as generateGraph4)
+                const labels = Object.keys(keywordStatusOccurrences).sort();
+                const allStatuts = Object.keys(statutColors);
+
+// Prepare datasets for each statut (same as generateGraph4)
+                const datasets = allStatuts.map(statut => {
+                    const data = labels.map(keyword => keywordStatusOccurrences[keyword][statut] || 0);
+                    return {
+                        label: `Statut: ${statut}`,
+                        data: data,
+                        backgroundColor: statutColors[statut], // Fill color
+                        borderColor: statutColors[statut].replace('0.4', '1'), // Border color
+                        borderWidth: 2,
+                        fill: true, // Enable fill (same as generateGraph4)
+                        tension: 0.4 // Smooth lines (same as generateGraph4)
+                    };
+                });
+
+                const ctx5 = document.getElementById('keywordChart5').getContext('2d');
+                new Chart(ctx5, {
+                    type: 'line',
+                    data: {
+                        labels: labels, // Sorted keywords on X-axis (same as generateGraph4)
+                        datasets: datasets
+                    },
+                    options: {
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: `${livre}: Statuts par mots-clés (non cumulé)`,
+                                font: {
+                                    size: 28
+                                }
+                            },
+                            datalabels: {
+                                anchor: 'center',
+                                align: 'top',
+                                color: 'black',
+                                font: {
+                                    size: 16,
+                                    weight: 'bold'
+                                },
+                                formatter: (value) => value > 0 ? value : ''
+                            }
+                        },
+                        responsive: true,
+                        scales: {
+                            x: {
+                                ticks: {
+                                    font: {
+                                        size: 22
+                                    } // Consistent font size with generateGraph4
+                                },
+                                title: {
+                                    display: true,
+                                    text: "Mots-clés", // X-axis title
+                                    font: {
+                                        size: 22
+                                    }
+                                }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    font: {
+                                        size: 22
+                                    }
+                                }, // Consistent font size with generateGraph4
+                                title: {
+                                    display: true,
+                                    text: "Occurrences", // Y-axis title
+                                    font: {
+                                        size: 22
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    plugins: [ChartDataLabels]
+                });
+            }
+
+        function generateGraph6() {
+            const keywordStatusOccurrences = {};
+            const livre = "{{ fiches|length > 0 ? fiches[0].livre : '' }}";
+            const fichesData = [{% for fiche in fiches %}
+                {
+                    statut: "{{ fiche.getStatut() }}",
+                    mots: [{% for mot in fiche.motCles %}"{{ mot.reference }}"{% if not loop.last %},{% endif %}
+                        {% endfor %}]
+                }
+                {% if not loop.last %},{% endif %}
+                {% endfor %}];
+
+            const statutColors = {};
+            const getRandomColor = () => {
+                const r = Math.floor(Math.random() * 256);
+                const g = Math.floor(Math.random() * 256);
+                const b = Math.floor(Math.random() * 256);
+                return `rgba(${r}, ${g}, ${b}, 0.8)`; // Couleur semi-transparente
+            };
+
+            // Compter les occurrences des statuts
+            const statutOccurrences = {};
+            let totalKeywords = 0; // Variable to store the total number of keywords
+
+            fichesData.forEach(fiche => {
+                const statut = fiche.statut;
+                if (!statutOccurrences[statut]) {
+                    statutOccurrences[statut] = 0;
+                }
+                statutOccurrences[statut] += fiche.mots.length; // Nombre de mots-clés par statut
+                totalKeywords += fiche.mots.length; // Add to the total count
+            });
+
+            // Préparer les données pour le pie chart
+            const labels = Object.keys(statutOccurrences);
+            const data = labels.map(statut => statutOccurrences[statut]);
+            const backgroundColors = labels.map(statut => {
+                if (!statutColors[statut]) {
+                    statutColors[statut] = getRandomColor();
+                }
+                return statutColors[statut];
+            });
+
+            // Créer le pie chart avec Chart.js
+            const ctx6 = document.getElementById('keywordChart6').getContext('2d');
+            new Chart(ctx6, {
+                type: 'pie',
+                data: {
+                    labels: labels, // Étiquettes simples (statuts)
+                    datasets: [{
+                        label: 'Occurrences par statut',
+                        data: data,
+                        backgroundColor: backgroundColors,
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: [
+                                `${livre}: Répartition des statuts`,
+                                `Total des mots-clés: ${totalKeywords}` // Add the total number of keywords here
+                            ],
+                            font: {
+                                size: 28
+                            }
+                        },
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    size: 16
+                                }
+                            }
+                        },
+                        datalabels: {
+                            anchor: 'center',
+                            align: 'center',
+                            color: 'white',
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            },
+                            rotation: 0,
+                            clip: false,
+                            formatter: (value, context) => {
+                                const statut = context.chart.data.labels[context.dataIndex];
+                                return ` ${value}`;
+                            }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+        }
+            // Function to export the graphs as a PDF (one per page)
+            function exportAsPDF() {
+                const {jsPDF} = window.jspdf;
+                const doc = new jsPDF();
+
+// Capture the first graph as a PNG
+                const canvas1 = document.getElementById('keywordChart1');
+                const imgData1 = canvas1.toDataURL('image/png');
+
+// Add the first graph to the PDF
+                doc.addImage(imgData1, 'PNG', 10, 10, 180, 90);
+                doc.addPage();
+
+// Capture the second graph as a PNG
+                const canvas2 = document.getElementById('keywordChart2');
+                const imgData2 = canvas2.toDataURL('image/png');
+
+// Add the second graph to the PDF
+                doc.addImage(imgData2, 'PNG', 10, 10, 180, 90);
+                doc.addPage();
+
+                const canvas3 = document.getElementById('keywordChart3');
+                const imgData3 = canvas3.toDataURL('image/png');
+
+                doc.addImage(imgData3, 'PNG', 10, 10, 180, 90);
+                doc.addPage();
+
+                const canvas4 = document.getElementById('keywordChart4');
+                const imgData4 = canvas4.toDataURL('image/png');
+
+                doc.addImage(imgData4, 'PNG', 10, 10, 180, 90);
+                doc.addPage();
+
+                const canvas5 = document.getElementById('keywordChart5');
+                const imgData5 = canvas5.toDataURL('image/png');
+                doc.addImage(imgData5, 'PNG', 10, 10, 180, 90);
+                doc.addPage();
+
+                const canvas6 = document.getElementById('keywordChart6');
+                const imgData6 = canvas6.toDataURL('image/png');
+
+                doc.addImage(imgData6, 'PNG', 10, 10, 120, 120);
+
+// Save the PDF
+                doc.save('graphes.pdf');
+            }
+
+
+            function exportAsZIP() {
+                const zip = new JSZip();
+
+// Capture the first graph as a PNG
+                const canvas1 = document.getElementById('keywordChart1');
+                const imgData1 = canvas1.toDataURL('image/png').split(',')[1];
+
+// Add the first graph to the ZIP
+                zip.file("graphe1.png", imgData1, {base64: true});
+
+// Capture the second graph as a PNG
+                const canvas2 = document.getElementById('keywordChart2');
+                const imgData2 = canvas2.toDataURL('image/png').split(',')[1];
+
+// Add the second graph to the ZIP
+                zip.file("graphe2.png", imgData2, {base64: true});
+
+                const canvas3 = document.getElementById('keywordChart3');
+                const imgData3 = canvas3.toDataURL('image/png').split(',')[1];
+
+                zip.file("graphe3.png", imgData3, {base64: true});
+
+                const canvas4 = document.getElementById('keywordChart4');
+                const imgData4 = canvas4.toDataURL('image/png').split(',')[1];
+
+                zip.file("graphe4.png", imgData4, {base64: true});
+
+                const canvas5 = document.getElementById('keywordChart5');
+                const imgData5 = canvas5.toDataURL('image/png').split(',')[1];
+
+                zip.file("graphe5.png", imgData5, {base64: true});
+
+                const canvas6 = document.getElementById('keywordChart6');
+                const imgData6 = canvas6.toDataURL('image/png').split(',')[1];
+
+                zip.file("graphe6.png", imgData6, {base64: true});
+
+// Generate and download the ZIP file
+                zip.generateAsync({type: "blob"}).then(function (content) {
+                    const downloadLink = document.createElement('a');
+                    downloadLink.href = URL.createObjectURL(content);
+                    downloadLink.download = 'graphes.zip';
+                    downloadLink.click();
+                });
+            }
+
+            // Call the functions when the content is loaded
+            document.addEventListener('DOMContentLoaded', function () {
+
+                generateGraph1();
+                generateGraph2();
+                generateGraph3();
+                generateGraph4();
+                generateGraph5();
+                generateGraph6();
+
+// Add event listeners for export buttons
+                document.getElementById('exportPDFButton').addEventListener('click', exportAsPDF);
+                document.getElementById('exportZIPButton').addEventListener('click', exportAsZIP);
+            });
+        </script>
+    </div>
+    <script>
+        function confirmDeleteFiche(url) { // Afficher une boîte de dialogue de confirmation
+            if (confirm("Êtes-vous sûr de vouloir supprimer cette fiche ?")) { // Si l'utilisateur clique sur OK, naviguer vers l'URL de suppression
+                window.location.href = url;
+            }
+// Retourner false pour empêcher le lien par défaut de se déclencher
+            return false;
+        }
+    </script>
+    <script>
+        function exportToExcel() { // Créer une nouvelle feuille de calcul
+            var wb = XLSX.utils.book_new();
+
+// Convertir les données des fiches en format de tableau pour SheetJS
+            var data = [];
+
+// Créer un dictionnaire pour stocker les occurrences de chaque mot-clé
+            var keywordOccurrences = {};
+
+// Créer un dictionnaire pour stocker le nombre de fiches par statut pour chaque mot-clé
+            var keywordStatusCounts = {};
+
+// Collecter les différents statuts des fiches
+            var statusList = [];
+            {% for fiche in fiches %}statusList.push('{{ fiche.statut }}');
+            {% endfor %}statusList = [...new Set(statusList)]; // Remove duplicates
+            statusList.sort();
+// Trie les statuts par ordre alphabétique
+
+// Pour chaque fiche, compter les occurrences de chaque mot-clé
+            {% for fiche in fiches %}
+            {% for mot in fiche.getMotCles() %}
+            if (!keywordOccurrences['{{ mot.getReference() }}']) {
+                keywordOccurrences['{{ mot.getReference() }}'] = {
+                    reference: '{{ mot.getReference() }}',
+                    denomination: '{{ mot.getDenomination() }}',
+                    count: 1,
+                    statusCounts: Object.fromEntries(statusList.map(status => [status, 0])),
+                    ficheIds: ['{{ fiche.getIdFiche() }}'] // Initialize with the current fiche ID
+                };
+            } else {
+                keywordOccurrences['{{ mot.getReference() }}'].count++;
+                keywordOccurrences['{{ mot.getReference() }}'].ficheIds.push('{{ fiche.getIdFiche() }}'); // Add the fiche ID
+            }
+            keywordOccurrences['{{ mot.getReference() }}'].statusCounts['{{ fiche.statut }}']++;{% endfor %}
+            {% endfor %}
+
+// Trie les clés du dictionnaire par ordre alphabétique avec les chiffres en premier et par ordre croissant de référence
+            var sortedKeywords = Object.keys(keywordOccurrences).sort((a, b) => {
+                if (a.match(/^\d/) && !b.match(/^\d/)) {
+                    return -1;
+                } else if (!a.match(/^\d/) && b.match(/^\d/)) {
+                    return 1;
+                } else {
+                    return a.localeCompare(b, 'fr', {numeric: true});
+                }
+            });
+
+// Ajouter les en-têtes de colonnes
+            var headers = ['Référence des mot-clés', 'Dénomination des mot-clés', 'Nombre de fiches'];
+            headers.push(...statusList.map(status => `${status}`));
+            headers.push('Liste des fiches');
+// Add a new column header for fiche IDs
+
+// Pour chaque mot-clé, ajouter les données pertinentes au tableau
+            sortedKeywords.forEach(function (keyword) {
+                var row = [
+                    keywordOccurrences[keyword].reference,
+                    keywordOccurrences[keyword].denomination,
+                    keywordOccurrences[keyword].count,
+                    ...statusList.map(status => keywordOccurrences[keyword].statusCounts[status]),
+                    keywordOccurrences[keyword].ficheIds.sort(
+                        (a, b) => a - b
+                    ).join(', ')
+                ];
+                data.push(row);
+            });
+
+// Créer une nouvelle feuille de calcul à partir des données
+            var ws = XLSX.utils.aoa_to_sheet([
+                headers,
+                ...data
+            ]);
+
+// Ajouter la feuille de calcul au classeur
+            XLSX.utils.book_append_sheet(wb, ws, "Mot-cles");
+
+// Sauvegarder le classeur au format Excel
+            XLSX.writeFile(wb, "mon_tableau.xlsx");
+        }
+    </script>
+
+
+{% endblock %}

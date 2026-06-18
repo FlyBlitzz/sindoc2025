@@ -1,0 +1,35 @@
+<div class="modal fade" id="exportModalword" tabindex="-1" aria-labelledby="exportModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exportModalLabel">Exporter les mots clés des fiches avec:</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="exportFormWord" action="{{path('fiches_word')}}" method="POST"> <!-- Updated URL to /word -->
+                    <input type="hidden" id="ficheDataWord" name="ficheDataWord" value=""> <!-- Changed to ficheDataWord -->
+                    <input type="hidden" id="exportType" name="exportType" value="reference_only">
+
+                    <div class="mb-3">
+                        <label for="exportOption" class="form-label">Sélectionner:</label>
+                        <select id="exportOptionWord" class="form-select">
+                            <option value="reference_only">Référence seulement</option>
+                            <option value="reference_denomination">Référence et Dénomination</option>
+                        </select>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                        <button type="submit" class="btn btn-primary">Exporter vers Word</button> <!-- Updated text -->
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById("exportOptionWord").addEventListener("change", function() {
+    document.getElementById("exportType").value = this.value;
+});
+</script>

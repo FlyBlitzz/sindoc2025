@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Livre{% endblock %}
+
+{% block body %}
+<head>
+       <link rel="stylesheet" href="{{ asset('css/ajoutFiche.css') }}">
+
+</head>
+ <div class=" classs">
+    <h1>Détails Livre</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ livre.idlivre }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ livre.nom }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    <a href="{{ path('app_livre_app_livre_edit', {'id': livre.idlivre}) }}" class="btn btn-primary">Modifier</a><br />
+        <a href="{{ path('app_livre_app_livre_index') }}"><strong>Retourner à la liste</strong></a><br />
+
+
+    </div>
+{% endblock %}

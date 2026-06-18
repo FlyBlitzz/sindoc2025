@@ -1,0 +1,132 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Index{% endblock %}
+
+{% block body %}
+<head>
+       <link rel="stylesheet" href="{{ asset('css/ajoutFiche.css') }}">
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+</head>
+<div class="container mb-5 pb-5">
+    <h1>Donner des autorisations</h1>
+    <h3>Vous êtes sur l'index: <i>{{ index.nom }}</i></h3>
+    <p>Veuillez sélectionner un ou plusieurs utilisateurs</p>
+    <form action="{{ path('app_index_auth_save', {id: index.idindex}) }}" method="post" id="authForm">
+        <div class="d-flex justify-content-end mb-3">
+            <button type="submit" class="btn btn-primary">Donner Autorisations</button>
+        </div>
+        <table id="userTable" class="table text-center">
+            <thead>
+                <tr>
+                    <th>ID Utilisateur</th>
+                    <th>Username</th>
+                    <th>Autorisation</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr class="user-row {% if auths[user.id] %}disabled{% endif %}" data-user-id="{{ user.id }}">
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>
+                            {% if auths[user.id] %}
+                                <span>Oui</span>
+                            {% else %}
+                                <span>Non</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if auths[user.id] %}
+                                <a href="{{ path('app_index_auth_remove', {id: index.idindex, userId: user.id}) }}" 
+                                   class="btn btn-danger" 
+                                   onclick="return confirm('Etes-vous sûr de vouloir supprimer cette autorisation?');">
+                                   Supprimer Autorisation
+                                </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <!-- Hidden input to hold selected user IDs -->
+        <input type="hidden" name="users" id="selectedUsers" value="">
+    </form>
+</div>
+
+<style>
+.user-row {
+    cursor: pointer;
+}
+.user-row:hover {
+    background: #f5f5f5;
+}
+
+.user-row.selected {
+    background-color: #d3d3d3; 
+}
+
+.user-row.disabled {
+    pointer-events: none;
+    color: gray;
+    background-color: #f9f9f9;
+}
+
+.user-row.disabled .btn-danger {
+    pointer-events: auto; /* Ensure the delete button remains active */
+    color: #fff;
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+</style>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const userTable = document.getElementById('userTable');
+    const selectedUsersInput = document.getElementById('selectedUsers');
+    let selectedUsers = [];
+
+    userTable.addEventListener('click', (event) => {
+        const row = event.target.closest('.user-row');
+
+        // Ignore disabled rows
+        if (row && !row.classList.contains('disabled')) {
+            const userId = row.dataset.userId;
+
+            // Toggle selection
+            if (row.classList.contains('selected')) {
+                row.classList.remove('selected');
+                selectedUsers = selectedUsers.filter(id => id !== userId);
+            } else {
+                row.classList.add('selected');
+                selectedUsers.push(userId);
+            }
+
+            // Update hidden input value
+            selectedUsersInput.value = JSON.stringify(selectedUsers);
+        }
+    });
+});
+
+$(document).ready(function() {
+    $('#userTable').DataTable({
+        language: {
+            url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/French.json'
+        }
+    });
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("authForm").addEventListener("submit", function (event) {
+        let selectedUsers = document.getElementById("selectedUsers").value;
+        
+        if (!selectedUsers.trim()) {
+            alert("Veuillez sélectionner au moins un utilisateur avant de soumettre.");
+            event.preventDefault(); // Prevent form submission
+        }
+    });
+});
+
+</script>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un nouveau MotCle{% endblock %}
+
+{% block body %}
+<head>
+       <link rel="stylesheet" href="{{ asset('css/ajoutFiche.css') }}">
+
+</head>
+ <div class=" classs">
+    <h1>Créer un nouveau MotCle</h1>
+
+    {{ include('mot_cle/_form.html.twig') }}
+
+    </div>
+{% endblock %}

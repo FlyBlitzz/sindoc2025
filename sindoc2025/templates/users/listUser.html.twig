@@ -1,0 +1,284 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des utilisateurs{% endblock %}
+
+{% block body %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/showUser.css') }}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ asset('css/listeUsers.css') }}">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+
+</head>
+       <div class="classs" style="width: 84%;     margin: 150px auto; margin-top: 0px;">
+           <div class="row  table-responsive">
+               {% include "_partials/_adminnav.html.twig"%}
+               <main class="container border border-light bg-white p-2">
+               <h1 style="  text-decoration: underline;      text-align: center;"> Administration </h1>
+                <h1>Liste des utilisateurs : </h1></br>
+                <a href="{{ path('app_admin_app_users_new') }}" type="button" class="btn btn-primary" style="margin-bottom: 60px;">+ Créer un nouvel utilisateur</a>
+                  <table class="table" id="userTable">
+                       <thead>
+                       <tr>
+                           <th>Nom</th>
+                           <th>Détails Fiche</th>
+                           <th>Actions</th>
+                           <th>Activer/Désactiver</th>
+                       </tr>
+                       </thead>
+                       <tbody>
+                       {% for user in users %}
+                      
+                    
+                       
+                       
+                           <tr>
+                               <td>{{ user.username }}</td>
+                               <td>
+
+                                   {# <div class="btn-group" role="group" aria-label="Basic example">
+                                        <a href="{{ path('user_auth_fiche_list', { 'userId': user.id }) }}"  class="btn btn-info" style="background-color:#0d6efd;color:white;">Ses fiches</a>
+                                   </div> #}
+                                    <div class="btn-group" role="group" aria-label="Basic example">
+                                        {% if user.getFiche()|length > 0 %}
+                                            {% set ficheCount = user.getFiche()|length %}
+                                            <a href="{{ path('user_auth_fiche_list', { 'userId': user.id }) }}"  
+                                            class="btn btn-info rounded mx-2 tooltip-link"
+                                           
+                                            data-tooltip="Cet utilisateur a {{ ficheCount }} fiche(s)."
+                                            style="background-color:#0d6efd;color:white;">
+                                                Ses fiches
+                                            </a>
+                                        {% else %}
+                                            <a href="javascript:void(0);" 
+                                            class="btn btn-info rounded mx-2 tooltip-link" 
+                                            style="background-color:#0d6efd;color:white;"
+                                            data-tooltip="Cet utilisateur n'a pas de fiches."
+                                            title="Cet utilisateur n'a pas de fiches.">
+                                                Ses fiches
+                                            </a>
+                                        {% endif %}
+                                    </div>
+
+                               </td>
+
+                               <td>
+
+                                    <div class="btn-group" role="group" aria-label="Basic example" >
+                                  <a href="{{ path('app_admin_app_users_show_admin', {'id': user.id}) }}" class="btn btn-outline-primary rounded mx-2 tooltip-link" data-tooltip="Afficher l'utilisateur" ><i class="fas fa-eye"></i></a>
+                                  <a onclick="return confirmDesactiverUser('{{ path('delete_user', {'id': user.id}) }}');" type="button" class="btn btn-outline-danger tooltip-link mx-2 rounded"  data-tooltip="Supprimer l'utilisateur" ><i class="fas fa-trash"></i></a>
+                                  <a href="{{ path('app_admin_app_users_edit', {'id': user.id}) }}" 
+                                    class="btn btn-outline-primary rounded mx-2 tooltip-link d-inline-block" 
+                                    data-tooltip="Modifier l'utilisateur">
+                                        <i class="fas fa-pencil"></i>
+                                    </a>
+                              </div>
+                               </td>
+
+                               <td>
+                                  <form method="POST" action="{{ path('desactive_user', {'id': user.id}) }}" id="form_desactive_{{ user.id }}" class="d-flex align-items-center justify-content-center flex-wrap">
+                                <input type="hidden" name="_method" value="PUT">                      
+                                <label class="switch">
+                                    <input type="checkbox" name="desactive" {% if user.isActive() %} checked {% endif %} 
+                                        onchange="document.getElementById('form_desactive_{{ user.id }}').submit()">
+                                    <span class="slider round"></span>
+                                </label>
+                            </form>
+
+                               </td>
+                           </tr>
+                       {% else %}
+                           <tr>
+                               <td colspan="5">Aucun utilisateur !</td>
+                           </tr>
+                       {% endfor %}
+                       </tbody>
+                   </table>
+               </main>
+           </div>
+<script>
+ // Fonction pour récupérer le contenu de base.html.twig
+    function fetchBaseHTML(callback) {
+        fetch('get_base_html')
+            .then(response => response.text())
+            .then(html => callback(html))
+            .catch(error => console.error('Erreur lors de la récupération du fichier base.html.twig : ', error));
+    }
+
+    function toggleDetails(button) {
+        const userDetails = button.parentElement.nextElementSibling;
+        userDetails.style.display = userDetails.style.display === 'none' ? 'block' : 'none';
+
+        if (userDetails.style.display === 'block') {
+
+            const detailsWindow = window.open('', '_self');
+
+            detailsWindow.document.write('<html><head><title>Détails</title>');
+            detailsWindow.document.write('<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">');
+            detailsWindow.document.write('<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">');
+            detailsWindow.document.write('<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">');
+            detailsWindow.document.write('<link rel="stylesheet" href="{{ asset('css/listeUsers.css') }}">');
+            detailsWindow.document.write('</head><body>');
+            detailsWindow.document.write('<h1 style="text-align: center;margin-bottom: 10px;margin-top: 150px;">Liste des fiches</h1>');
+            detailsWindow.document.write(userDetails.innerHTML);
+            detailsWindow.document.write('</body></html>');
+
+            userDetails.style.display = 'none';
+
+            detailsWindow.addEventListener('popstate', function(event) {
+                if (event.state === null) {
+                    detailsWindow.close();
+                }
+            });
+            // Insérer le contenu de base.html.twig dans la fenêtre modale
+                fetchBaseHTML(function(htmlContent) {
+                    detailsWindow.document.write(htmlContent);
+                });
+            // Mettre un état initial dans l'historique
+            detailsWindow.history.replaceState({ page: 1 }, 'Détails', '');
+
+            // Gérer les liens internes pour les ajouter à l'historique
+            const internalLinks = detailsWindow.document.querySelectorAll('a');
+            internalLinks.forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    detailsWindow.history.pushState({ page: 2 }, 'Détails', link.href);
+                    detailsWindow.location.reload();
+                });
+            });
+        }
+    }
+    $(document).ready(function() {
+    $('#userTable').DataTable({
+        language: {
+            url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/French.json'
+        },
+        responsive: true,
+    });
+});
+ function confirmDesactiverUser(url) {
+        if (confirm("Êtes-vous sûr de vouloir supprimer cet utilisateur ?")) {
+            window.location.href = url;
+        }
+        return false;
+    }
+</script>
+
+
+</div>
+<style>
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 25px;
+}
+/* Tooltip container */
+.tooltip-link {
+    position: relative;
+    display: inline-block;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Tooltip text */
+.tooltip-link::after {
+    content: attr(data-tooltip); /* Use the attribute value */
+    position: absolute;
+    bottom: 120%; /* Position above the link */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 5px 10px;
+    font-size: 12px;
+    white-space: nowrap;
+    border-radius: 5px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+}
+.tooltip-link.disabled {
+    pointer-events: auto;
+}
+/* Show tooltip on hover */
+.tooltip-link:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+/* Make switch size adaptive for different screen sizes */
+@media (max-width: 768px) {
+    .switch {
+        width: 40px;
+        height: 20px;
+    }
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 25px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 4px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+/* Checked state */
+input:checked + .slider {
+    background-color: #0d6efd; /* Bootstrap primary color */
+}
+
+input:checked + .slider:before {
+    transform: translateX(24px);
+}
+
+/* Smaller screens */
+@media (max-width: 768px) {
+    .slider:before {
+        height: 14px;
+        width: 14px;
+        left: 3px;
+        bottom: 3px;
+    }
+    
+    input:checked + .slider:before {
+        transform: translateX(18px);
+    }
+}
+</style>
+{% endblock %}
+
+
+
+
+

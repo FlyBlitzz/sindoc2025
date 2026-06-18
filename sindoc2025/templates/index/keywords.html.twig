@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mots Clés - Index {{ indexId }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/ajoutFiche.css') }}">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+{% endblock %}
+
+{% block body %}
+<div class="container mb-5 pb-5">
+    <h1>Liste des mots clés</h1>
+    <div style="width: 80%; margin: 20px auto; margin-top: 100px; text-align: center;">
+        <a href="{{ path('export_pdf', {'indexId': indexId}) }}" class="btn btn-primary" style="margin-right: 10px;">Exporter PDF</a>
+        <a href="{{ path('export_word', {'indexId': indexId}) }}" class="btn btn-secondary">Exporter Word</a>
+    </div>
+
+    <table id="mytable" class="table table-bordered" style="width:100%; margin: 40px auto 0; margin-top: 0px;margin-bottom: 0px;">
+        <thead>
+            <tr>
+                <th scope="col">Mot-clé</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for motCle in motsClesSorted %}
+                <tr>
+                    <td>{{ motCle.reference }}:{{ motCle.Denomination }}</td>
+                    <td>
+                        <a href="{{ path('motCle_app_mot_cle_delete', {'id': motCle.idMotCle}) }}" class="btn btn-secondary">Supprimer</a>
+                        <a href="{{ path('motCle_app_mot_cle_edit_un_mot', {'id': motCle.idMotCle}) }}" class="btn btn-secondary">Modifier</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div style="text-align: center; margin-top: 20px;">
+        <strong><a href="{{ path('index_app_index_index') }}">Retour à la liste</a></strong>
+    </div>
+</div>
+    <script>
+        $(document).ready(function() {
+            $('#mytable').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/French.json'
+                },
+                responsive: true,
+            });
+        });
+    </script>
+{% endblock %}

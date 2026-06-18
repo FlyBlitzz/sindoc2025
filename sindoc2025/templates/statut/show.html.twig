@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Statut{% endblock %}
+
+{% block body %}
+<head>
+       <link rel="stylesheet" href="{{ asset('css/ajoutFiche.css') }}">
+
+</head>
+ <div class=" classs">
+    <h1>Détails statut</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ statut.idstatut }}</td>
+
+
+            </tr>
+            <tr>
+               <th>Denomination</th>
+                <td>{{ statut.denomination }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    <a href="{{ path('statut_app_statut_edit', {'id': statut.idstatut}) }}" class="btn btn-primary">Modifier</a>
+    <p></p>
+       <a href="{{ path('statut_app_statut_index') }}"><strong>Retourner à la liste</strong></a><br />
+
+    </div>
+{% endblock %}

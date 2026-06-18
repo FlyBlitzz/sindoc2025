@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier Livre{% endblock %}
+
+{% block body %}
+<head>
+       <link rel="stylesheet" href="{{ asset('css/ajoutFiche.css') }}">
+
+</head>
+ <div class=" classs">
+    <h1>Modifier Livre</h1>
+
+    {{ include('livre/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+
+     </div >
+
+{% endblock %}

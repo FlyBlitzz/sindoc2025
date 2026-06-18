@@ -1,0 +1,191 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des fiches{% endblock %}
+{% block Pagetitle %}
+    Liste des fiches
+{% endblock %}
+{% block body %}
+    <head>
+        <link rel="stylesheet" href="{{ asset('css/listeFicheRechercher.css') }}">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    </head>
+    <div class=" overflow-hidden px-5 ">
+        <div class="row ">
+           
+            <main class="container border border-light bg-white">
+            <h1 > Liste des fiches </h1>
+    {% if (livres) %}
+        
+    
+               <form method="GET" action="{{ path('user_auth_fiche_list', { 'userId': userId }) }}" class="row g-2 align-items-center">
+                <div class="col-12 col-md-auto">
+                    <select id="livre" name="livre" class="form-select">
+                       
+                        {% for livre in livres %}
+                            <option value="{{ livre.idlivre }}" {% if livre.idlivre == selectedLivre %}selected{% endif %}>
+                                {{ livre.nom }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-12 col-md-auto">
+                    <button type="submit" class="btn btn-primary w-100">Filtrer</button>
+                </div>
+            </form>
+{% endif %}
+                {% include 'fiche/fiche_modal.html.twig' %}
+                <div class="card-body my-4 table-responsive"  >
+                    {% if fiches is not empty %}
+                        <table class="table table-striped table-bordered w-100 pt-2 mx-4" id="fichesTable">
+                            <thead>
+                            <tr style="background-color: rgba(0, 0, 0, 0.4); ">
+                                <th scope="col">Id</th>
+                                <th scope="col">Référence</th>
+                                <th scope="col">Livre</th>
+                                <th scope="col" >Dénomination</th>
+                                <th scope="col">Statut</th>
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <th scope="col">Visibilité</th>
+                                {% endif %}
+
+                                <th scope="col">Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <h4 style="text-align: center">Aucune fiche trouvée !</h4>
+                    {% endif %}
+                </div>
+            </main>
+        </div>
+
+    </div>
+
+
+
+    <script>
+    function confirmDeleteFiche(url) {
+        if (confirm("Êtes-vous sûr de vouloir supprimer cette fiche ?")) {
+            window.location.href = url;
+        }
+        return false;
+    }
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script>
+    const isAdmin = {{ is_granted('ROLE_ADMIN') ? 'true' : 'false' }};
+</script>
+<script>
+   $(document).ready(function () {
+        
+        const fiches = {{ fiches|raw }};
+        
+        $('#fichesTable').DataTable({
+            data: fiches,
+            responsive:true,
+            language: {
+                zeroRecords: "Aucune fiche disponible pour cet utilisateur", // Custom message for no data
+                paginate: {
+                    next: "Suivant",
+                    previous: "Précédent"
+                },
+                info: 'Page _PAGE_ de _PAGES_',
+                lengthMenu: 'Afficher _MENU_ fiches'
+            },
+            columns: [
+                {data: 'Id'
+                ,visible: false, // Hide the ID column
+                    searchable: false},
+                { data: 'refer' },
+                { data: 'livre' },
+                { data: 'denomination' },
+                { data: 'statut' },
+                {% if is_granted('ROLE_ADMIN') %}
+            { data: 'visible' }, // Add the visible column only for admins
+            {% endif %}
+                {
+    data: null,
+    render: function (data, type, row, meta) {
+        const rowIndex = meta.row + 1; // Row index (1-based)
+        
+        const totalRows = fiches.length
+
+        const baseUrlAfficher = "{{ path('detail_fiche_total', {'id': 0}) }}".replace('/0', '');
+        const baseUrlEdit = "{{ path('app_fiche_edit', {'id': 0}) }}".replace("/0", `/${data.Id}`);
+        const baseUrlDupliquer = "{{ path('fiche_dupliquer', {'ficheID': 0}) }}".replace('/0', '');
+        const baseUrlDelete = "{{ path('delete_fiche', {'id': 0}) }}".replace('/0', '');
+
+        let actions = `
+        <a href="${baseUrlAfficher}/${data.Id}?index=${rowIndex}&total=${totalRows}"
+        class="btn btn-primary btn-sm me-2 tooltip-link" data-tooltip="Afficher la fiche">
+            <i class="fas fa-eye me-1"></i>
+        </a>
+        <a href="#" 
+            class="btn btn-outline-secondary btn-sm tooltip-link" data-tooltip="Exporter la fiche"
+            data-toggle="modal" 
+            data-target="#exportModal" 
+            data-ficheid="${data.Id}">
+                <i class="fas fa-download me-1"></i>
+        </a>
+`;
+
+        // Check if the user is an admin or has permission based on their ID
+        if (isAdmin || data.canEdit) {
+            actions += `
+                <a href="${baseUrlEdit}" class="btn btn-outline-primary btn-sm me-2 tooltip-link" data-tooltip="Modifier la fiche">
+                    <i class="fas fa-edit me-1"></i>
+                </a>
+        <a href="${baseUrlDupliquer}/${data.Id}" class="btn btn-outline-primary btn-sm me-2 tooltip-link" data-tooltip="Dupliquer la fiche"><i <i class="fas fa-regular fa-clone"></i></a>
+               <a href="#" onclick="return confirmDeleteFiche('${baseUrlDelete}/${data.Id}');"
+                class="btn btn-outline-danger btn-sm delete-link tooltip-link" data-tooltip="Supprimer la fiche">
+                <i class="fas fa-trash me-1"></i>
+               </a>
+            `;
+        }
+
+        return `<td class="actions-td">${actions}</td>`;
+    }
+}
+            ]
+        });
+   });
+    </script>
+    <style>
+    
+.tooltip-link {
+    position: relative;
+    display: inline-block;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Tooltip text */
+.tooltip-link::after {
+    content: attr(data-tooltip); /* Use the attribute value */
+    position: absolute;
+    bottom: 120%; /* Position above the link */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 5px 10px;
+    font-size: 12px;
+    white-space: nowrap;
+    border-radius: 5px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+}
+
+/* Show tooltip on hover */
+.tooltip-link:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+</style>
+{% endblock %}

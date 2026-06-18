@@ -1,0 +1,121 @@
+/*.classs{
+margin: 60px;
+margin-bottom:300px;
+}*/
+@media(max-width:570px){
+    .chart-container{
+      flex-direction: column!important;
+      align-items: center!important;
+    }
+    .export-buttons{
+      flex-direction: column!important;
+    }
+}
+.btn-order {
+	color: var(--bs-teal);
+	border-color: var(--bs-teal);
+	transition: 0.5s;
+
+}
+
+.btn-order:hover,
+.btn-order:focus,
+.btn-order:active {
+	color: #fff;
+	background-color: var(--bs-teal);
+}
+
+ .card-link {
+        color: #007bff; /* Couleur du texte par défaut */
+        text-decoration: none; /* Supprime le soulignement par défaut */
+        margin-right: 10px; /* Marge à droite pour l'espacement */
+    }
+
+    .card-link:hover {
+        text-decoration: underline; /* Soulignement lors du survol */
+    }
+
+    .delete-link {
+        color: #dc3545; /* Couleur du texte pour le lien de suppression */
+    }
+
+    .edit-link {
+        color: #ffc107; /* Couleur du texte pour le lien de modification */
+    }
+  .circle {
+          margin-right: 0px;
+
+       width: 100px;
+       height: 100px;
+       border-radius: 50%;
+       display: flex;
+       justify-content: center;
+       align-items: center;
+       font-weight: bold;
+       font-size: 20px;
+     }
+     .circle-blue {
+       background-color: #007bff;
+       color: white;
+     }
+
+/* Style du conteneur */
+.custom-select {
+  position: relative;
+  font-family: Arial, sans-serif;
+}
+
+/* Style du menu déroulant */
+.custom-select select {
+  display: none; /* masquer le menu déroulant d'origine */
+}
+
+/* Style de la boîte de sélection personnalisée */
+.custom-select .select-box {
+  display: inline-block;
+  padding: 8px 16px;
+  font-size: 16px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f8f9fa;
+  color: #333;
+}
+
+/* Style de la flèche */
+.custom-select .select-arrow {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+}
+
+/* Style des options */
+.custom-select .options-container {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  z-index: 999;
+}
+
+.custom-select .options-container.active {
+  display: block;
+}
+
+.custom-select .option {
+  padding: 8px 16px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.custom-select .option:hover {
+  background-color: #f0f0f0;
+}

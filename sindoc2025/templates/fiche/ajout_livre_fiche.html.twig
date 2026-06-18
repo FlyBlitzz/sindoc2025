@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block head %}
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/ajoutFiche.css') }}">
+
+{% endblock %}
+{% block body %}
+
+    
+
+
+<body>
+    <div class="card-body classs">
+        <h1>Ajouter une fiche</h1>
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+        {{ form_end(form) }}
+    </div>
+    
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+    <script>
+    $(document).ready(function() {
+        $('.select2').select2();
+    });
+    </script>
+    {% endblock %}
