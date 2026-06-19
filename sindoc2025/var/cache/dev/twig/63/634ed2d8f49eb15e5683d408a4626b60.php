@@ -233,35 +233,27 @@ class __TwigTemplate_3d464a3cd81dd7de69d50c7e9d33cc42 extends Template
 (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 135, $this->source); })()), "request", [], "any", false, false, false, 135), "attributes", [], "any", false, false, false, 135), "get", ["_route"], "method", false, false, false, 135) != "app_login")) && (CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source,         // line 136
 (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 136, $this->source); })()), "request", [], "any", false, false, false, 136), "attributes", [], "any", false, false, false, 136), "get", ["_route"], "method", false, false, false, 136) != "app_register"))) {
             // line 137
-            yield "          
-          <div class=\"card-body\" style=\"display:flex;justify-content:flex-end;\">
-          <div>
-              <button onclick=\"goBack()\" class=\"btn btn-outline-secondary\" > < </button>
-              <button onclick=\"goForward()\" class=\"btn btn-outline-secondary\" >></button>
-              </div>
-          </div>
-
+            yield "
         ";
         }
-        // line 146
+        // line 139
         yield "        </div>
-
            
           <div class=\"mainContainer\">
           
           ";
-        // line 152
+        // line 144
         yield "          ";
         $context['_parent'] = $context;
-        $context['_seq'] = CoreExtension::ensureTraversable(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 152, $this->source); })()), "session", [], "any", false, false, false, 152), "flashBag", [], "any", false, false, false, 152), "get", ["info"], "method", false, false, false, 152));
+        $context['_seq'] = CoreExtension::ensureTraversable(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 144, $this->source); })()), "session", [], "any", false, false, false, 144), "flashBag", [], "any", false, false, false, 144), "get", ["info"], "method", false, false, false, 144));
         foreach ($context['_seq'] as $context["_key"] => $context["message"]) {
-            // line 153
+            // line 145
             yield "              ";
             $context["margin_top"] = 8;
-            // line 154
+            // line 146
             yield "              <div class=\"alert alert-info\" style=\"margin-top: 130px; margin-bottom: 10px;\">
                   ";
-            // line 155
+            // line 147
             yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($context["message"], "html", null, true);
             yield "
               </div>
@@ -270,18 +262,18 @@ class __TwigTemplate_3d464a3cd81dd7de69d50c7e9d33cc42 extends Template
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_key'], $context['message'], $context['_parent']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 158
+        // line 150
         yield "          ";
         $context['_parent'] = $context;
-        $context['_seq'] = CoreExtension::ensureTraversable(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 158, $this->source); })()), "session", [], "any", false, false, false, 158), "flashBag", [], "any", false, false, false, 158), "get", ["success"], "method", false, false, false, 158));
+        $context['_seq'] = CoreExtension::ensureTraversable(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 150, $this->source); })()), "session", [], "any", false, false, false, 150), "flashBag", [], "any", false, false, false, 150), "get", ["success"], "method", false, false, false, 150));
         foreach ($context['_seq'] as $context["_key"] => $context["message"]) {
-            // line 159
+            // line 151
             yield "              ";
             $context["margin_top"] = 8;
-            // line 160
+            // line 152
             yield "              <div class=\"alert alert-success\" style=\"margin-top: 130px; margin-bottom: 10px;\">
                   ";
-            // line 161
+            // line 153
             yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($context["message"], "html", null, true);
             yield "
               </div>
@@ -290,18 +282,18 @@ class __TwigTemplate_3d464a3cd81dd7de69d50c7e9d33cc42 extends Template
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_key'], $context['message'], $context['_parent']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 164
+        // line 156
         yield "          ";
         $context['_parent'] = $context;
-        $context['_seq'] = CoreExtension::ensureTraversable(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 164, $this->source); })()), "session", [], "any", false, false, false, 164), "flashBag", [], "any", false, false, false, 164), "get", ["error"], "method", false, false, false, 164));
+        $context['_seq'] = CoreExtension::ensureTraversable(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 156, $this->source); })()), "session", [], "any", false, false, false, 156), "flashBag", [], "any", false, false, false, 156), "get", ["error"], "method", false, false, false, 156));
         foreach ($context['_seq'] as $context["_key"] => $context["message"]) {
-            // line 165
+            // line 157
             yield "              ";
             $context["margin_top"] = 8;
-            // line 166
+            // line 158
             yield "              <div class=\"alert alert-danger\" style=\"margin-top: 130px;margin-bottom: 10px;\">
                   ";
-            // line 167
+            // line 159
             yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($context["message"], "html", null, true);
             yield "
               </div>
@@ -310,27 +302,27 @@ class __TwigTemplate_3d464a3cd81dd7de69d50c7e9d33cc42 extends Template
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_key'], $context['message'], $context['_parent']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 170
+        // line 162
         yield " 
 
             
             ";
-        // line 173
+        // line 165
         yield from $this->unwrap()->yieldBlock('body', $context, $blocks);
-        // line 174
+        // line 166
         yield "            ";
         $context["margin_bottom"] = 250;
-        // line 175
+        // line 167
         yield "            </div>
             <div class=\"push\"></div>
             ";
-        // line 177
-        yield from $this->load("footer.html.twig", 177)->unwrap()->yield($context);
-        // line 178
+        // line 169
+        yield from $this->load("footer.html.twig", 169)->unwrap()->yield($context);
+        // line 170
         yield "            
             
             ";
-        // line 183
+        // line 175
         yield "           \t<script src=\"";
         yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Symfony\Bridge\Twig\Extension\AssetExtension']->getAssetUrl("js/bootstrap.bundle.min.js"), "html", null, true);
         yield "\"></script>
@@ -352,7 +344,7 @@ class __TwigTemplate_3d464a3cd81dd7de69d50c7e9d33cc42 extends Template
             </script>
 
 ";
-        // line 233
+        // line 225
         yield "
 
  <!-- Scripts d\x27initialisation CKEditor 5 -->
@@ -401,12 +393,8 @@ class __TwigTemplate_3d464a3cd81dd7de69d50c7e9d33cc42 extends Template
                 }, 500);
             });
         </script>
-
-
-
     </body>
-</html>
-";
+</html>";
         
         $__internal_5a27a8ba21ca79b61932376b2fa922d2->leave($__internal_5a27a8ba21ca79b61932376b2fa922d2_prof);
 
@@ -533,7 +521,7 @@ class __TwigTemplate_3d464a3cd81dd7de69d50c7e9d33cc42 extends Template
         yield from [];
     }
 
-    // line 173
+    // line 165
     /**
      * @return iterable<null|scalar|\Stringable>
      */
@@ -576,7 +564,7 @@ class __TwigTemplate_3d464a3cd81dd7de69d50c7e9d33cc42 extends Template
      */
     public function getDebugInfo(): array
     {
-        return array (  537 => 173,  524 => 32,  520 => 31,  514 => 29,  501 => 28,  482 => 19,  478 => 17,  465 => 16,  443 => 15,  420 => 5,  356 => 233,  334 => 183,  330 => 178,  328 => 177,  324 => 175,  321 => 174,  319 => 173,  314 => 170,  305 => 167,  302 => 166,  299 => 165,  294 => 164,  285 => 161,  282 => 160,  279 => 159,  274 => 158,  265 => 155,  262 => 154,  259 => 153,  254 => 152,  247 => 146,  236 => 137,  234 => 136,  233 => 135,  232 => 134,  231 => 133,  230 => 132,  227 => 131,  222 => 128,  219 => 127,  211 => 121,  204 => 117,  199 => 114,  197 => 113,  193 => 111,  191 => 110,  188 => 109,  185 => 108,  183 => 107,  180 => 106,  177 => 104,  174 => 103,  172 => 102,  161 => 93,  116 => 50,  114 => 49,  97 => 34,  95 => 28,  92 => 27,  89 => 16,  87 => 15,  81 => 12,  75 => 9,  71 => 8,  67 => 7,  63 => 6,  59 => 5,  53 => 1,);
+        return array (  525 => 165,  512 => 32,  508 => 31,  502 => 29,  489 => 28,  470 => 19,  466 => 17,  453 => 16,  431 => 15,  408 => 5,  348 => 225,  326 => 175,  322 => 170,  320 => 169,  316 => 167,  313 => 166,  311 => 165,  306 => 162,  297 => 159,  294 => 158,  291 => 157,  286 => 156,  277 => 153,  274 => 152,  271 => 151,  266 => 150,  257 => 147,  254 => 146,  251 => 145,  246 => 144,  240 => 139,  236 => 137,  234 => 136,  233 => 135,  232 => 134,  231 => 133,  230 => 132,  227 => 131,  222 => 128,  219 => 127,  211 => 121,  204 => 117,  199 => 114,  197 => 113,  193 => 111,  191 => 110,  188 => 109,  185 => 108,  183 => 107,  180 => 106,  177 => 104,  174 => 103,  172 => 102,  161 => 93,  116 => 50,  114 => 49,  97 => 34,  95 => 28,  92 => 27,  89 => 16,  87 => 15,  81 => 12,  75 => 9,  71 => 8,  67 => 7,  63 => 6,  59 => 5,  53 => 1,);
     }
 
     public function getSourceContext(): Source
@@ -717,17 +705,9 @@ class __TwigTemplate_3d464a3cd81dd7de69d50c7e9d33cc42 extends Template
                         and app.request.attributes.get(\x27_route\x27) !=\x27admin_get_base_html\x27
                             and app.request.attributes.get(\x27_route\x27) !=\x27app_login\x27
                                 and app.request.attributes.get(\x27_route\x27) !=\x27app_register\x27%}
-          
-          <div class=\"card-body\" style=\"display:flex;justify-content:flex-end;\">
-          <div>
-              <button onclick=\"goBack()\" class=\"btn btn-outline-secondary\" > < </button>
-              <button onclick=\"goForward()\" class=\"btn btn-outline-secondary\" >></button>
-              </div>
-          </div>
 
         {% endif %}
         </div>
-
            
           <div class=\"mainContainer\">
           
@@ -861,11 +841,7 @@ class __TwigTemplate_3d464a3cd81dd7de69d50c7e9d33cc42 extends Template
                 }, 500);
             });
         </script>
-
-
-
     </body>
-</html>
-", "base.html.twig", "D:\\nvillard\\Mes documents\\sindoc2025\\sindoc2025\\templates\\base.html.twig");
+</html>", "base.html.twig", "D:\\nvillard\\Mes documents\\sindoc2025\\sindoc2025\\templates\\base.html.twig");
     }
 }

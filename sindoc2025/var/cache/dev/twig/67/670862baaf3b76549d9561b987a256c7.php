@@ -47,7 +47,7 @@ class __TwigTemplate_16800153ffd087a17dc21769e1e5bc96 extends Template
 
         // line 1
         yield from $this->unwrap()->yieldBlock('body', $context, $blocks);
-        // line 358
+        // line 355
         yield "
 <script>
 document.addEventListener(\"DOMContentLoaded\", function () {
@@ -60,34 +60,34 @@ document.addEventListener(\"DOMContentLoaded\", function () {
 });
 
 ";
-        // line 369
-        if ((($tmp = CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 369, $this->source); })()), "session", [], "any", false, false, false, 369), "get", ["openLivrePopup"], "method", false, false, false, 369)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
-            // line 370
+        // line 366
+        if ((($tmp = CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 366, $this->source); })()), "session", [], "any", false, false, false, 366), "get", ["openLivrePopup"], "method", false, false, false, 366)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
+            // line 367
             yield "    // Ouvre automatiquement le pop-up de sélection de livre
     setTimeout(function() {
         const livreModal = new bootstrap.Modal(document.getElementById(\x27livreModal\x27));
         livreModal.show();
     }, 800); // Délai pour laisser le fetch des livres se terminer
     ";
-            // line 375
-            CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 375, $this->source); })()), "session", [], "any", false, false, false, 375), "remove", ["openLivrePopup"], "method", false, false, false, 375);
+            // line 372
+            CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 372, $this->source); })()), "session", [], "any", false, false, false, 372), "remove", ["openLivrePopup"], "method", false, false, false, 372);
         }
-        // line 377
+        // line 374
         yield "</script>
 ";
-        // line 378
-        if (!CoreExtension::inFilter(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 378, $this->source); })()), "request", [], "any", false, false, false, 378), "attributes", [], "any", false, false, false, 378), "get", ["_route"], "method", false, false, false, 378), ["app_login"])) {
-            // line 379
+        // line 375
+        if (!CoreExtension::inFilter(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 375, $this->source); })()), "request", [], "any", false, false, false, 375), "attributes", [], "any", false, false, false, 375), "get", ["_route"], "method", false, false, false, 375), ["app_login"])) {
+            // line 376
             yield "<script>
  const isAdmin = ";
-            // line 380
+            // line 377
             yield (((($tmp = $this->extensions['Symfony\Bridge\Twig\Extension\SecurityExtension']->isGranted("ROLE_ADMIN")) && $tmp instanceof Markup ? (string) $tmp : $tmp)) ? ("true") : ("false"));
             yield ";
  let canEdit = false; 
   document.addEventListener(\"DOMContentLoaded\", function () {
         // Fetch books from backend
         fetch(\"";
-            // line 384
+            // line 381
             yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_livre_app_livre_get_livre_dropdown");
             yield "\")
             .then(response => response.json())
@@ -159,9 +159,8 @@ document.getElementById(\"livreFormSelect\").addEventListener(\"submit\", functi
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert(\"Livre sélectionné avec succès !\");
             window.location.href = \"";
-            // line 455
+            // line 451
             yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_home");
             yield "\";
         } else {
@@ -178,9 +177,6 @@ document.getElementById(\"livreFormSelect\").addEventListener(\"submit\", functi
 });
   });
 </script>
-
-
-
 ";
         }
         
@@ -206,10 +202,7 @@ document.getElementById(\"livreFormSelect\").addEventListener(\"submit\", functi
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f->enter($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof = new \Twig\Profiler\Profile($this->getTemplateName(), "block", "body"));
 
         // line 2
-        yield "
-
-\t
-\t\t<div class=\"modal fade\" id=\"livreModal\" tabindex=\"-1\" aria-labelledby=\"livreModalLabel\" aria-hidden=\"true\">
+        yield "\t\t<div class=\"modal fade\" id=\"livreModal\" tabindex=\"-1\" aria-labelledby=\"livreModalLabel\" aria-hidden=\"true\">
 \t\t\t<div class=\"modal-dialog\">
 \t\t\t\t<div class=\"modal-content\">
 \t\t\t\t\t<div class=\"modal-header\">
@@ -218,7 +211,7 @@ document.getElementById(\"livreFormSelect\").addEventListener(\"submit\", functi
 \t\t\t\t\t</div>
 \t\t\t\t\t<div class=\"modal-body\">
 \t\t\t\t\t\t<form id=\"livreFormSelect\" action=\"";
-        // line 13
+        // line 10
         yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_livre_app_livre_set_livre_session");
         yield "\" method=\"POST\">
 \t\t\t\t\t\t\t<label for=\"livre\">Veuillez choisir un livre</label>
@@ -236,11 +229,11 @@ document.getElementById(\"livreFormSelect\").addEventListener(\"submit\", functi
 \t\t</div>
         <nav class=\"navbar\">
          <a href=\"";
-        // line 28
+        // line 25
         yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_home");
         yield "\" class=\"nav-logo\">
             <img src=\"";
-        // line 29
+        // line 26
         yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Symfony\Bridge\Twig\Extension\AssetExtension']->getAssetUrl("images/Logo-ista.png"), "html", null, true);
         yield "\" style=\"width:40%; margin-left: 60px; \" alt=\"ISTA Logo\" class=\"logo-image \">
         </a>
@@ -249,91 +242,91 @@ document.getElementById(\"livreFormSelect\").addEventListener(\"submit\", functi
         
         <div class=\"hamburger\" id=\"hamburger\" style=\"font-size:3em;\">
             ";
-        // line 38
+        // line 35
         yield "            <i class=\"fa-solid fa-bars\"></i>
         </div>
 
         <ul class=\"nav-menu\" id=\"nav-menu\">
             ";
-        // line 42
+        // line 39
         if (($this->extensions['Symfony\Bridge\Twig\Extension\SecurityExtension']->isGranted("ROLE_ADMIN") || $this->extensions['Symfony\Bridge\Twig\Extension\SecurityExtension']->isGranted("ROLE_USER"))) {
-            // line 43
+            // line 40
             yield "                ";
-            if ((($tmp = CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 43, $this->source); })()), "user", [], "any", false, false, false, 43)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
-                // line 44
+            if ((($tmp = CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 40, $this->source); })()), "user", [], "any", false, false, false, 40)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
+                // line 41
                 yield "                    ";
-                if ((($this->extensions['Symfony\Bridge\Twig\Extension\SecurityExtension']->isGranted("ROLE_ADMIN") || $this->extensions['Symfony\Bridge\Twig\Extension\SecurityExtension']->isGranted("ROLE_USER")) || (isset($context["canEdit"]) || array_key_exists("canEdit", $context) ? $context["canEdit"] : (function () { throw new RuntimeError('Variable "canEdit" does not exist.', 44, $this->source); })()))) {
-                    // line 45
+                if ((($this->extensions['Symfony\Bridge\Twig\Extension\SecurityExtension']->isGranted("ROLE_ADMIN") || $this->extensions['Symfony\Bridge\Twig\Extension\SecurityExtension']->isGranted("ROLE_USER")) || (isset($context["canEdit"]) || array_key_exists("canEdit", $context) ? $context["canEdit"] : (function () { throw new RuntimeError('Variable "canEdit" does not exist.', 41, $this->source); })()))) {
+                    // line 42
                     yield "                        <li id=\"canEditUser\"><a href=\"#\" data-bs-toggle=\"modal\" data-bs-target=\"#livreModal\">Livre</a></li>
                     ";
                 }
-                // line 47
+                // line 44
                 yield "                    <li><a href=\"";
                 yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("fiche_recherche");
                 yield "\" class=\"";
-                if (CoreExtension::inFilter(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 47, $this->source); })()), "request", [], "any", false, false, false, 47), "attributes", [], "any", false, false, false, 47), "get", ["_route"], "method", false, false, false, 47), ["fiche_recherche", "deuxieme_fiche_recherche", "fiche_recherche_resultat"])) {
+                if (CoreExtension::inFilter(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 44, $this->source); })()), "request", [], "any", false, false, false, 44), "attributes", [], "any", false, false, false, 44), "get", ["_route"], "method", false, false, false, 44), ["fiche_recherche", "deuxieme_fiche_recherche", "fiche_recherche_resultat"])) {
                     yield "active";
                 }
                 yield "\">Rechercher une fiche</a></li>
                     <li><a href=\"";
-                // line 48
+                // line 45
                 yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("savreq_app_sav_requete_index");
                 yield "\" class=\"";
-                if ((CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 48, $this->source); })()), "request", [], "any", false, false, false, 48), "attributes", [], "any", false, false, false, 48), "get", ["_route"], "method", false, false, false, 48) == "savreq_app_sav_requete_index")) {
+                if ((CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 45, $this->source); })()), "request", [], "any", false, false, false, 45), "attributes", [], "any", false, false, false, 45), "get", ["_route"], "method", false, false, false, 45) == "savreq_app_sav_requete_index")) {
                     yield "active";
                 }
                 yield "\">Requêtes enregistrées</a></li>
                     <li><a href=\"";
-                // line 49
+                // line 46
                 yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("savreq_app_recherche");
                 yield "\" class=\"";
-                if ((CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 49, $this->source); })()), "request", [], "any", false, false, false, 49), "attributes", [], "any", false, false, false, 49), "get", ["_route"], "method", false, false, false, 49) == "savreq_app_recherche")) {
+                if ((CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 46, $this->source); })()), "request", [], "any", false, false, false, 46), "attributes", [], "any", false, false, false, 46), "get", ["_route"], "method", false, false, false, 46) == "savreq_app_recherche")) {
                     yield "active";
                 }
                 yield "\">Recherche multicritères</a></li>
                     ";
-                // line 50
-                if (($this->extensions['Symfony\Bridge\Twig\Extension\SecurityExtension']->isGranted("ROLE_ADMIN") || (isset($context["canEdit"]) || array_key_exists("canEdit", $context) ? $context["canEdit"] : (function () { throw new RuntimeError('Variable "canEdit" does not exist.', 50, $this->source); })()))) {
-                    // line 51
+                // line 47
+                if (($this->extensions['Symfony\Bridge\Twig\Extension\SecurityExtension']->isGranted("ROLE_ADMIN") || (isset($context["canEdit"]) || array_key_exists("canEdit", $context) ? $context["canEdit"] : (function () { throw new RuntimeError('Variable "canEdit" does not exist.', 47, $this->source); })()))) {
+                    // line 48
                     yield "                        <li id=\"canEditUser\"><a href=\"";
                     yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("add_fiche");
                     yield "\" class=\"";
-                    if (CoreExtension::inFilter(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 51, $this->source); })()), "request", [], "any", false, false, false, 51), "attributes", [], "any", false, false, false, 51), "get", ["_route"], "method", false, false, false, 51), ["add_fiche", "deuxieme_formulaire_route"])) {
+                    if (CoreExtension::inFilter(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 48, $this->source); })()), "request", [], "any", false, false, false, 48), "attributes", [], "any", false, false, false, 48), "get", ["_route"], "method", false, false, false, 48), ["add_fiche", "deuxieme_formulaire_route"])) {
                         yield "active";
                     }
                     yield "\">Ajouter une Fiche</a></li>
                     ";
                 }
-                // line 53
+                // line 50
                 yield "                    ";
                 if ((($tmp = $this->extensions['Symfony\Bridge\Twig\Extension\SecurityExtension']->isGranted("ROLE_ADMIN")) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
-                    // line 54
+                    // line 51
                     yield "                        <li><a href=\"";
                     yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("admin_index");
                     yield "\" class=\"";
-                    if ((CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 54, $this->source); })()), "request", [], "any", false, false, false, 54), "attributes", [], "any", false, false, false, 54), "get", ["_route"], "method", false, false, false, 54) == "admin_index")) {
+                    if ((CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 51, $this->source); })()), "request", [], "any", false, false, false, 51), "attributes", [], "any", false, false, false, 51), "get", ["_route"], "method", false, false, false, 51) == "admin_index")) {
                         yield "active";
                     }
                     yield "\">ADMINISTRATION</a></li>
                     ";
                 }
-                // line 56
+                // line 53
                 yield "                    <li><a href=\"";
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_admin_app_users_show", ["id" => CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 56, $this->source); })()), "user", [], "any", false, false, false, 56), "getId", [], "method", false, false, false, 56)]), "html", null, true);
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_admin_app_users_show", ["id" => CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 53, $this->source); })()), "user", [], "any", false, false, false, 53), "getId", [], "method", false, false, false, 53)]), "html", null, true);
                 yield "\" 
                     class=\"";
-                // line 57
-                if ((CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 57, $this->source); })()), "request", [], "any", false, false, false, 57), "attributes", [], "any", false, false, false, 57), "get", ["_route"], "method", false, false, false, 57) == "app_admin_app_users_show")) {
+                // line 54
+                if ((CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 54, $this->source); })()), "request", [], "any", false, false, false, 54), "attributes", [], "any", false, false, false, 54), "get", ["_route"], "method", false, false, false, 54) == "app_admin_app_users_show")) {
                     yield "active";
                 }
                 yield "\">
                         <i class=\"fas fa-user\"></i> ";
-                // line 58
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 58, $this->source); })()), "user", [], "any", false, false, false, 58), "getUsername", [], "method", false, false, false, 58), "html", null, true);
+                // line 55
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 55, $this->source); })()), "user", [], "any", false, false, false, 55), "getUsername", [], "method", false, false, false, 55), "html", null, true);
                 yield "</a></li>
                     <li>
     <a href=\"";
-                // line 60
+                // line 57
                 yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_logout");
                 yield "\" >
         <i class=\"fas fa-sign-out-alt\"></i> Me déconnecter
@@ -343,72 +336,72 @@ document.getElementById(\"livreFormSelect\").addEventListener(\"submit\", functi
 
                 ";
             } else {
-                // line 67
+                // line 64
                 yield "                    <li><a href=\"";
                 yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_login");
                 yield "\">Connexion</a></li>
                     <li><a href=\"";
-                // line 68
+                // line 65
                 yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_register");
                 yield "\">Inscription</a></li>
                     <li><a href=\"";
-                // line 69
+                // line 66
                 yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("fiche_recherche");
                 yield "\" class=\"";
-                if (CoreExtension::inFilter(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 69, $this->source); })()), "request", [], "any", false, false, false, 69), "attributes", [], "any", false, false, false, 69), "get", ["_route"], "method", false, false, false, 69), ["fiche_recherche", "deuxieme_fiche_recherche"])) {
+                if (CoreExtension::inFilter(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 66, $this->source); })()), "request", [], "any", false, false, false, 66), "attributes", [], "any", false, false, false, 66), "get", ["_route"], "method", false, false, false, 66), ["fiche_recherche", "deuxieme_fiche_recherche"])) {
                     yield "active";
                 }
                 yield "\">Rechercher une fiche</a></li>
                     <li><a href=\"";
-                // line 70
+                // line 67
                 yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("savreq_app_sav_requete_index");
                 yield "\" class=\"";
-                if ((CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 70, $this->source); })()), "request", [], "any", false, false, false, 70), "attributes", [], "any", false, false, false, 70), "get", ["_route"], "method", false, false, false, 70) == "savreq_app_sav_requete_index")) {
+                if ((CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 67, $this->source); })()), "request", [], "any", false, false, false, 67), "attributes", [], "any", false, false, false, 67), "get", ["_route"], "method", false, false, false, 67) == "savreq_app_sav_requete_index")) {
                     yield "active";
                 }
                 yield "\">Recherche multicritères</a></li>
                 ";
             }
-            // line 72
+            // line 69
             yield "            ";
         } else {
-            // line 73
+            // line 70
             yield "                <li><a href=\"";
             yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_login");
             yield "\" class=\"";
-            if (CoreExtension::inFilter(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 73, $this->source); })()), "request", [], "any", false, false, false, 73), "attributes", [], "any", false, false, false, 73), "get", ["_route"], "method", false, false, false, 73), ["app_login"])) {
+            if (CoreExtension::inFilter(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 70, $this->source); })()), "request", [], "any", false, false, false, 70), "attributes", [], "any", false, false, false, 70), "get", ["_route"], "method", false, false, false, 70), ["app_login"])) {
                 yield "active";
             }
             yield "\">Connexion</a></li>
                 <li><a href=\"";
-            // line 74
+            // line 71
             yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_register");
             yield "\" class=\"";
-            if (CoreExtension::inFilter(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 74, $this->source); })()), "request", [], "any", false, false, false, 74), "attributes", [], "any", false, false, false, 74), "get", ["_route"], "method", false, false, false, 74), ["app_register"])) {
+            if (CoreExtension::inFilter(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 71, $this->source); })()), "request", [], "any", false, false, false, 71), "attributes", [], "any", false, false, false, 71), "get", ["_route"], "method", false, false, false, 71), ["app_register"])) {
                 yield "active";
             }
             yield "\">Inscription</a></li>
                 ";
-            // line 76
+            // line 73
             yield "                <li><a href=\"";
             yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("fiche_recherche");
             yield "\" class=\"";
-            if (CoreExtension::inFilter(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 76, $this->source); })()), "request", [], "any", false, false, false, 76), "attributes", [], "any", false, false, false, 76), "get", ["_route"], "method", false, false, false, 76), ["fiche_recherche", "deuxieme_fiche_recherche"])) {
+            if (CoreExtension::inFilter(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 73, $this->source); })()), "request", [], "any", false, false, false, 73), "attributes", [], "any", false, false, false, 73), "get", ["_route"], "method", false, false, false, 73), ["fiche_recherche", "deuxieme_fiche_recherche"])) {
                 yield "active";
             }
             yield "\">Rechercher une fiche</a></li>
                 <li><a href=\"";
-            // line 77
+            // line 74
             yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("visiteur_multi_requetes");
             yield "\">Recherche multicritères</a></li>
             ";
         }
-        // line 79
+        // line 76
         yield "        </ul>
     </div>
 </nav>
 \t\t";
-        // line 223
+        // line 220
         yield "
 <style>
 * {
@@ -429,7 +422,7 @@ document.getElementById(\"livreFormSelect\").addEventListener(\"submit\", functi
     z-index: 1000;
 }
 ";
-        // line 245
+        // line 242
         yield ".nav-container {
     display: flex;
     justify-content: space-between;
@@ -541,7 +534,7 @@ document.getElementById(\"livreFormSelect\").addEventListener(\"submit\", functi
 </style>
 
 <script src=\"";
-        // line 355
+        // line 352
         yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Symfony\Bridge\Twig\Extension\AssetExtension']->getAssetUrl("js/bootstrap.bundle.min.js"), "html", null, true);
         yield "\"></script>
 
@@ -576,15 +569,12 @@ document.getElementById(\"livreFormSelect\").addEventListener(\"submit\", functi
      */
     public function getDebugInfo(): array
     {
-        return array (  545 => 355,  433 => 245,  412 => 223,  407 => 79,  402 => 77,  393 => 76,  385 => 74,  376 => 73,  373 => 72,  364 => 70,  356 => 69,  352 => 68,  347 => 67,  337 => 60,  332 => 58,  326 => 57,  321 => 56,  311 => 54,  308 => 53,  298 => 51,  296 => 50,  288 => 49,  280 => 48,  271 => 47,  267 => 45,  264 => 44,  261 => 43,  259 => 42,  253 => 38,  244 => 29,  240 => 28,  222 => 13,  209 => 2,  196 => 1,  165 => 455,  91 => 384,  84 => 380,  81 => 379,  79 => 378,  76 => 377,  73 => 375,  66 => 370,  64 => 369,  51 => 358,  49 => 1,);
+        return array (  538 => 352,  426 => 242,  405 => 220,  400 => 76,  395 => 74,  386 => 73,  378 => 71,  369 => 70,  366 => 69,  357 => 67,  349 => 66,  345 => 65,  340 => 64,  330 => 57,  325 => 55,  319 => 54,  314 => 53,  304 => 51,  301 => 50,  291 => 48,  289 => 47,  281 => 46,  273 => 45,  264 => 44,  260 => 42,  257 => 41,  254 => 40,  252 => 39,  246 => 35,  237 => 26,  233 => 25,  215 => 10,  205 => 2,  192 => 1,  164 => 451,  91 => 381,  84 => 377,  81 => 376,  79 => 375,  76 => 374,  73 => 372,  66 => 367,  64 => 366,  51 => 355,  49 => 1,);
     }
 
     public function getSourceContext(): Source
     {
         return new Source("{% block body %}
-
-
-\t
 \t\t<div class=\"modal fade\" id=\"livreModal\" tabindex=\"-1\" aria-labelledby=\"livreModalLabel\" aria-hidden=\"true\">
 \t\t\t<div class=\"modal-dialog\">
 \t\t\t\t<div class=\"modal-content\">
@@ -1034,7 +1024,6 @@ document.getElementById(\"livreFormSelect\").addEventListener(\"submit\", functi
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert(\"Livre sélectionné avec succès !\");
             window.location.href = \"{{ path(\"app_home\") }}\";
         } else {
             alert(\"Erreur: \" + data.message);
@@ -1050,10 +1039,6 @@ document.getElementById(\"livreFormSelect\").addEventListener(\"submit\", functi
 });
   });
 </script>
-
-
-
-{% endif %}
-", "header.html.twig", "D:\\nvillard\\Mes documents\\sindoc2025\\sindoc2025\\templates\\header.html.twig");
+{% endif %}", "header.html.twig", "D:\\nvillard\\Mes documents\\sindoc2025\\sindoc2025\\templates\\header.html.twig");
     }
 }

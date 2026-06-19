@@ -7,10 +7,8 @@ use App\Entity\Livre;
 use App\Entity\MotCle;
 use App\Entity\Statut;
 use App\Repository\StatutRepository;
-
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
-use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -19,7 +17,6 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Validator\Constraints\Positive;
-use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Constraints\Type;
 
 class RechercheFicheType extends AbstractType
@@ -29,39 +26,32 @@ class RechercheFicheType extends AbstractType
         $livreAssocie = $options['livreAssocie'];
 
         $builder
-        ->add('num_fiche', IntegerType::class, [
-            'label' => 'Numéro de fiche',
-            'attr' => [
-                'min' => 1,  // Only positive numbers
-                'step' => 1, // No decimals
-            ],
-            'constraints' => [
-                new Type([
-                    'type' => 'integer',
-                    'message' => 'Entrez un numéro de fiche valide.'
-                ]),
-                new Positive([
-                    'message' => 'Le numéro de fiche doit être positif.'
-                ]),
-            ],
-        ])
-        
-        // ->add('id', null, [
-        //     'label' => 'Numéro de fiche',
-        //     // 'attr' => [
-        //     //     'min' => 1,  // Only positive numbers
-        //     //     'step' => 1, // No decimals
-        //     // ],
-        //     // 'constraints' => [
-        //     //     new Type([
-        //     //         'type' => 'integer',
-        //     //         'message' => 'Entrez un numéro de fiche valide.'
-        //     //     ]),
-        //     //     new Positive(['message' => 'Le numéro de fiche doit etre positif.']),
-        //     // ],
-        // ])
+            ->add('num_fiche', IntegerType::class, [
+                'label' => 'Numéro de fiche',
+                'attr' => [
+                    'min' => 1,  // Only positive numbers
+                    'step' => 1, // No decimals
+                ],
+                'constraints' => [
+                    new Type(type: 'integer', message: 'Entrez un numéro de fiche valide.'),
+                    new Positive(message: 'Le numéro de fiche doit etre positif.')
+                ],
+            ])
+
+            // ->add('id', null, [
+            //     'label' => 'Numéro de fiche',
+            //     // 'attr' => [
+            //     //     'min' => 1,  // Only positive numbers
+            //     //     'step' => 1, // No decimals
+            //     // ],
+            //     // 'constraints' => [
+            //     //     new Type(type: 'integer', message: 'Entrez un numéro de fiche valide.'),
+            //     //     new Positive(message: 'Le numéro de fiche doit etre positif.')
+            //     // ],
+            // ])
             ->add('refer', null, [
-                      'label' => 'Référence',])
+                'label' => 'Référence',
+            ])
             ->add('edition')
             ->add('refer_bis')
             ->add('denomination')
@@ -86,7 +76,7 @@ class RechercheFicheType extends AbstractType
             ->add('motCles', EntityType::class, [
                 'class' => MotCle::class,
                 'choice_label' => function (MotCle $motCle) {
-                    return sprintf('%s - %s',  $motCle->getReference(), $motCle->getDenomination());
+                    return sprintf('%s - %s', $motCle->getReference(), $motCle->getDenomination());
                 },
                 'expanded' => false,
                 'multiple' => true,
@@ -102,54 +92,54 @@ class RechercheFicheType extends AbstractType
                 'attr' => [
                     'class' => 'select2 motClesSelect',
                 ],
-                  'label' => 'Mots Clés',
+                'label' => 'Mots Clés',
 
                 'choice_attr' => function ($choice, $key, $value) {
                     return ['data-reference' => $choice->getReference()];
 
-            },
+                },
 
             ])
 
 
-                 ->add('et', ButtonType::class, [
-                     'label' => 'ET',
-                     'attr' => [
-                         'class' => 'btn btn-secondary  buttonET', // Ajoutez des classes CSS au besoin
-                     ],
-                     'row_attr' => ['class' => 'inline-button'], // pour afficher le bouton sur la même ligne
-                 ])
-                 ->add('ou', SubmitType::class, [
-                     'label' => 'OU',
-                     'attr' => [
-                         'class' => 'btn btn-secondary buttonOU', // Ajoutez des classes CSS au besoin
-                     ],
-                     'row_attr' => ['class' => 'inline-button'], // pour afficher le bouton sur la même ligne
-                 ])
-                  ->add('not', SubmitType::class, [
-                     'label' => 'NOT',
-                     'attr' => [
-                         'class' => 'btn btn-secondary buttonNOT', // Ajoutez des classes CSS au besoin
-                     ],
-                     'row_attr' => ['class' => 'inline-button'], // pour afficher le bouton sur la même ligne
-                 ])
-                 ->add('ajouterParentheseGauche', ButtonType::class, [
-                     'label' => '(',
-                     'attr' => ['class' => 'btn btn-secondary  ajouter-parenthese-gauche-btn'],
-                     'row_attr' => ['class' => 'inline-button'], // pour afficher le bouton sur la même ligne
-                 ])
-                 ->add('ajouterParentheseDroite', ButtonType::class, [
-                     'label' => ')',
-                     'attr' => ['class' => 'btn btn-secondary  ajouter-parenthese-droite-btn'],
-                     'row_attr' => ['class' => 'inline-button'], // pour afficher le bouton sur la même ligne
-                 ])
-                 ->add('supprimer', ButtonType::class, [
-                     'label' => 'Supprimer',
-                     'attr' => [
-                         'class' => 'btn btn-danger supprimer-btn supprimerContenu', // Ajoutez des classes CSS au besoin pour le style
-                     ],
-                     'row_attr' => ['class' => 'inline-button'], // pour afficher le bouton sur la même ligne
-                 ])
+            ->add('et', ButtonType::class, [
+                'label' => 'ET',
+                'attr' => [
+                    'class' => 'btn btn-secondary  buttonET', // Ajoutez des classes CSS au besoin
+                ],
+                'row_attr' => ['class' => 'inline-button'], // pour afficher le bouton sur la même ligne
+            ])
+            ->add('ou', SubmitType::class, [
+                'label' => 'OU',
+                'attr' => [
+                    'class' => 'btn btn-secondary buttonOU', // Ajoutez des classes CSS au besoin
+                ],
+                'row_attr' => ['class' => 'inline-button'], // pour afficher le bouton sur la même ligne
+            ])
+            ->add('not', SubmitType::class, [
+                'label' => 'NOT',
+                'attr' => [
+                    'class' => 'btn btn-secondary buttonNOT', // Ajoutez des classes CSS au besoin
+                ],
+                'row_attr' => ['class' => 'inline-button'], // pour afficher le bouton sur la même ligne
+            ])
+            ->add('ajouterParentheseGauche', ButtonType::class, [
+                'label' => '(',
+                'attr' => ['class' => 'btn btn-secondary  ajouter-parenthese-gauche-btn'],
+                'row_attr' => ['class' => 'inline-button'], // pour afficher le bouton sur la même ligne
+            ])
+            ->add('ajouterParentheseDroite', ButtonType::class, [
+                'label' => ')',
+                'attr' => ['class' => 'btn btn-secondary  ajouter-parenthese-droite-btn'],
+                'row_attr' => ['class' => 'inline-button'], // pour afficher le bouton sur la même ligne
+            ])
+            ->add('supprimer', ButtonType::class, [
+                'label' => 'Supprimer',
+                'attr' => [
+                    'class' => 'btn btn-danger supprimer-btn supprimerContenu', // Ajoutez des classes CSS au besoin pour le style
+                ],
+                'row_attr' => ['class' => 'inline-button'], // pour afficher le bouton sur la même ligne
+            ])
 
             ->add('motClesRechercher', TextType::class, [
                 'label' => false,
@@ -160,7 +150,7 @@ class RechercheFicheType extends AbstractType
             ])
 
 
-           ->add(child:'rechercher', type:SubmitType::class)
+            ->add(child: 'rechercher', type: SubmitType::class)
 
 
 

@@ -42,25 +42,18 @@ class FicheTypeEdit extends AbstractType
             ->add('livre')
             ->add('refer', null, [
                 'label' => 'Référence (*)',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Ce champ est obligatoire. Il doit être rempli.',
-                    ]),
-                ],
+                'constraints' => [new NotBlank(message: 'Ce champ est obligatoire. Il doit être rempli.')],
             ])
             ->add('edition', TextType::class, [
                 'required' => false, // Permet d'envoyer un champ vide
                 'empty_data' => '',  // Remplace `null` par une chaîne vide
             ])
             ->add('refer_bis', TextType::class, [
-                'required' => false,])
+                'required' => false,
+            ])
             ->add('denomination', null, [
                 'label' => 'Dénomination (*)',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Ce champ est obligatoire. Veuillez donner une denomination.',
-                    ]),
-                ],
+                'constraints' => [new NotBlank(message: 'Ce champ est obligatoire. Veuillez donner une dénomination.')],
             ])
             ->add('statut', EntityType::class, [
                 'label' => 'Statut (*)',
@@ -70,11 +63,7 @@ class FicheTypeEdit extends AbstractType
                     return $repo->createQueryBuilder('l')
                         ->orderBy('l.denomination', 'ASC'); // Trie par nom (ordre alphabétique)
                 },
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Ce champ est obligatoire. Veuillez choisir un statut.',
-                    ]),
-                ],
+                'constraints' => [new NotBlank(message: 'Ce champ est obligatoire. Veuillez choisir un statut.')],
                 'placeholder' => '-- Sélectionner un statut --', // Optionnelle
             ])
             ->add('texte', TextareaType::class, [
@@ -119,22 +108,22 @@ class FicheTypeEdit extends AbstractType
                 'allow_delete' => true,
                 'by_reference' => false,
             ])
-             ->add('plus', ButtonType::class, [
+            ->add('plus', ButtonType::class, [
                 'label' => 'Ajouter un mot cle',
 
                 'attr' => [
                     'class' => 'add_item_link btn-primary',
                     'data-collection-holder-class' => "ficheMotCles"
                 ],
-             ])
-            ->add(child:'Enregistrer', type:SubmitType::class)
+            ])
+            ->add(child: 'Enregistrer', type: SubmitType::class)
         ;
     }
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Fiche::class,
-            
+
         ]);
         $resolver->setRequired('livreAssocie');
         $resolver->addAllowedTypes('livreAssocie', Livre::class);

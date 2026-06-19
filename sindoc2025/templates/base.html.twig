@@ -134,17 +134,9 @@
                         and app.request.attributes.get('_route') !='admin_get_base_html'
                             and app.request.attributes.get('_route') !='app_login'
                                 and app.request.attributes.get('_route') !='app_register'%}
-          
-          <div class="card-body" style="display:flex;justify-content:flex-end;">
-          <div>
-              <button onclick="goBack()" class="btn btn-outline-secondary" > < </button>
-              <button onclick="goForward()" class="btn btn-outline-secondary" >></button>
-              </div>
-          </div>
 
         {% endif %}
         </div>
-
            
           <div class="mainContainer">
           
@@ -278,8 +270,5 @@
                 }, 500);
             });
         </script>
-
-
-
     </body>
 </html>
