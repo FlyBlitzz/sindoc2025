@@ -21,61 +21,75 @@
 				</div>
 			</div>
 		</div>
+
         <nav class="navbar">
-         <a href="{{ path('app_home') }}" class="nav-logo">
-            <img src="{{ asset('images/Logo-ista.png') }}" style="width:40%; margin-left: 60px; " alt="ISTA Logo" class="logo-image ">
-        </a>
-    <div class="nav-container">
-       
-        
-        <div class="hamburger" id="hamburger" style="font-size:3em;">
-            {# <div class="bar"></div>
-            <div class="bar"></div>
-            <div class="bar"></div> #}
-            <i class="fa-solid fa-bars"></i>
-        </div>
+            <div class="nav-left">
+                <a href="{{ path('app_home') }}" class="nav-logo">
+                    <img src="{{ asset('images/Logo-ista.png') }}" alt="ISTA Logo" class="logo-image">
+                </a>
 
-        <ul class="nav-menu" id="nav-menu">
-            {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER') %}
                 {% if app.user %}
-                    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER') or canEdit %}
-                        <li id="canEditUser"><a href="#" data-bs-toggle="modal" data-bs-target="#livreModal">Livre</a></li>
-                    {% endif %}
-                    <li><a href="{{ path('fiche_recherche') }}" class="{% if app.request.attributes.get('_route') in ['fiche_recherche', 'deuxieme_fiche_recherche', 'fiche_recherche_resultat'] %}active{% endif %}">Rechercher une fiche</a></li>
-                    <li><a href="{{ path('savreq_app_sav_requete_index') }}" class="{% if app.request.attributes.get('_route') == 'savreq_app_sav_requete_index' %}active{% endif %}">Requêtes enregistrées</a></li>
-                    <li><a href="{{ path('savreq_app_recherche') }}" class="{% if app.request.attributes.get('_route') == 'savreq_app_recherche' %}active{% endif %}">Recherche multicritères</a></li>
-                    {% if is_granted('ROLE_ADMIN') or canEdit %}
-                        <li id="canEditUser"><a href="{{ path('add_fiche') }}" class="{% if app.request.attributes.get('_route') in ['add_fiche', 'deuxieme_formulaire_route'] %}active{% endif %}">Ajouter une Fiche</a></li>
-                    {% endif %}
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <li><a href="{{ path('admin_index') }}" class="{% if app.request.attributes.get('_route') == 'admin_index' %}active{% endif %}">ADMINISTRATION</a></li>
-                    {% endif %}
-                    <li><a href="{{ path('app_admin_app_users_show', {id: app.user.getId()}) }}" 
-                    class="{% if app.request.attributes.get('_route') == 'app_admin_app_users_show' %}active{% endif %}">
-                        <i class="fas fa-user"></i> {{ app.user.getUsername() }}</a></li>
-                    <li>
-    <a href="{{ path('app_logout') }}" >
-        <i class="fas fa-sign-out-alt"></i> Me déconnecter
-    </a>
-</li>
-
-
-                {% else %}
-                    <li><a href="{{ path('app_login') }}">Connexion</a></li>
-                    <li><a href="{{ path('app_register') }}">Inscription</a></li>
-                    <li><a href="{{ path('fiche_recherche') }}" class="{% if app.request.attributes.get('_route') in ['fiche_recherche', 'deuxieme_fiche_recherche'] %}active{% endif %}">Rechercher une fiche</a></li>
-                    <li><a href="{{ path('savreq_app_sav_requete_index') }}" class="{% if app.request.attributes.get('_route') == 'savreq_app_sav_requete_index' %}active{% endif %}">Recherche multicritères</a></li>
+                    <span class="livre-badge">
+                        {% if app.session.get('livreName') %}
+                            Vous travaillez sur le livre : {{ app.session.get('livreName') }}
+                        {% else %}
+                            Aucun livre n'est sélectionné
+                        {% endif %}
+                    </span>
                 {% endif %}
-            {% else %}
-                <li><a href="{{ path('app_login') }}" class="{% if app.request.attributes.get('_route') in ['app_login'] %}active{% endif %}">Connexion</a></li>
-                <li><a href="{{ path('app_register') }}" class="{% if app.request.attributes.get('_route') in ['app_register'] %}active{% endif %}">Inscription</a></li>
-                {# <li><a href="#" data-bs-toggle="modal" data-bs-target="#livreModal">Livre</a></li> #}
-                <li><a href="{{ path('fiche_recherche') }}" class="{% if app.request.attributes.get('_route') in ['fiche_recherche', 'deuxieme_fiche_recherche'] %}active{% endif %}">Rechercher une fiche</a></li>
-                <li><a href="{{ path('visiteur_multi_requetes') }}">Recherche multicritères</a></li>
-            {% endif %}
-        </ul>
-    </div>
-</nav>
+            </div>
+
+            <div class="nav-container">
+            
+                <div class="hamburger" id="hamburger" style="font-size:3em;">
+                    {# <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div> #}
+                    <i class="fa-solid fa-bars"></i>
+                </div>
+
+                <ul class="nav-menu" id="nav-menu">
+                    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER') %}
+                        {% if app.user %}
+                            {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER') or canEdit %}
+                                <li id="canEditUser"><a href="#" data-bs-toggle="modal" data-bs-target="#livreModal">Livre</a></li>
+                            {% endif %}
+                            <li><a href="{{ path('fiche_recherche') }}" class="{% if app.request.attributes.get('_route') in ['fiche_recherche', 'deuxieme_fiche_recherche', 'fiche_recherche_resultat'] %}active{% endif %}">Rechercher une fiche</a></li>
+                            <li><a href="{{ path('savreq_app_sav_requete_index') }}" class="{% if app.request.attributes.get('_route') == 'savreq_app_sav_requete_index' %}active{% endif %}">Requêtes enregistrées</a></li>
+                            <li><a href="{{ path('savreq_app_recherche') }}" class="{% if app.request.attributes.get('_route') == 'savreq_app_recherche' %}active{% endif %}">Recherche multicritères</a></li>
+                            {% if is_granted('ROLE_ADMIN') or canEdit %}
+                                <li id="canEditUser"><a href="{{ path('add_fiche') }}" class="{% if app.request.attributes.get('_route') in ['add_fiche', 'deuxieme_formulaire_route'] %}active{% endif %}">Ajouter une Fiche</a></li>
+                            {% endif %}
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <li><a href="{{ path('admin_index') }}" class="{% if app.request.attributes.get('_route') == 'admin_index' %}active{% endif %}">ADMINISTRATION</a></li>
+                            {% endif %}
+                            <li><a href="{{ path('app_admin_app_users_show', {id: app.user.getId()}) }}" 
+                            class="{% if app.request.attributes.get('_route') == 'app_admin_app_users_show' %}active{% endif %}">
+                                <i class="fas fa-user"></i> {{ app.user.getUsername() }}</a></li>
+                            <li>
+                                <a href="{{ path('app_logout') }}" >
+                                    <i class="fas fa-sign-out-alt"></i> Me déconnecter
+                                </a>
+                            </li>
+
+                        {% else %}
+                            <li><a href="{{ path('app_login') }}">Connexion</a></li>
+                            <li><a href="{{ path('app_register') }}">Inscription</a></li>
+                            <li><a href="{{ path('fiche_recherche') }}" class="{% if app.request.attributes.get('_route') in ['fiche_recherche', 'deuxieme_fiche_recherche'] %}active{% endif %}">Rechercher une fiche</a></li>
+                            <li><a href="{{ path('savreq_app_sav_requete_index') }}" class="{% if app.request.attributes.get('_route') == 'savreq_app_sav_requete_index' %}active{% endif %}">Recherche multicritères</a></li>
+                        {% endif %}
+                    {% else %}
+                        <li><a href="{{ path('app_login') }}" class="{% if app.request.attributes.get('_route') in ['app_login'] %}active{% endif %}">Connexion</a></li>
+                        <li><a href="{{ path('app_register') }}" class="{% if app.request.attributes.get('_route') in ['app_register'] %}active{% endif %}">Inscription</a></li>
+                        {# <li><a href="#" data-bs-toggle="modal" data-bs-target="#livreModal">Livre</a></li> #}
+                        <li><a href="{{ path('fiche_recherche') }}" class="{% if app.request.attributes.get('_route') in ['fiche_recherche', 'deuxieme_fiche_recherche'] %}active{% endif %}">Rechercher une fiche</a></li>
+                        <li><a href="{{ path('visiteur_multi_requetes') }}">Recherche multicritères</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
+
+
 		{# <nav class="cc-navbar navbar navbar-expand-lg position-fixed navbar-dark w-100" style="flex-direction:column;">
 			<div class="container-fluid">
 				<a class="navbar-brand text-uppercase fw-bolder mx-4 py-3" href="{{ path('app_home') }}">ISTA</a>
@@ -85,133 +99,133 @@
 				</button>
 				<div class="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER') %}
-        {% if app.user %}
-            {% if is_granted('ROLE_ADMIN') %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('admin_index')}}">ADMINISTRATION</a>
-                </li>
-            {% endif %}
+                        {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER') %}
+                            {% if app.user %}
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{ path('admin_index')}}">ADMINISTRATION</a>
+                                    </li>
+                                {% endif %}
 
-            <li class="nav-item">
-                <div class="input-group">
-                    <span class="input-group-text bg-transparent border-0">
-                        <i class="fas fa-user"></i>
-                    </span>
-                    <a class="nav-link" href="{{ path('app_admin_app_users_show', {id: app.user.getId()})}}">
-                        {{ app.user.getUsername() }}
-                    </a>
-                </div>
-            </li>
+                                <li class="nav-item">
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-transparent border-0">
+                                            <i class="fas fa-user"></i>
+                                        </span>
+                                        <a class="nav-link" href="{{ path('app_admin_app_users_show', {id: app.user.getId()})}}">
+                                            {{ app.user.getUsername() }}
+                                        </a>
+                                    </div>
+                                </li>
 
-            <li class="nav-item">
-                <a class="nav-link" href="{{ path('app_logout') }}">Me déconnecter</a>
-            </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ path('app_logout') }}">Me déconnecter</a>
+                                </li>
 
-            <li class="nav-item pe-1">
-                <a class="btn btn-order w-100 text-center" href="#" data-bs-toggle="modal" data-bs-target="#livreModal">
-                    Livre
-                </a>
-            </li>
+                                <li class="nav-item pe-1">
+                                    <a class="btn btn-order w-100 text-center" href="#" data-bs-toggle="modal" data-bs-target="#livreModal">
+                                        Livre
+                                    </a>
+                                </li>
 
-            <li class="nav-item pe-1">
-                <a class="btn btn-order w-100 text-center" href="{{ path('fiche_recherche') }}">
-                    Rechercher une fiche
-                </a>
-            </li>
+                                <li class="nav-item pe-1">
+                                    <a class="btn btn-order w-100 text-center" href="{{ path('fiche_recherche') }}">
+                                        Rechercher une fiche
+                                    </a>
+                                </li>
 
-            <li class="nav-item pe-1">
-                <a class="btn btn-order w-100 text-center" href="{{ path('savreq_app_sav_requete_index') }}">
-                    Requêtes enregistrées
-                </a>
-            </li>
+                                <li class="nav-item pe-1">
+                                    <a class="btn btn-order w-100 text-center" href="{{ path('savreq_app_sav_requete_index') }}">
+                                        Requêtes enregistrées
+                                    </a>
+                                </li>
 
-            <li class="nav-item pe-1">
-                <a class="btn btn-order w-100 text-center" href="{{ path('savreq_app_recherche') }}">
-                    Recherche multicritères
-                </a>
-            </li>
-		{% if is_granted('ROLE_ADMIN') %}
-            <li class="nav-item">
-                <a class="btn btn-order w-100 text-center" href="{{ path('add_fiche') }}">
-                    Ajouter une Fiche
-                </a>
-            </li>
-			{% endif %}
-        {% else %}
-            <li class="nav-item pe-4">
-                <a class="nav-link active" aria-current="page" href="{{ path('app_home') }}">Accueil</a>
-            </li>
-            <li class="nav-item pe-4">
-                <a class="nav-link" href="{{ path('app_login')}}">Connexion</a>
-            </li>
-            <li class="nav-item pe-4">
-                <a class="nav-link" href="{{ path('app_register') }}">Inscription</a>
-            </li>
+                                <li class="nav-item pe-1">
+                                    <a class="btn btn-order w-100 text-center" href="{{ path('savreq_app_recherche') }}">
+                                        Recherche multicritères
+                                    </a>
+                                </li>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <li class="nav-item">
+                                    <a class="btn btn-order w-100 text-center" href="{{ path('add_fiche') }}">
+                                        Ajouter une Fiche
+                                    </a>
+                                </li>
+                                {% endif %}
+                            {% else %}
+                                <li class="nav-item pe-4">
+                                    <a class="nav-link active" aria-current="page" href="{{ path('app_home') }}">Accueil</a>
+                                </li>
+                                <li class="nav-item pe-4">
+                                    <a class="nav-link" href="{{ path('app_login')}}">Connexion</a>
+                                </li>
+                                <li class="nav-item pe-4">
+                                    <a class="nav-link" href="{{ path('app_register') }}">Inscription</a>
+                                </li>
 
-            <li class="nav-item">
-                <a class="btn btn-order w-100 text-center" href="{{ path('fiche_recherche') }}">
-                    Rechercher une fiche
-                </a>
-            </li>
+                                <li class="nav-item">
+                                    <a class="btn btn-order w-100 text-center" href="{{ path('fiche_recherche') }}">
+                                        Rechercher une fiche
+                                    </a>
+                                </li>
 
-            <li class="nav-item">
-                <a class="btn btn-order w-100 text-center" href="{{ path('savreq_app_sav_requete_index') }}">
-                    Recherche multicritères
-                </a>
-            </li>
-        {% endif %}
-    {% else %}
-        <li class="nav-item pe-4">
-            <a class="nav-link active" aria-current="page" href="{{ path('app_home') }}">Accueil</a>
-        </li>
-        <li class="nav-item pe-4">
-            <a class="nav-link" href="{{ path('app_login')}}">Connexion</a>
-        </li>
-        <li class="nav-item pe-4">
-            <a class="nav-link" href="{{ path('app_register') }}">Inscription</a>
-        </li>
+                                <li class="nav-item">
+                                    <a class="btn btn-order w-100 text-center" href="{{ path('savreq_app_sav_requete_index') }}">
+                                        Recherche multicritères
+                                    </a>
+                                </li>
+                            {% endif %}
+                        {% else %}
+                            <li class="nav-item pe-4">
+                                <a class="nav-link active" aria-current="page" href="{{ path('app_home') }}">Accueil</a>
+                            </li>
+                            <li class="nav-item pe-4">
+                                <a class="nav-link" href="{{ path('app_login')}}">Connexion</a>
+                            </li>
+                            <li class="nav-item pe-4">
+                                <a class="nav-link" href="{{ path('app_register') }}">Inscription</a>
+                            </li>
 
-        <li class="nav-item">
-            <button class="btn btn-order w-100 text-center" data-bs-toggle="modal" data-bs-target="#livreModal">
-                Livre
-            </button>
-        </li>
+                            <li class="nav-item">
+                                <button class="btn btn-order w-100 text-center" data-bs-toggle="modal" data-bs-target="#livreModal">
+                                    Livre
+                                </button>
+                            </li>
 
-        <li class="nav-item pe-1">
-            <a class="btn btn-order w-100 text-center" href="{{ path('fiche_recherche') }}">
-                Rechercher une fiche
-            </a>
-        </li>
+                            <li class="nav-item pe-1">
+                                <a class="btn btn-order w-100 text-center" href="{{ path('fiche_recherche') }}">
+                                    Rechercher une fiche
+                                </a>
+                            </li>
 
-        <li class="nav-item">
-            <a class="btn btn-order w-100 text-center" href="{{ path('visiteur_multi_requetes') }}">
-                Recherche multicritères
-            </a>
-        </li>
-    {% endif %}
-</ul>
-
+                            <li class="nav-item">
+                                <a class="btn btn-order w-100 text-center" href="{{ path('visiteur_multi_requetes') }}">
+                                    Recherche multicritères
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
 				</div>
 			</div>
 	</body>
+    
 	{% if app.user %}
-	<div class="row">
+        <div class="row">
 
-	<p class="ps-4 mt-3" style="float:left;">
-		{% if app.session.get('livreName') %}
-			<span class="navbar-text">
-				<span class="bg-white text-dark p-2 rounded">
-					Livre actuel:
-					{{ app.session.get('livreName') }}
-				</span>
-			</span>
-		{% else %}
-			<span class="navbar-text">
-				<span class="bg-white text-dark p-2 rounded">
-					Aucun livre sélectionné
-				</span>
-			</span>
+        <p class="ps-4 mt-3" style="float:left;">
+            {% if app.session.get('livreName') %}
+                <span class="navbar-text">
+                    <span class="bg-white text-dark p-2 rounded">
+                        Livre actuel:
+                        {{ app.session.get('livreName') }}
+                    </span>
+                </span>
+            {% else %}
+                <span class="navbar-text">
+                    <span class="bg-white text-dark p-2 rounded">
+                        Aucun livre sélectionné
+                    </span>
+                </span>
 		{% endif %}
 	</p>
 	</div>
@@ -225,20 +239,29 @@
     box-sizing: border-box;
 }
 
-
 .navbar {
     background-color: #333;
     color: white;
-    padding: 15px 20px;
+    padding: 10px 20px;
     position: fixed;
     width: 100%;
     top: 0;
     left: 0;
     z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
+
+.nav-left {
+    display: flex;
+    align-items: center;
+}
+
 {# #canEditUser{
     display:none;
 } #}
+
 .nav-container {
     display: flex;
     justify-content: space-between;
@@ -250,6 +273,14 @@
     color: white;
     font-size: 1.5rem;
     font-weight: bold;
+    display: inline-block;
+    margin-left: 20px;
+}
+
+.logo-image {
+    height: 50px;
+    width: auto;
+    display: block;
 }
 
 .nav-menu {
@@ -346,6 +377,15 @@
     }
 }
 
+.livre-badge {
+    margin-left: 20px;
+    background-color: #3667f8;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: white;
+}
 
 </style>
 
@@ -372,6 +412,7 @@ document.addEventListener("DOMContentLoaded", function () {
     {% do app.session.remove('openLivrePopup') %}
 {% endif %}
 </script>
+
 {% if app.request.attributes.get('_route') not in ['app_login']%}
 <script>
  const isAdmin = {{ is_granted('ROLE_ADMIN') ? 'true' : 'false' }};
@@ -398,8 +439,6 @@ document.addEventListener("DOMContentLoaded", function () {
             .catch(error => console.error("Erreur de chargement des livres:", error));
   
 
- 
-
 function toggleButtonVisibility() {
     let buttons = document.querySelectorAll("#canEditUser"); // Select all elements with the class
     console.log(buttons)
@@ -411,10 +450,6 @@ function toggleButtonVisibility() {
         }
     });
 }
-
-    
-
-
 
 
 // Handle form submission
